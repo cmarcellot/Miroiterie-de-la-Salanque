@@ -13,10 +13,10 @@ export default function Header() {
 
   return (
     <header className="sticky top-0 z-50 border-b border-slate-200 bg-white">
-      <div className="container-mds flex items-center justify-between gap-6 py-3">
+      <div className="container-mds relative flex min-h-[68px] items-center justify-end gap-5 py-3 pl-24 sm:pl-36 lg:pl-44 xl:gap-6">
         <Link
           href="/"
-          className="relative z-20 -mb-8 shrink-0 sm:-mb-12 lg:-mb-14"
+          className="absolute left-4 top-2 z-20 sm:left-6 lg:left-8"
           aria-label="Accueil — Miroiterie de la Salanque"
         >
           <span className="flex items-center justify-center rounded-full bg-white p-2 shadow-md ring-1 ring-slate-200">
@@ -25,13 +25,13 @@ export default function Header() {
               alt="Miroiterie de la Salanque"
               width={220}
               height={220}
-              className="h-20 w-auto sm:h-28 lg:h-32"
+              className="h-[72px] w-auto sm:h-24 lg:h-28"
               priority
             />
           </span>
         </Link>
 
-        <nav className="hidden items-center gap-6 lg:flex">
+        <nav className="hidden items-center gap-5 lg:flex xl:gap-6">
           {mainNav.map((item) => {
             const active =
               item.href === "/"
@@ -41,7 +41,7 @@ export default function Header() {
               <div key={item.href} className="group relative">
                 <Link
                   href={item.href}
-                  className={`flex items-center gap-1 py-2 text-[13px] font-semibold uppercase tracking-wide transition ${
+                  className={`flex items-center gap-1 whitespace-nowrap py-2 text-[13px] font-semibold uppercase tracking-wide transition ${
                     active ? "text-royal" : "text-navy hover:text-royal"
                   }`}
                 >
@@ -72,7 +72,10 @@ export default function Header() {
         </nav>
 
         <div className="hidden lg:block">
-          <Link href="/devis" className="btn-primary">
+          <Link
+            href="/devis"
+            className="btn-primary whitespace-nowrap px-4 py-2.5 text-xs xl:px-6 xl:py-3 xl:text-sm"
+          >
             Demander un devis <ArrowRight className="h-4 w-4" />
           </Link>
         </div>
