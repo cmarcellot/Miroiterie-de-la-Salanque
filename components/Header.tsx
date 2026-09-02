@@ -25,7 +25,7 @@ export default function Header() {
               alt="Miroiterie de la Salanque"
               width={220}
               height={220}
-              className="h-20 w-auto sm:h-28 lg:h-[8.5rem]"
+              className="h-[68px] w-auto sm:h-24 lg:h-[7rem]"
               priority
             />
           </span>
