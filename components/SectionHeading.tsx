@@ -9,7 +9,7 @@ export default function SectionHeading({
 }) {
   return (
     <div className={`flex flex-col items-center gap-2 ${className}`}>
-      <MountainMark className="h-5 w-24 text-navy/70" />
+      <MountainMark className="h-7 w-7 text-navy/70" />
       <h2 className="section-title">{children}</h2>
     </div>
   );
