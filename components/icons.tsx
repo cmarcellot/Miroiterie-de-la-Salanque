@@ -1,4 +1,15 @@
 import type { SVGProps } from "react";
+import {
+  Award,
+  Blinds,
+  DoorOpen,
+  Fence,
+  Ruler,
+  UserCheck,
+  Warehouse,
+  Wrench,
+  type LucideProps,
+} from "lucide-react";
 
 type IconProps = SVGProps<SVGSVGElement>;
 
@@ -10,6 +21,10 @@ const base = {
   strokeLinejoin: "round" as const,
   viewBox: "0 0 48 48",
 };
+
+const lucide = (p: LucideProps) => ({ strokeWidth: 1.4, absoluteStrokeWidth: true, ...p });
+
+/* ---------- Menuiseries : dessins maison (verre / vitrage) ---------- */
 
 export function WindowIcon(p: IconProps) {
   return (
@@ -31,31 +46,11 @@ export function BayIcon(p: IconProps) {
   );
 }
 
-export function DoorIcon(p: IconProps) {
-  return (
-    <svg {...base} {...p}>
-      <rect x="12" y="5" width="24" height="38" rx="1" />
-      <path d="M12 43h24" />
-      <circle cx="30" cy="24" r="1.4" />
-      <path d="M18 12h12M18 20h12M18 28h12" />
-    </svg>
-  );
-}
-
 export function GateIcon(p: IconProps) {
   return (
     <svg {...base} {...p}>
       <path d="M5 40h38M8 40V16l16-8 16 8v24" />
       <path d="M16 40V20M24 40V16M32 40V20" />
-    </svg>
-  );
-}
-
-export function FenceIcon(p: IconProps) {
-  return (
-    <svg {...base} {...p}>
-      <path d="M6 14h36M6 24h36M6 34h36" />
-      <path d="M12 10v32M24 10v32M36 10v32" />
     </svg>
   );
 }
@@ -69,75 +64,32 @@ export function PergolaIcon(p: IconProps) {
   );
 }
 
-export function ShutterIcon(p: IconProps) {
-  return (
-    <svg {...base} {...p}>
-      <rect x="8" y="6" width="32" height="8" rx="1" />
-      <rect x="10" y="16" width="28" height="26" rx="1" />
-      <path d="M10 22h28M10 28h28M10 34h28" />
-    </svg>
-  );
-}
+/* ---------- Menuiseries : icônes Lucide (plus fidèles) ---------- */
 
-export function GarageIcon(p: IconProps) {
-  return (
-    <svg {...base} {...p}>
-      <path d="M5 42V18L24 7l19 11v24" />
-      <rect x="12" y="22" width="24" height="20" rx="1" />
-      <path d="M12 28h24M12 34h24" />
-    </svg>
-  );
-}
+export const DoorIcon = (p: LucideProps) => <DoorOpen {...lucide(p)} />;
+export const FenceIcon = (p: LucideProps) => <Fence {...lucide(p)} />;
+export const ShutterIcon = (p: LucideProps) => <Blinds {...lucide(p)} />;
+export const GarageIcon = (p: LucideProps) => <Warehouse {...lucide(p)} />;
 
-export function BadgeIcon(p: IconProps) {
-  return (
-    <svg {...base} {...p}>
-      <circle cx="24" cy="19" r="12" />
-      <path d="M17 29l-3 13 10-5 10 5-3-13" />
-    </svg>
-  );
-}
+/* ---------- Atouts / services ---------- */
+
+export const BadgeIcon = (p: LucideProps) => <Award {...lucide(p)} />;
+export const RulerIcon = (p: LucideProps) => <Ruler {...lucide(p)} />;
+export const UserIcon = (p: LucideProps) => <UserCheck {...lucide(p)} />;
+export const WrenchIcon = (p: LucideProps) => <Wrench {...lucide(p)} />;
+
+/* ---------- Carte de France (silhouette dessinée à la main) ---------- */
 
 export function FranceIcon(p: IconProps) {
   return (
     <svg {...base} {...p}>
-      <path d="M12 6l6 3 8-3 6 5 4 2-2 6 3 5-5 6 1 6-8 2-6-4-8 1-1-7-5-4 3-6-2-6z" />
+      <path d="M30 8 L38 14 L39 20 L37 23 L38 27 L38 32 L31 34 L24 35 L20 34 L17 33 L15 31 L14 27 L13 24 L14 20 L10 20 L6 18 L10 16 L14 13 L15 9 L18 12 L22 9 Z" />
+      <path d="M41 34l2 1-1 4-2-1z" />
     </svg>
   );
 }
 
-export function RulerIcon(p: IconProps) {
-  return (
-    <svg {...base} {...p}>
-      <rect
-        x="6"
-        y="18"
-        width="36"
-        height="12"
-        rx="1"
-        transform="rotate(-45 24 24)"
-      />
-      <path d="M18 12l3 3M24 18l3 3M30 24l3 3" />
-    </svg>
-  );
-}
-
-export function UserIcon(p: IconProps) {
-  return (
-    <svg {...base} {...p}>
-      <circle cx="24" cy="16" r="8" />
-      <path d="M8 40c2-9 8-13 16-13s14 4 16 13" />
-    </svg>
-  );
-}
-
-export function WrenchIcon(p: IconProps) {
-  return (
-    <svg {...base} {...p}>
-      <path d="M31 6a10 10 0 00-9 16L8 36a4 4 0 006 6l14-14A10 10 0 0031 6z" />
-    </svg>
-  );
-}
+/* ---------- Divers ---------- */
 
 export function PinIcon(p: IconProps) {
   return (
@@ -175,13 +127,23 @@ export function FacebookIcon(p: IconProps) {
 
 export function MountainMark(p: IconProps) {
   return (
-    <svg viewBox="0 0 120 34" fill="none" stroke="currentColor" strokeWidth={2} strokeLinejoin="round" {...p}>
+    <svg
+      viewBox="0 0 120 34"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth={2}
+      strokeLinejoin="round"
+      {...p}
+    >
       <path d="M4 30l20-22 10 12 8-9 14 19M40 30l14-14 22 22M70 30l16-16 30 16" />
     </svg>
   );
 }
 
-export const solutionIcons: Record<string, (p: IconProps) => JSX.Element> = {
+export const solutionIcons: Record<
+  string,
+  (p: IconProps & LucideProps) => JSX.Element
+> = {
   window: WindowIcon,
   bay: BayIcon,
   door: DoorIcon,
