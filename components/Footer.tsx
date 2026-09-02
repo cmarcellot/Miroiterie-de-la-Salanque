@@ -1,7 +1,6 @@
 import Link from "next/link";
 import Image from "next/image";
 import { site } from "@/lib/site";
-import { FacebookIcon } from "./icons";
 
 const navLinks = [
   { label: "Accueil", href: "/" },
@@ -79,19 +78,6 @@ export default function Footer() {
               {site.address.zip} {site.address.city}
             </li>
           </ul>
-
-          <h3 className="mb-3 mt-6 text-sm font-bold uppercase tracking-wide text-white">
-            Suivez-nous
-          </h3>
-          <a
-            href={site.facebook}
-            target="_blank"
-            rel="noopener noreferrer"
-            aria-label="Facebook"
-            className="inline-flex h-9 w-9 items-center justify-center rounded-full bg-white/10 hover:bg-white/20"
-          >
-            <FacebookIcon className="h-5 w-5 text-white" />
-          </a>
         </div>
       </div>
 

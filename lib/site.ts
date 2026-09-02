@@ -9,7 +9,6 @@ export const site = {
     zip: "66470",
     city: "Sainte-Marie-la-Mer",
   },
-  facebook: "https://www.facebook.com/",
   areas: [
     "Perpignan",
     "Saint-Laurent-de-la-Salanque",
