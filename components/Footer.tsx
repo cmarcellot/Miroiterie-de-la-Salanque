@@ -19,9 +19,9 @@ export default function Footer() {
           <Image
             src="/logo/mds-blanc.png"
             alt="Miroiterie de la Salanque"
-            width={120}
-            height={120}
-            className="h-16 w-auto"
+            width={240}
+            height={240}
+            className="h-32 w-auto sm:h-40"
           />
         </div>
 

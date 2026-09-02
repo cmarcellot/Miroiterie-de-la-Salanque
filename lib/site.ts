@@ -1,13 +1,13 @@
 export const site = {
   name: "Miroiterie de la Salanque",
   shortName: "MDS",
-  phone: "04 68 08 50 20",
-  phoneHref: "tel:+33468085020",
-  email: "contact@miroiterie-salanque.fr",
+  phone: "06 67 24 07 60",
+  phoneHref: "tel:+33667240760",
+  email: "mds66530@gmail.com",
   address: {
-    street: "8 Rue des Artisans",
-    zip: "66250",
-    city: "Saint-Laurent-de-la-Salanque",
+    street: "12 rue des Pins",
+    zip: "66470",
+    city: "Sainte-Marie-la-Mer",
   },
   facebook: "https://www.facebook.com/",
   areas: [
