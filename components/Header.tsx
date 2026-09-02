@@ -14,13 +14,17 @@ export default function Header() {
   return (
     <header className="sticky top-0 z-50 border-b border-slate-200 bg-white">
       <div className="container-mds flex items-center justify-between gap-6 py-3">
-        <Link href="/" className="shrink-0" aria-label="Accueil — Miroiterie de la Salanque">
+        <Link
+          href="/"
+          className="relative z-20 shrink-0"
+          aria-label="Accueil — Miroiterie de la Salanque"
+        >
           <Image
             src="/logo/mds-bleu-transparent.png"
             alt="Miroiterie de la Salanque"
-            width={110}
-            height={110}
-            className="h-14 w-auto"
+            width={220}
+            height={220}
+            className="-mb-10 h-20 w-auto drop-shadow-sm sm:-mb-14 sm:h-28 lg:-mb-16 lg:h-32"
             priority
           />
         </Link>
