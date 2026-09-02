@@ -9,7 +9,7 @@ export default function Solutions() {
       <div className="container-mds">
         <SectionHeading>Nos menuiseries</SectionHeading>
 
-        <div className="mt-12 grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4">
+        <div className="mt-12 grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-5">
           {solutions.map((s) => {
             const Icon = solutionIcons[s.icon];
             const href = `/menuiseries#${s.id}`;
@@ -28,8 +28,8 @@ export default function Solutions() {
             );
           })}
 
-          {/* Fabrication française à Perpignan */}
-          <div className="col-span-2 flex flex-col items-center justify-center rounded-lg border border-slate-200 bg-slate-50 p-6 text-center sm:col-span-1 lg:col-span-2">
+          {/* Fabrication française à Perpignan — après la 2e ligne (5 + 3) */}
+          <div className="col-span-2 flex flex-col items-center justify-center rounded-lg border border-slate-200 bg-slate-50 p-6 text-center sm:col-span-3 lg:col-span-2 lg:col-start-1">
             <div className="flex items-center gap-3">
               <FranceIcon className="h-10 w-10 shrink-0 text-navy" />
               <h3 className="text-base font-bold uppercase leading-tight tracking-wide text-navy">
