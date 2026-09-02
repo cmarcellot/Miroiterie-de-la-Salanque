@@ -12,7 +12,6 @@ import {
   Grid2x2,
   House,
   MapPin,
-  MountainSnow,
   Ruler,
   UserCheck,
   Warehouse,
@@ -49,7 +48,6 @@ export const PinIcon = (p: LucideProps) => <MapPin {...l(p)} />;
 export const CheckIcon = (p: LucideProps) => <CircleCheck {...l(p)} />;
 export const ArrowRight = (p: LucideProps) => <LArrowRight {...l(p)} />;
 export const FacebookIcon = (p: LucideProps) => <Facebook {...p} />;
-export const MountainMark = (p: LucideProps) => <MountainSnow {...l(p)} />;
 
 /* ---------- Carte de France (silhouette géographique — source mapsicon, MIT) ---------- */
 export function FranceIcon(p: IconProps) {
