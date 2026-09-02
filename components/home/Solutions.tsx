@@ -12,10 +12,7 @@ export default function Solutions() {
         <div className="mt-12 grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4">
           {solutions.map((s) => {
             const Icon = solutionIcons[s.icon];
-            const href =
-              s.icon === "shutter" || s.icon === "garage"
-                ? `/fermetures-protections#${s.id}`
-                : `/menuiseries#${s.id}`;
+            const href = `/menuiseries#${s.id}`;
             return (
               <Link
                 key={s.id}

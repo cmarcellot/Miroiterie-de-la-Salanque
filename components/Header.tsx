@@ -13,7 +13,7 @@ export default function Header() {
 
   return (
     <header className="sticky top-0 z-50 border-b border-slate-200 bg-white">
-      <div className="container-mds relative flex min-h-[68px] items-center justify-end gap-5 py-3 pl-24 sm:pl-36 lg:pl-44 xl:gap-6">
+      <div className="container-mds relative flex min-h-[88px] items-center justify-end gap-5 py-4 pl-24 sm:pl-36 lg:pl-44 xl:gap-6">
         <Link
           href="/"
           className="absolute left-4 top-2 z-20 sm:left-6 lg:left-8"
@@ -25,7 +25,7 @@ export default function Header() {
               alt="Miroiterie de la Salanque"
               width={220}
               height={220}
-              className="h-[72px] w-auto sm:h-24 lg:h-28"
+              className="h-20 w-auto sm:h-28 lg:h-[8.5rem]"
               priority
             />
           </span>

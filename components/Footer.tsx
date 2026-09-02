@@ -6,7 +6,6 @@ import { FacebookIcon } from "./icons";
 const navLinks = [
   { label: "Accueil", href: "/" },
   { label: "Menuiseries", href: "/menuiseries" },
-  { label: "Fermetures & protections", href: "/fermetures-protections" },
   { label: "Réalisations", href: "/realisations" },
   { label: "L'entreprise", href: "/entreprise" },
   { label: "Contact", href: "/contact" },

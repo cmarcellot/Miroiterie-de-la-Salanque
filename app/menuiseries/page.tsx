@@ -41,6 +41,21 @@ const blocks = [
     title: "Pergolas & vérandas",
     text: "Pergolas bioclimatiques et vérandas aluminium pour profiter de l'extérieur toute l'année, sur-mesure.",
   },
+  {
+    id: "volets",
+    title: "Volets roulants",
+    text: "Volets roulants neufs ou en rénovation, avec ou sans motorisation. Réparation et dépannage de tous types de volets (moteur, tablier, lame, télécommande).",
+  },
+  {
+    id: "garage",
+    title: "Portes de garage",
+    text: "Portes de garage sectionnelles, basculantes ou enroulables, motorisées ou manuelles, isolées et sécurisées, adaptées à toutes les configurations.",
+  },
+  {
+    id: "depannage",
+    title: "Dépannage & réparation",
+    text: "Un volet bloqué, une serrure qui ne répond plus, une porte de garage en panne ? Intervention rapide dans toute la Salanque pour remettre vos fermetures en service.",
+  },
 ];
 
 export default function MenuiseriesPage() {
@@ -48,7 +63,7 @@ export default function MenuiseriesPage() {
     <>
       <PageHeader
         title="Nos menuiseries"
-        subtitle="Fenêtres, portes, portails, clôtures, pergolas et vérandas en aluminium et PVC, fabriqués en France à Perpignan."
+        subtitle="Fenêtres, portes, portails, clôtures, pergolas, vérandas, volets roulants et portes de garage en aluminium et PVC, fabriqués en France à Perpignan. Réparation et dépannage assurés."
       />
       <div className="container-mds space-y-16 py-16">
         {blocks.map((b, i) => (

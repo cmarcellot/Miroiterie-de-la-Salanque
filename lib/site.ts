@@ -35,15 +35,9 @@ export const mainNav: {
       { label: "Portails & portillons", href: "/menuiseries#portails" },
       { label: "Clôtures", href: "/menuiseries#clotures" },
       { label: "Pergolas & vérandas", href: "/menuiseries#pergolas" },
-    ],
-  },
-  {
-    label: "Fermetures & protections",
-    href: "/fermetures-protections",
-    children: [
-      { label: "Volets roulants", href: "/fermetures-protections#volets" },
-      { label: "Portes de garage", href: "/fermetures-protections#garage" },
-      { label: "Dépannage & réparation", href: "/fermetures-protections#depannage" },
+      { label: "Volets roulants", href: "/menuiseries#volets" },
+      { label: "Portes de garage", href: "/menuiseries#garage" },
+      { label: "Dépannage & réparation", href: "/menuiseries#depannage" },
     ],
   },
   { label: "Réalisations", href: "/realisations" },

@@ -6,7 +6,6 @@ export default function sitemap(): MetadataRoute.Sitemap {
   const routes = [
     "",
     "/menuiseries",
-    "/fermetures-protections",
     "/realisations",
     "/entreprise",
     "/contact",
