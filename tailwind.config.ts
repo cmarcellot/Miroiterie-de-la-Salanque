@@ -8,15 +8,26 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        brand: {
-          DEFAULT: "#1e6091",
-          dark: "#144d75",
-          light: "#e8f1f7",
+        // Bleu du logo MDS
+        navy: {
+          DEFAULT: "#14315b",
+          dark: "#0e2547",
+          light: "#1e4a86",
         },
+        royal: {
+          DEFAULT: "#1a4f97",
+          dark: "#143f7d",
+        },
+      },
+      fontFamily: {
+        sans: ["var(--font-inter)", "system-ui", "sans-serif"],
+      },
+      maxWidth: {
+        content: "1200px",
       },
     },
   },
-  plugins: [],
+  plugins: [require("@tailwindcss/typography")],
 };
 
 export default config;
