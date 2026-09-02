@@ -1,7 +1,7 @@
 import Link from "next/link";
 import SectionHeading from "@/components/SectionHeading";
 import { solutions } from "@/lib/site";
-import { solutionIcons } from "@/components/icons";
+import { solutionIcons, FranceIcon } from "@/components/icons";
 
 export default function Solutions() {
   return (
@@ -27,6 +27,25 @@ export default function Solutions() {
               </Link>
             );
           })}
+
+          {/* Fabrication française à Perpignan */}
+          <div className="col-span-2 flex flex-col items-center justify-center rounded-lg border border-slate-200 bg-slate-50 p-6 text-center sm:col-span-1 lg:col-span-2">
+            <div className="flex items-center gap-3">
+              <FranceIcon className="h-10 w-10 shrink-0 text-navy" />
+              <h3 className="text-base font-bold uppercase leading-tight tracking-wide text-navy">
+                Fabrication française
+                <br />à Perpignan
+              </h3>
+            </div>
+            <p className="mt-3 text-sm text-slate-600">
+              Des produits conçus et fabriqués dans notre atelier à Perpignan.
+            </p>
+            <span className="mt-4 flex h-1 w-24 overflow-hidden rounded-full">
+              <span className="w-1/3 bg-[#0055A4]" />
+              <span className="w-1/3 bg-slate-300" />
+              <span className="w-1/3 bg-[#EF4135]" />
+            </span>
+          </div>
         </div>
       </div>
     </section>
