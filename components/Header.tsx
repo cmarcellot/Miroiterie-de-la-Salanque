@@ -16,17 +16,19 @@ export default function Header() {
       <div className="container-mds flex items-center justify-between gap-6 py-3">
         <Link
           href="/"
-          className="relative z-20 shrink-0"
+          className="relative z-20 -mb-8 shrink-0 sm:-mb-12 lg:-mb-14"
           aria-label="Accueil — Miroiterie de la Salanque"
         >
-          <Image
-            src="/logo/mds-bleu-transparent.png"
-            alt="Miroiterie de la Salanque"
-            width={220}
-            height={220}
-            className="-mb-10 h-20 w-auto drop-shadow-sm sm:-mb-14 sm:h-28 lg:-mb-16 lg:h-32"
-            priority
-          />
+          <span className="flex items-center justify-center rounded-full bg-white p-2 shadow-md ring-1 ring-slate-200">
+            <Image
+              src="/logo/mds-bleu-transparent.png"
+              alt="Miroiterie de la Salanque"
+              width={220}
+              height={220}
+              className="h-20 w-auto sm:h-28 lg:h-32"
+              priority
+            />
+          </span>
         </Link>
 
         <nav className="hidden items-center gap-6 lg:flex">
