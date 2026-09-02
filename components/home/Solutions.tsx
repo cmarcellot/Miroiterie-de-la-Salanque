@@ -28,8 +28,8 @@ export default function Solutions() {
             );
           })}
 
-          {/* Fabrication française à Perpignan — après la 2e ligne (5 + 3) */}
-          <div className="col-span-2 flex flex-col items-center justify-center rounded-lg border border-slate-200 bg-slate-50 p-6 text-center sm:col-span-3 lg:col-span-2 lg:col-start-1">
+          {/* Fabrication française à Perpignan — fin de la 2e ligne (5 puis 3 + cette case sur 2 colonnes) */}
+          <div className="col-span-2 flex flex-col items-center justify-center rounded-lg border border-slate-200 bg-slate-50 p-6 text-center sm:col-span-3 lg:col-span-2">
             <div className="flex items-center gap-3">
               <FranceIcon className="h-10 w-10 shrink-0 text-navy" />
               <h3 className="text-base font-bold uppercase leading-tight tracking-wide text-navy">
