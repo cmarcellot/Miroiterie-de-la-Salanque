@@ -54,6 +54,11 @@ export default function Footer() {
                 Politique de confidentialité
               </Link>
             </li>
+            <li>
+              <Link href="/pro" className="hover:text-white">
+                Espace pro
+              </Link>
+            </li>
           </ul>
         </div>
 
