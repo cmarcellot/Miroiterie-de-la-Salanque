@@ -1,6 +1,5 @@
 import type { SVGProps } from "react";
 import {
-  AlignJustify,
   ArrowRight as LArrowRight,
   Award,
   Blinds,
@@ -37,7 +36,25 @@ export const FenceIcon = (p: LucideProps) => <Fence {...l(p)} />;
 export const PergolaIcon = (p: LucideProps) => <House {...l(p)} />;
 export const ShutterIcon = (p: LucideProps) => <Blinds {...l(p)} />;
 export const GarageIcon = (p: LucideProps) => <Warehouse {...l(p)} />;
-export const CurtainIcon = (p: LucideProps) => <AlignJustify {...l(p)} />;
+
+/* Rideau métallique : caisson + corrugations verticales + barre de sol */
+export function CurtainIcon(p: IconProps) {
+  return (
+    <svg
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth={1.6}
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      {...p}
+    >
+      <rect x="3" y="3" width="18" height="3.5" rx="1" />
+      <path d="M5.5 6.5v13M8.5 6.5v13M11.5 6.5v13M14.5 6.5v13M17.5 6.5v13" />
+      <path d="M3.5 19.5h17" />
+    </svg>
+  );
+}
 
 /* ---------- Atouts / services ---------- */
 export const BadgeIcon = (p: LucideProps) => <Award {...l(p)} />;
@@ -63,7 +80,10 @@ export function FranceIcon(p: IconProps) {
   );
 }
 
-export const solutionIcons: Record<string, (p: LucideProps) => JSX.Element> = {
+export const solutionIcons: Record<
+  string,
+  (p: { className?: string }) => JSX.Element
+> = {
   window: WindowIcon,
   bay: BayIcon,
   door: DoorIcon,
