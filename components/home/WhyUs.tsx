@@ -10,6 +10,7 @@ const items = [
     Icon: FranceIcon,
     title: "Fabriqué en France à Perpignan",
     text: "Une fabrication locale pour garantir qualité, précision et réactivité.",
+    flag: true,
   },
   {
     Icon: RulerIcon,
@@ -41,7 +42,7 @@ export default function WhyUs() {
         <h2 className="section-title text-white">30 ans de savoir-faire</h2>
 
         <div className="mt-12 grid gap-y-10 sm:grid-cols-2 lg:grid-cols-4 lg:divide-x lg:divide-white/15">
-          {items.map(({ Icon, title, text }) => (
+          {items.map(({ Icon, title, text, flag }) => (
             <div
               key={title}
               className="flex flex-col items-center px-6 text-center"
@@ -52,6 +53,13 @@ export default function WhyUs() {
               <h3 className="mt-4 text-sm font-bold uppercase tracking-wide">
                 {title}
               </h3>
+              {flag && (
+                <span className="mt-2 flex h-1 w-16 overflow-hidden rounded-full">
+                  <span className="w-1/3 bg-[#0055A4]" />
+                  <span className="w-1/3 bg-white" />
+                  <span className="w-1/3 bg-[#EF4135]" />
+                </span>
+              )}
               <p className="mt-2 text-sm leading-relaxed text-white/80">{text}</p>
             </div>
           ))}
