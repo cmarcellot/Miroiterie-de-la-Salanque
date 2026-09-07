@@ -52,6 +52,11 @@ const blocks = [
     text: "Portes de garage sectionnelles, basculantes ou enroulables, motorisées ou manuelles, isolées et sécurisées, adaptées à toutes les configurations.",
   },
   {
+    id: "rideaux",
+    title: "Rideaux métalliques",
+    text: "Rideaux métalliques pour commerces, entrepôts et locaux professionnels : lames pleines ou micro-perforées, manuels ou motorisés, pour sécuriser vos accès.",
+  },
+  {
     id: "depannage",
     title: "Dépannage & réparation",
     text: "Un volet bloqué, une serrure qui ne répond plus, une porte de garage en panne ? Intervention rapide dans toute la Salanque pour remettre vos fermetures en service.",

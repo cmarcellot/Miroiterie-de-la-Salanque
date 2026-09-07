@@ -36,9 +36,9 @@ export default function EntreprisePage() {
             <p className="mt-4 leading-relaxed text-slate-600">
               Fenêtres et portes-fenêtres, baies vitrées, pergolas, vérandas,
               portails, portillons et clôtures brise-vue et brise-vent en
-              aluminium, mais aussi réparation de volets roulants et de portes
-              de garage sectionnelles, basculantes ou enroulables, avec ou sans
-              motorisation.
+              aluminium, mais aussi rideaux métalliques et réparation de volets
+              roulants et de portes de garage sectionnelles, basculantes ou
+              enroulables, avec ou sans motorisation.
             </p>
             <p className="mt-4 leading-relaxed text-slate-600">
               Des produits de qualité, fabriqués en France à Perpignan,

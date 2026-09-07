@@ -1,5 +1,6 @@
 import type { SVGProps } from "react";
 import {
+  AlignJustify,
   ArrowRight as LArrowRight,
   Award,
   Blinds,
@@ -36,6 +37,7 @@ export const FenceIcon = (p: LucideProps) => <Fence {...l(p)} />;
 export const PergolaIcon = (p: LucideProps) => <House {...l(p)} />;
 export const ShutterIcon = (p: LucideProps) => <Blinds {...l(p)} />;
 export const GarageIcon = (p: LucideProps) => <Warehouse {...l(p)} />;
+export const CurtainIcon = (p: LucideProps) => <AlignJustify {...l(p)} />;
 
 /* ---------- Atouts / services ---------- */
 export const BadgeIcon = (p: LucideProps) => <Award {...l(p)} />;
@@ -70,4 +72,5 @@ export const solutionIcons: Record<string, (p: LucideProps) => JSX.Element> = {
   pergola: PergolaIcon,
   shutter: ShutterIcon,
   garage: GarageIcon,
+  curtain: CurtainIcon,
 };

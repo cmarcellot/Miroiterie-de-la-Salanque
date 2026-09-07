@@ -36,6 +36,7 @@ export const mainNav: {
       { label: "Pergolas & vérandas", href: "/menuiseries#pergolas" },
       { label: "Volets roulants", href: "/menuiseries#volets" },
       { label: "Portes de garage", href: "/menuiseries#garage" },
+      { label: "Rideaux métalliques", href: "/menuiseries#rideaux" },
       { label: "Dépannage & réparation", href: "/menuiseries#depannage" },
     ],
   },
@@ -67,6 +68,12 @@ export const solutions = [
     icon: "garage",
     title: "Portes de garage",
     subtitle: "Sectionnelles, basculantes ou enroulables",
+  },
+  {
+    id: "rideaux",
+    icon: "curtain",
+    title: "Rideaux métalliques",
+    subtitle: "Commerces & locaux, motorisables",
   },
 ] as const;
 

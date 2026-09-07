@@ -28,20 +28,14 @@ export default function Solutions() {
             );
           })}
 
-          {/* Fabrication française à Perpignan — fin de la 2e ligne (5 puis 3 + cette case sur 2 colonnes) */}
-          <div className="col-span-2 flex flex-col items-center justify-center rounded-lg border border-slate-200 bg-slate-50 p-6 text-center sm:col-span-3 lg:col-span-2">
-            <div className="flex items-center gap-3">
-              <FranceIcon className="h-10 w-10 shrink-0 text-navy" />
-              <h3 className="text-base font-bold uppercase leading-tight tracking-wide text-navy">
-                Fabrication française
-                <br />à Perpignan
-              </h3>
-            </div>
-            <p className="mt-3 text-sm text-slate-600">
-              Des produits fabriqués en France par nos ateliers partenaires,
-              près de Perpignan.
-            </p>
-            <span className="mt-4 flex h-1 w-24 overflow-hidden rounded-full">
+          {/* Fabrication française — complète la 2e ligne (5 + 5) */}
+          <div className="col-span-2 flex flex-col items-center rounded-lg border border-slate-200 bg-slate-50 p-5 text-center sm:col-span-1">
+            <FranceIcon className="h-12 w-12 text-navy" />
+            <h3 className="mt-4 text-sm font-bold uppercase tracking-wide text-navy">
+              Fabrication française
+            </h3>
+            <p className="mt-1 text-xs text-slate-500">Ateliers partenaires</p>
+            <span className="mt-3 flex h-1 w-16 overflow-hidden rounded-full">
               <span className="w-1/3 bg-[#0055A4]" />
               <span className="w-1/3 bg-slate-300" />
               <span className="w-1/3 bg-[#EF4135]" />
