@@ -31,7 +31,7 @@ export default function InfoBand() {
               Notre zone d&apos;intervention
             </h3>
             <p className="mt-3 text-sm leading-relaxed text-white/85">
-              Basés à Sainte-Marie-la-Mer, nous intervenons dans toute la
+              Basés à Canet-en-Roussillon, nous intervenons dans toute la
               Salanque et les alentours.
             </p>
             <ul className="mt-4 grid gap-2 text-sm sm:grid-cols-2">

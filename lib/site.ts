@@ -5,9 +5,9 @@ export const site = {
   phoneHref: "tel:+33667240760",
   email: "mds66530@gmail.com",
   address: {
-    street: "12 rue des Pins",
-    zip: "66470",
-    city: "Sainte-Marie-la-Mer",
+    street: "BP 8C008",
+    zip: "66141",
+    city: "Canet-en-Roussillon",
   },
   areas: [
     "Perpignan",
