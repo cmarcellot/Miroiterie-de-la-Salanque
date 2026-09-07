@@ -15,15 +15,15 @@ export default function DeptMap({
       {showMarker && (
         <g>
           <circle
-            cx="341.5"
-            cy="516.5"
+            cx="341"
+            cy="511.5"
             r="5.5"
             fill="none"
             stroke="#ffffff"
             strokeOpacity="0.55"
             strokeWidth="1.1"
           />
-          <circle cx="341.5" cy="516.5" r="2.6" fill="#ffffff" />
+          <circle cx="341" cy="511.5" r="2.6" fill="#ffffff" />
         </g>
       )}
     </svg>
