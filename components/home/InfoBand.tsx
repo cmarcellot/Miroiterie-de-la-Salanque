@@ -25,7 +25,10 @@ export default function InfoBand() {
 
         {/* Zone d'intervention */}
         <div className="relative overflow-hidden rounded-lg bg-navy p-8 text-white">
-          <DeptMap className="pointer-events-none absolute inset-y-6 right-4 h-[calc(100%-3rem)] w-auto text-white/[0.12]" />
+          <DeptMap
+            showMarker
+            className="pointer-events-none absolute inset-y-6 right-4 h-[calc(100%-3rem)] w-auto text-white/[0.12]"
+          />
           <div className="relative max-w-sm">
             <PinIcon className="h-10 w-10 text-white/90" />
             <h3 className="mt-4 text-lg font-bold uppercase tracking-wide">
