@@ -38,7 +38,8 @@ export default function Solutions() {
               </h3>
             </div>
             <p className="mt-3 text-sm text-slate-600">
-              Des produits conçus et fabriqués dans notre atelier à Perpignan.
+              Des produits fabriqués en France par nos ateliers partenaires,
+              près de Perpignan.
             </p>
             <span className="mt-4 flex h-1 w-24 overflow-hidden rounded-full">
               <span className="w-1/3 bg-[#0055A4]" />

@@ -16,7 +16,7 @@ export const metadata: Metadata = {
     template: "%s | Miroiterie de la Salanque",
   },
   description:
-    "25 ans d'expérience en menuiserie et serrurerie à Perpignan et dans la Salanque : fenêtres et portes-fenêtres PVC ou aluminium, portails, clôtures, pergolas, vérandas, volets roulants et portes de garage. Produits fabriqués en France.",
+    "30 ans d'expérience en menuiserie et serrurerie à Perpignan et dans la Salanque : fenêtres et portes-fenêtres PVC ou aluminium, portails, clôtures, pergolas, vérandas, volets roulants et portes de garage. Produits fabriqués en France.",
   openGraph: {
     type: "website",
     locale: "fr_FR",

@@ -6,12 +6,12 @@ import { BadgeIcon, FranceIcon, RulerIcon, UserIcon } from "@/components/icons";
 export const metadata: Metadata = {
   title: "L'entreprise",
   description:
-    "Miroiterie de la Salanque : 25 ans d'expérience en menuiserie et serrurerie à Perpignan, avec une fabrication française et un suivi attentif de chaque chantier.",
+    "Miroiterie de la Salanque : 30 ans d'expérience en menuiserie et serrurerie à Perpignan, avec une fabrication française et un suivi attentif de chaque chantier.",
 };
 
 const values = [
-  { Icon: BadgeIcon, title: "25 ans d'expérience", text: "Un savoir-faire reconnu dans la menuiserie et la serrurerie." },
-  { Icon: FranceIcon, title: "Fabrication française", text: "Des produits conçus et fabriqués dans notre atelier à Perpignan." },
+  { Icon: BadgeIcon, title: "30 ans d'expérience", text: "Un savoir-faire reconnu dans la menuiserie et la serrurerie." },
+  { Icon: FranceIcon, title: "Fabrication française", text: "Des produits fabriqués en France par nos ateliers partenaires, près de Perpignan." },
   { Icon: RulerIcon, title: "Sur-mesure", text: "Chaque projet est étudié et adapté à vos besoins." },
   { Icon: UserIcon, title: "Suivi attentif", text: "Un interlocuteur dédié, de l'étude à la pose." },
 ];
@@ -25,11 +25,11 @@ export default function EntreprisePage() {
       />
       <div className="container-mds py-16">
         <div className="grid items-center gap-10 lg:grid-cols-2">
-          <Placeholder label="Atelier & équipe" ratio="aspect-[4/3]" className="rounded-lg" />
+          <Placeholder label="Chantier & équipe" ratio="aspect-[4/3]" className="rounded-lg" />
           <div>
             <h2 className="text-2xl font-bold text-navy">Notre savoir-faire</h2>
             <p className="mt-4 leading-relaxed text-slate-600">
-              Depuis plus de 25 ans, la Miroiterie de la Salanque accompagne
+              Depuis plus de 30 ans, la Miroiterie de la Salanque accompagne
               les particuliers et les professionnels dans leurs projets de
               menuiserie aluminium et PVC, de fermetures et de serrurerie.
             </p>

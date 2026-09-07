@@ -20,7 +20,7 @@ export default function Hero() {
         <div className="max-w-xl">
           <p className="mb-4 flex items-center gap-3 text-sm font-semibold uppercase tracking-widest text-white/80">
             <span className="h-4 w-0.5 bg-white/80" />
-            25 ans d&apos;expérience
+            30 ans d&apos;expérience
           </p>
           <h1 className="text-4xl font-extrabold leading-tight sm:text-5xl">
             Le sur-mesure

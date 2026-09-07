@@ -3,8 +3,8 @@ import { BadgeIcon, FranceIcon, RulerIcon, UserIcon } from "@/components/icons";
 const items = [
   {
     Icon: BadgeIcon,
-    title: "25 ans d'expérience",
-    text: "Un savoir-faire reconnu depuis plus de 25 ans dans la menuiserie et la serrurerie.",
+    title: "30 ans d'expérience",
+    text: "Un savoir-faire reconnu depuis plus de 30 ans dans la menuiserie et la serrurerie.",
   },
   {
     Icon: FranceIcon,
@@ -38,7 +38,7 @@ export default function WhyUs() {
       </svg>
 
       <div className="container-mds relative">
-        <h2 className="section-title text-white">25 ans de savoir-faire</h2>
+        <h2 className="section-title text-white">30 ans de savoir-faire</h2>
 
         <div className="mt-12 grid gap-y-10 sm:grid-cols-2 lg:grid-cols-4 lg:divide-x lg:divide-white/15">
           {items.map(({ Icon, title, text }) => (
