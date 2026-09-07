@@ -23,9 +23,9 @@ export default function Hero() {
             30 ans d&apos;expérience
           </p>
           <h1 className="text-4xl font-extrabold leading-tight sm:text-5xl">
-            Le sur-mesure
+            Le sur-mesure pour vos
             <br />
-            pour vos projets
+            projets et créations
           </h1>
           <p className="mt-6 text-base leading-relaxed text-white/85">
             Menuiserie et serrurerie à Perpignan et dans la Salanque.
