@@ -51,7 +51,10 @@ export default function ContactPage() {
             <h2 className="text-sm font-bold uppercase tracking-wide text-navy">
               Zone d&apos;intervention
             </h2>
-            <p className="mt-1">Perpignan et toute la Salanque</p>
+            <p className="mt-1">
+              Département des Pyrénées-Orientales (66). Au-delà, étudié au cas
+              par cas.
+            </p>
           </div>
         </div>
 

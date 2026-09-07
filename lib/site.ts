@@ -11,10 +11,11 @@ export const site = {
   },
   areas: [
     "Perpignan",
+    "Canet-en-Roussillon",
     "Saint-Laurent-de-la-Salanque",
     "Le Barcarès",
     "Torreilles",
-    "Et toute la Salanque",
+    "Toute la Salanque",
   ],
 };
 
