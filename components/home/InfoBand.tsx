@@ -1,6 +1,6 @@
 import Link from "next/link";
-import { site } from "@/lib/site";
-import { ArrowRight, CheckIcon, PinIcon, WrenchIcon } from "@/components/icons";
+import DeptMap from "@/components/DeptMap";
+import { ArrowRight, PinIcon, WrenchIcon } from "@/components/icons";
 
 export default function InfoBand() {
   return (
@@ -24,8 +24,8 @@ export default function InfoBand() {
 
         {/* Zone d'intervention */}
         <div className="relative overflow-hidden rounded-lg bg-navy p-8 text-white">
-          <div className="absolute inset-0 opacity-[0.08] [background-image:linear-gradient(#fff_1px,transparent_1px),linear-gradient(90deg,#fff_1px,transparent_1px)] [background-size:26px_26px]" />
-          <div className="relative">
+          <DeptMap className="pointer-events-none absolute inset-y-6 right-4 h-[calc(100%-3rem)] w-auto text-white/[0.12]" />
+          <div className="relative max-w-sm">
             <PinIcon className="h-10 w-10 text-white/90" />
             <h3 className="mt-4 text-lg font-bold uppercase tracking-wide">
               Notre zone d&apos;intervention
@@ -34,14 +34,6 @@ export default function InfoBand() {
               Nous intervenons dans tout le département des Pyrénées-Orientales
               (66). Au-delà, chaque demande est étudiée au cas par cas.
             </p>
-            <ul className="mt-4 grid gap-2 text-sm sm:grid-cols-2">
-              {site.areas.map((a) => (
-                <li key={a} className="flex items-center gap-2">
-                  <CheckIcon className="h-4 w-4 shrink-0 text-white/80" />
-                  {a}
-                </li>
-              ))}
-            </ul>
           </div>
         </div>
       </div>
