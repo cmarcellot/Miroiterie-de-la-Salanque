@@ -15,7 +15,8 @@
     "mongoose": "8.7.0",
     "lucide-react": "0.454.0",
     "next-auth": "4.24.11",
-    "bcryptjs": "2.4.3"
+    "bcryptjs": "2.4.3",
+    "sharp": "0.33.5"
   },
   "devDependencies": {
     "@types/node": "20.16.11",

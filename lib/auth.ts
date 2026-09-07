@@ -19,7 +19,13 @@ export const authOptions: NextAuthOptions = {
         const email = String(credentials.email).toLowerCase().trim();
         const password = String(credentials.password);
 
-        await connectToDatabase();
+        try {
+          await connectToDatabase();
+        } catch (err) {
+          console.error("[auth] connexion base impossible:", err);
+          throw new Error("db_unreachable");
+        }
+
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         let user: any = await User.findOne({ email });
 
@@ -28,23 +34,29 @@ export const authOptions: NextAuthOptions = {
         if (!user) {
           const seedEmail = process.env.ADMIN_EMAIL?.toLowerCase().trim();
           const seedPassword = process.env.ADMIN_PASSWORD;
-          if (
-            seedEmail &&
-            seedPassword &&
-            email === seedEmail &&
-            (await User.countDocuments()) === 0
-          ) {
+          const count = await User.countDocuments();
+          console.log(
+            `[auth] user introuvable pour "${email}". seedEmail="${seedEmail}" match=${
+              email === seedEmail
+            } users=${count}`
+          );
+          if (seedEmail && seedPassword && email === seedEmail && count === 0) {
             user = await User.create({
               email: seedEmail,
               name: "Administrateur",
               role: "admin",
               passwordHash: await bcrypt.hash(seedPassword, 10),
             });
+            console.log("[auth] compte gérant créé:", user.email);
           }
         }
 
-        if (!user) return null;
+        if (!user) {
+          console.log("[auth] échec: aucun utilisateur");
+          return null;
+        }
         const ok = await bcrypt.compare(password, user.passwordHash);
+        console.log(`[auth] comparaison mot de passe pour ${user.email}: ${ok}`);
         if (!ok) return null;
 
         return {
