@@ -49,6 +49,13 @@ export default function ContactPage() {
           </div>
           <div>
             <h2 className="text-sm font-bold uppercase tracking-wide text-navy">
+              Horaires
+            </h2>
+            <p className="mt-1">{site.hours.week}</p>
+            <p className="mt-1 text-sm text-slate-500">{site.hours.weekend}</p>
+          </div>
+          <div>
+            <h2 className="text-sm font-bold uppercase tracking-wide text-navy">
               Zone d&apos;intervention
             </h2>
             <p className="mt-1">

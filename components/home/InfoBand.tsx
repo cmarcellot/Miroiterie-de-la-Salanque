@@ -15,7 +15,8 @@ export default function InfoBand() {
           <p className="mt-3 text-sm leading-relaxed text-slate-600">
             Un problème avec votre volet roulant ? Une serrure bloquée ?
             Intervention rapide dans toute la Salanque pour la réparation et
-            le dépannage.
+            le dépannage. Dépannages urgents assurés le week-end et les jours
+            fériés.
           </p>
           <Link href="/contact" className="btn-outline mt-6">
             Intervention rapide <ArrowRight className="h-4 w-4" />

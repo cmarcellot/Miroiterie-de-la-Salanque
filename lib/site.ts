@@ -9,6 +9,10 @@ export const site = {
     zip: "66141",
     city: "Canet-en-Roussillon",
   },
+  hours: {
+    week: "Du lundi au vendredi, 8h – 12h et 13h30 – 18h",
+    weekend: "Week-end et jours fériés : dépannages urgents uniquement",
+  },
   areas: [
     "Perpignan",
     "Canet-en-Roussillon",

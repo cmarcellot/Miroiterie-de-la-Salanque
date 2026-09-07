@@ -77,6 +77,11 @@ export default function Footer() {
               <br />
               {site.address.zip} {site.address.city}
             </li>
+            <li className="pt-2 text-slate-300">
+              {site.hours.week}
+              <br />
+              {site.hours.weekend}
+            </li>
           </ul>
         </div>
       </div>
