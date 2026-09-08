@@ -2,24 +2,32 @@ import Link from "next/link";
 import { connectToDatabase } from "@/lib/mongodb";
 import Message, { MESSAGE_STATUS_LABELS } from "@/lib/models/Message";
 import Client from "@/lib/models/Client";
+import Devis from "@/lib/models/Devis";
+import { formatEUR } from "@/lib/pro-enums";
 import Kpis, { type Kpi } from "@/components/pro/Kpis";
 
 export const dynamic = "force-dynamic";
 
 async function getStats() {
   await connectToDatabase();
-  const [nouveau, enCours, total, clients, recents] = await Promise.all([
+  const [nouveau, enCours, clients, recents, devisWaiting] = await Promise.all([
     Message.countDocuments({ status: "nouveau" }),
     Message.countDocuments({ status: "en_cours" }),
-    Message.countDocuments({}),
     Client.countDocuments({}),
     Message.find({}).sort({ createdAt: -1 }).limit(6).lean(),
+    Devis.find({ status: { $in: ["brouillon", "envoye"] } }, { totalTTC: 1 }).lean(),
   ]);
-  return { nouveau, enCours, total, clients, recents };
+  const devisCount = devisWaiting.length;
+  const devisAmount = (devisWaiting as any[]).reduce(
+    (s, d) => s + (d.totalTTC || 0),
+    0
+  );
+  return { nouveau, enCours, clients, recents, devisCount, devisAmount };
 }
 
 export default async function DashboardPage() {
-  const { nouveau, enCours, total, clients, recents } = await getStats();
+  const { nouveau, enCours, clients, recents, devisCount, devisAmount } =
+    await getStats();
 
   const today = new Date().toLocaleDateString("fr-FR", {
     weekday: "long",
@@ -38,11 +46,18 @@ export default async function DashboardPage() {
       accent: "var(--cyan)",
     },
     {
+      label: "Devis en attente",
+      value: devisCount,
+      hint: `${formatEUR(devisAmount)} en jeu`,
+      href: "/pro/devis?status=envoye",
+      spark: "0,20 20,22 40,18 60,20 80,17 100,19",
+    },
+    {
       label: "En cours",
       value: enCours,
-      hint: "en discussion",
+      hint: "demandes en discussion",
       href: "/pro/demandes?status=en_cours",
-      spark: "0,20 20,22 40,18 60,20 80,17 100,19",
+      spark: "0,12 20,18 40,14 60,24 80,20 100,28",
     },
     {
       label: "Clients",
@@ -51,13 +66,6 @@ export default async function DashboardPage() {
       href: "/pro/clients",
       spark: "0,34 15,28 30,30 45,20 60,22 75,11 100,6",
       accent: "var(--cyan)",
-    },
-    {
-      label: "Demandes reçues",
-      value: total,
-      hint: "depuis le lancement",
-      href: "/pro/demandes",
-      spark: "0,12 20,18 40,14 60,24 80,20 100,28",
     },
   ];
 

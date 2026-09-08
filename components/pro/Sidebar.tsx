@@ -21,7 +21,7 @@ const sections: { title: string; items: Item[] }[] = [
     items: [
       { href: "/pro", label: "Tableau de bord", exact: true },
       { href: "/pro/demandes", label: "Demandes" },
-      { href: "/pro/devis", label: "Devis", soon: true },
+      { href: "/pro/devis", label: "Devis" },
       { href: "/pro/planning", label: "Planning", soon: true },
     ],
   },
@@ -43,10 +43,12 @@ export default function Sidebar({
   email,
   pending,
   clients,
+  devisEnAttente,
 }: {
   email?: string | null;
   pending: number;
   clients: number;
+  devisEnAttente: number;
 }) {
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
@@ -91,6 +93,8 @@ export default function Sidebar({
               let count = item.count;
               if (item.href === "/pro/demandes" && pending > 0) count = pending;
               if (item.href === "/pro/clients" && clients > 0) count = clients;
+              if (item.href === "/pro/devis" && devisEnAttente > 0)
+                count = devisEnAttente;
               return (
                 <Link
                   key={item.href}

@@ -632,3 +632,217 @@
     grid-template-columns: 1fr !important;
   }
 }
+
+/* statuts devis */
+.pro-st.devis-brouillon {
+  color: var(--ink-3);
+}
+.pro-st.devis-brouillon i {
+  background: var(--ink-3);
+}
+.pro-st.devis-envoye {
+  color: var(--warn);
+  border-color: rgba(185, 121, 31, 0.4);
+  background: rgba(185, 121, 31, 0.08);
+}
+.pro-st.devis-envoye i {
+  background: var(--warn);
+}
+.pro-st.devis-accepte {
+  color: var(--cyan);
+  border-color: rgba(14, 145, 130, 0.4);
+  background: rgba(14, 145, 130, 0.08);
+}
+.pro-st.devis-accepte i {
+  background: var(--cyan);
+}
+.pro-st.devis-refuse {
+  color: var(--danger);
+  border-color: rgba(209, 86, 96, 0.4);
+  background: rgba(209, 86, 96, 0.08);
+}
+.pro-st.devis-refuse i {
+  background: var(--danger);
+}
+.pro-st.devis-expire {
+  color: var(--ink-3);
+}
+.pro-st.devis-expire i {
+  background: var(--ink-3);
+}
+
+/* ---------- document imprimable ---------- */
+.print-sheet {
+  background: #fff;
+  color: #1a2330;
+  max-width: 800px;
+  margin: 0 auto;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 40px 44px;
+  box-shadow: 0 24px 60px rgba(20, 40, 66, 0.1);
+}
+.devis-doc {
+  font-family: var(--font-manrope), "Manrope", sans-serif;
+  font-size: 12px;
+  line-height: 1.55;
+  color: #1a2330;
+}
+.devis-doc .dd-head {
+  display: flex;
+  justify-content: space-between;
+  gap: 24px;
+  padding-bottom: 20px;
+  border-bottom: 2px solid #1d3f6b;
+}
+.devis-doc .dd-emitter {
+  display: flex;
+  gap: 14px;
+}
+.devis-doc .dd-logo {
+  height: 56px;
+  width: auto;
+}
+.devis-doc .dd-co {
+  font-family: var(--font-chivo), "Chivo", sans-serif;
+  font-weight: 900;
+  font-size: 15px;
+  letter-spacing: -0.02em;
+  color: #1d3f6b;
+}
+.devis-doc .dd-co-lines,
+.devis-doc .dd-meta-lines,
+.devis-doc .dd-client-lines {
+  font-size: 10.5px;
+  color: #5a6675;
+  margin-top: 4px;
+}
+.devis-doc .dd-meta {
+  text-align: right;
+}
+.devis-doc .dd-title {
+  font-family: var(--font-chivo), "Chivo", sans-serif;
+  font-weight: 900;
+  font-size: 26px;
+  letter-spacing: -0.04em;
+  color: #1d3f6b;
+  text-transform: uppercase;
+}
+.devis-doc .dd-num {
+  font-family: var(--font-pro-mono), monospace;
+  font-size: 12px;
+  color: #1a2330;
+  margin-top: 2px;
+}
+.devis-doc .dd-client {
+  margin-top: 22px;
+}
+.devis-doc .dd-label,
+.devis-doc .dd-table th {
+  font-family: var(--font-pro-mono), monospace;
+  font-size: 8.5px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #8b95a1;
+}
+.devis-doc .dd-client-name {
+  font-weight: 700;
+  font-size: 13px;
+  margin-top: 3px;
+}
+.devis-doc .dd-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+}
+.devis-doc .dd-table th {
+  text-align: left;
+  padding: 8px 6px;
+  border-bottom: 1px solid #d7dce2;
+}
+.devis-doc .dd-table th.r,
+.devis-doc .dd-table td.r {
+  text-align: right;
+}
+.devis-doc .dd-table td {
+  padding: 9px 6px;
+  border-bottom: 1px solid #eef0f3;
+  font-size: 11px;
+}
+.devis-doc .dd-totals {
+  margin-top: 18px;
+  margin-left: auto;
+  width: 280px;
+  display: grid;
+  gap: 6px;
+}
+.devis-doc .dd-totals > div {
+  display: flex;
+  justify-content: space-between;
+  font-family: var(--font-pro-mono), monospace;
+  font-size: 11px;
+  color: #5a6675;
+}
+.devis-doc .dd-grand {
+  font-family: var(--font-chivo), "Chivo", sans-serif !important;
+  font-weight: 900;
+  font-size: 15px !important;
+  color: #1d3f6b !important;
+  padding-top: 8px;
+  border-top: 1px solid #d7dce2;
+}
+.devis-doc .dd-deposit {
+  margin-top: 4px;
+  color: #1a2330 !important;
+}
+.devis-doc .dd-notes {
+  margin-top: 22px;
+  padding: 12px 14px;
+  background: #f5f7fa;
+  border-radius: 6px;
+  font-size: 10.5px;
+  color: #3a4655;
+  white-space: pre-wrap;
+}
+.devis-doc .dd-foot {
+  margin-top: 26px;
+  padding-top: 12px;
+  border-top: 1px solid #d7dce2;
+  font-size: 9px;
+  color: #8b95a1;
+  line-height: 1.7;
+}
+
+@media print {
+  body {
+    background: #fff !important;
+  }
+  .pro-aura,
+  .pro-grain,
+  .pro-side,
+  .pro-top,
+  .no-print {
+    display: none !important;
+  }
+  .pro-shell {
+    display: block !important;
+  }
+  .pro-page {
+    padding: 0 !important;
+    animation: none !important;
+  }
+  .print-sheet {
+    max-width: none;
+    margin: 0;
+    border: none;
+    border-radius: 0;
+    padding: 0;
+    box-shadow: none;
+  }
+  .devis-doc .dd-table {
+    page-break-inside: auto;
+  }
+  .devis-doc .dd-table tr {
+    page-break-inside: avoid;
+  }
+}

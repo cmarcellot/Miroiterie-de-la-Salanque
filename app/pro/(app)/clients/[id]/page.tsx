@@ -47,6 +47,12 @@ export default async function ClientDetailPage({
           <div className="pro-lab">Fiche client</div>
           <h1>{c.name}</h1>
         </div>
+        <Link
+          href={`/pro/devis/nouveau?client=${c._id}`}
+          className="pro-btn solid"
+        >
+          Nouveau devis
+        </Link>
       </div>
 
       <div
