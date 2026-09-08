@@ -580,6 +580,58 @@
   }
 }
 
+/* ---------- toast ---------- */
+.pro-toast {
+  position: fixed;
+  left: 50%;
+  bottom: 28px;
+  z-index: 1000;
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  padding: 11px 18px 11px 12px;
+  border-radius: 999px;
+  background: var(--marine);
+  color: #fff;
+  font-size: 13px;
+  font-weight: 600;
+  box-shadow: 0 16px 40px rgba(20, 40, 66, 0.28);
+  transform: translateX(-50%);
+  animation:
+    pro-toast-in 0.3s cubic-bezier(0.16, 1, 0.3, 1),
+    pro-toast-out 0.4s ease-in 2.6s forwards;
+}
+.pro-toast-ic {
+  display: grid;
+  place-items: center;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: var(--cyan);
+  color: #04231f;
+}
+@keyframes pro-toast-in {
+  from {
+    opacity: 0;
+    transform: translate(-50%, 16px);
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, 0);
+  }
+}
+@keyframes pro-toast-out {
+  to {
+    opacity: 0;
+    transform: translate(-50%, 12px);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .pro-toast {
+    animation: none;
+  }
+}
+
 /* statuts devis */
 .pro-st.devis-brouillon {
   color: var(--ink-3);

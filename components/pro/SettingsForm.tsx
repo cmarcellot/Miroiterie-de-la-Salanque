@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import type { AppSettings } from "@/lib/settings";
+import Toast from "@/components/pro/Toast";
 
 function Field({
   name,
@@ -51,11 +52,9 @@ function Card({
 export default function SettingsForm({
   action,
   settings,
-  saved,
 }: {
   action: (formData: FormData) => Promise<void>;
   settings: AppSettings;
-  saved?: boolean;
 }) {
   const [pending, setPending] = useState(false);
   const { company, legal, devis } = settings;
@@ -72,19 +71,7 @@ export default function SettingsForm({
       }}
       style={{ display: "grid", gap: 14, maxWidth: 720 }}
     >
-      {saved && (
-        <div
-          className="pro-card"
-          style={{
-            padding: "12px 16px",
-            fontSize: 13,
-            color: "var(--cyan)",
-            borderColor: "rgba(14,145,130,.4)",
-          }}
-        >
-          Paramètres enregistrés.
-        </div>
-      )}
+      <Toast message="Paramètres enregistrés." />
 
       <Card title="Entreprise (en-tête des documents)">
         <Field name="company.name" label="Nom" defaultValue={company.name} />

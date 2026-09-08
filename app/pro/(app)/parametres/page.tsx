@@ -4,11 +4,7 @@ import SettingsForm from "@/components/pro/SettingsForm";
 
 export const dynamic = "force-dynamic";
 
-export default async function ParametresPage({
-  searchParams,
-}: {
-  searchParams: { ok?: string };
-}) {
+export default async function ParametresPage() {
   const settings = await getSettings();
 
   return (
@@ -23,11 +19,7 @@ export default async function ParametresPage({
         </div>
       </div>
 
-      <SettingsForm
-        action={updateSettings}
-        settings={settings}
-        saved={searchParams.ok === "1"}
-      />
+      <SettingsForm action={updateSettings} settings={settings} />
     </div>
   );
 }
