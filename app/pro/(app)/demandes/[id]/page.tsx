@@ -4,6 +4,7 @@ import mongoose from "mongoose";
 import { ArrowLeft } from "lucide-react";
 import { connectToDatabase } from "@/lib/mongodb";
 import Message from "@/lib/models/Message";
+import Client from "@/lib/models/Client";
 import DemandeEditor from "@/components/pro/DemandeEditor";
 
 export const dynamic = "force-dynamic";
@@ -19,6 +20,11 @@ export default async function DemandeDetailPage({
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const m: any = await Message.findById(params.id).lean();
   if (!m) notFound();
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const client: any = m.clientId
+    ? await Client.findById(m.clientId).lean()
+    : null;
 
   return (
     <div>
@@ -94,11 +100,50 @@ export default async function DemandeDetailPage({
           </div>
         </div>
 
-        <DemandeEditor
-          id={String(m._id)}
-          status={m.status}
-          notes={m.adminNotes ?? ""}
-        />
+        <div style={{ display: "grid", gap: 14 }}>
+          <div className="pro-card" style={{ padding: "16px 20px" }}>
+            <div className="pro-lab">Client</div>
+            {client ? (
+              <div style={{ marginTop: 10 }}>
+                <Link
+                  href={`/pro/clients/${client._id}`}
+                  style={{ fontWeight: 600, fontSize: 13.5 }}
+                >
+                  {client.name}
+                </Link>
+                <div
+                  style={{ marginTop: 4, fontSize: 12.5, color: "var(--ink-3)" }}
+                >
+                  Fiche rattachée
+                </div>
+              </div>
+            ) : (
+              <div style={{ marginTop: 10 }}>
+                <p
+                  style={{
+                    fontSize: 13,
+                    color: "var(--ink-3)",
+                    marginBottom: 10,
+                  }}
+                >
+                  Aucune fiche client rattachée.
+                </p>
+                <Link
+                  href={`/pro/clients/nouveau?fromMessage=${m._id}`}
+                  className="pro-btn ghost"
+                >
+                  Créer une fiche client
+                </Link>
+              </div>
+            )}
+          </div>
+
+          <DemandeEditor
+            id={String(m._id)}
+            status={m.status}
+            notes={m.adminNotes ?? ""}
+          />
+        </div>
       </div>
     </div>
   );

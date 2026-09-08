@@ -1,24 +1,25 @@
 import Link from "next/link";
 import { connectToDatabase } from "@/lib/mongodb";
 import Message, { MESSAGE_STATUS_LABELS } from "@/lib/models/Message";
+import Client from "@/lib/models/Client";
 import Kpis, { type Kpi } from "@/components/pro/Kpis";
 
 export const dynamic = "force-dynamic";
 
 async function getStats() {
   await connectToDatabase();
-  const [nouveau, enCours, traite, total, recents] = await Promise.all([
+  const [nouveau, enCours, total, clients, recents] = await Promise.all([
     Message.countDocuments({ status: "nouveau" }),
     Message.countDocuments({ status: "en_cours" }),
-    Message.countDocuments({ status: "traite" }),
     Message.countDocuments({}),
+    Client.countDocuments({}),
     Message.find({}).sort({ createdAt: -1 }).limit(6).lean(),
   ]);
-  return { nouveau, enCours, traite, total, recents };
+  return { nouveau, enCours, total, clients, recents };
 }
 
 export default async function DashboardPage() {
-  const { nouveau, enCours, traite, total, recents } = await getStats();
+  const { nouveau, enCours, total, clients, recents } = await getStats();
 
   const today = new Date().toLocaleDateString("fr-FR", {
     weekday: "long",
@@ -44,15 +45,15 @@ export default async function DashboardPage() {
       spark: "0,20 20,22 40,18 60,20 80,17 100,19",
     },
     {
-      label: "Traitées",
-      value: traite,
-      hint: "clôturées",
-      href: "/pro/demandes?status=traite",
+      label: "Clients",
+      value: clients,
+      hint: "fiches enregistrées",
+      href: "/pro/clients",
       spark: "0,34 15,28 30,30 45,20 60,22 75,11 100,6",
       accent: "var(--cyan)",
     },
     {
-      label: "Total reçu",
+      label: "Demandes reçues",
       value: total,
       hint: "depuis le lancement",
       href: "/pro/demandes",

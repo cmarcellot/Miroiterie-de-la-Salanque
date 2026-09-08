@@ -6,7 +6,7 @@ import {
   MESSAGE_STATUSES,
   MESSAGE_STATUS_LABELS,
   type MessageStatus,
-} from "@/lib/models/Message";
+} from "@/lib/pro-enums";
 
 export default function DemandeEditor({
   id,

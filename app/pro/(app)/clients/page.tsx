@@ -1,10 +1,96 @@
-import ComingSoon from "@/components/pro/ComingSoon";
+import Link from "next/link";
+import { connectToDatabase } from "@/lib/mongodb";
+import Client, { CLIENT_TYPE_LABELS, type ClientType } from "@/lib/models/Client";
 
-export default function Page() {
+export const dynamic = "force-dynamic";
+
+export default async function ClientsPage({
+  searchParams,
+}: {
+  searchParams: { q?: string };
+}) {
+  const q = (searchParams.q ?? "").trim();
+
+  await connectToDatabase();
+  const filter = q
+    ? {
+        $or: [
+          { name: { $regex: q, $options: "i" } },
+          { email: { $regex: q, $options: "i" } },
+          { phone: { $regex: q, $options: "i" } },
+          { city: { $regex: q, $options: "i" } },
+        ],
+      }
+    : {};
+  const clients = await Client.find(filter).sort({ name: 1 }).limit(300).lean();
+
   return (
-    <ComingSoon
-      title="Clients"
-      description="Fiches clients, historique des échanges et chantiers rattachés."
-    />
+    <div>
+      <div className="pro-phead">
+        <div>
+          <div className="pro-lab">Répertoire</div>
+          <h1>Clients</h1>
+          <div className="sub">
+            {clients.length} fiche{clients.length > 1 ? "s" : ""}
+            {q ? ` pour « ${q} »` : ""}.
+          </div>
+        </div>
+        <Link href="/pro/clients/nouveau" className="pro-btn solid">
+          Ajouter un client
+        </Link>
+      </div>
+
+      <form
+        method="get"
+        style={{ marginBottom: 14, maxWidth: 420 }}
+        className="pro-search"
+      >
+        <input
+          name="q"
+          defaultValue={q}
+          placeholder="Rechercher un nom, une ville, un téléphone…"
+        />
+      </form>
+
+      <div className="pro-card" style={{ overflowX: "auto" }}>
+        {clients.length === 0 ? (
+          <p style={{ padding: 24, color: "var(--ink-3)", fontSize: 13 }}>
+            {q ? "Aucun client trouvé." : "Aucune fiche client pour l'instant."}
+          </p>
+        ) : (
+          <table className="pro-table">
+            <thead>
+              <tr>
+                <th>Nom</th>
+                <th>Type</th>
+                <th>Contact</th>
+                <th>Ville</th>
+              </tr>
+            </thead>
+            <tbody>
+              {clients.map((c: any) => (
+                <tr key={String(c._id)}>
+                  <td>
+                    <Link
+                      href={`/pro/clients/${c._id}`}
+                      style={{ fontWeight: 600 }}
+                    >
+                      {c.name}
+                    </Link>
+                  </td>
+                  <td style={{ color: "var(--ink-3)" }}>
+                    {CLIENT_TYPE_LABELS[c.type as ClientType] ?? c.type}
+                  </td>
+                  <td style={{ color: "var(--ink-3)" }}>
+                    {[c.phone, c.email].filter(Boolean).join(" · ") || "—"}
+                  </td>
+                  <td style={{ color: "var(--ink-3)" }}>{c.city || "—"}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        )}
+      </div>
+    </div>
   );
 }

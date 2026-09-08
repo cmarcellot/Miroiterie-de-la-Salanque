@@ -28,7 +28,7 @@ const sections: { title: string; items: Item[] }[] = [
   {
     title: "Gestion",
     items: [
-      { href: "/pro/clients", label: "Clients", soon: true },
+      { href: "/pro/clients", label: "Clients" },
       { href: "/pro/factures", label: "Factures", soon: true },
       { href: "/pro/chantiers", label: "Chantiers", soon: true },
     ],
@@ -42,9 +42,11 @@ const sections: { title: string; items: Item[] }[] = [
 export default function Sidebar({
   email,
   pending,
+  clients,
 }: {
   email?: string | null;
   pending: number;
+  clients: number;
 }) {
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
@@ -86,10 +88,9 @@ export default function Sidebar({
                 ? pathname === item.href
                 : pathname === item.href ||
                   pathname.startsWith(item.href + "/");
-              const count =
-                item.href === "/pro/demandes" && pending > 0
-                  ? pending
-                  : item.count;
+              let count = item.count;
+              if (item.href === "/pro/demandes" && pending > 0) count = pending;
+              if (item.href === "/pro/clients" && clients > 0) count = clients;
               return (
                 <Link
                   key={item.href}

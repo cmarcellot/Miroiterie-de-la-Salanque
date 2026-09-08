@@ -1,19 +1,11 @@
 import mongoose, { Schema, InferSchemaType, models, model } from "mongoose";
+import { MESSAGE_STATUSES } from "@/lib/pro-enums";
 
-export const MESSAGE_STATUSES = [
-  "nouveau",
-  "en_cours",
-  "traite",
-  "archive",
-] as const;
-export type MessageStatus = (typeof MESSAGE_STATUSES)[number];
-
-export const MESSAGE_STATUS_LABELS: Record<MessageStatus, string> = {
-  nouveau: "Nouveau",
-  en_cours: "En cours",
-  traite: "Traité",
-  archive: "Archivé",
-};
+export {
+  MESSAGE_STATUSES,
+  MESSAGE_STATUS_LABELS,
+  type MessageStatus,
+} from "@/lib/pro-enums";
 
 const MessageSchema = new Schema(
   {
@@ -25,6 +17,7 @@ const MessageSchema = new Schema(
     source: { type: String, enum: ["contact", "devis"], default: "contact" },
     status: { type: String, enum: MESSAGE_STATUSES, default: "nouveau" },
     adminNotes: { type: String, default: "", maxlength: 5000 },
+    clientId: { type: Schema.Types.ObjectId, ref: "Client", default: null },
   },
   { timestamps: true }
 );
