@@ -20,12 +20,20 @@ export default function ClientForm({
   values = {},
   fromMessage,
   cancelHref,
+  onCancel,
+  onDone,
+  stay = false,
+  bare = false,
   submitLabel = "Enregistrer",
 }: {
   action: (formData: FormData) => Promise<void>;
   values?: ClientValues;
   fromMessage?: string;
-  cancelHref: string;
+  cancelHref?: string;
+  onCancel?: () => void;
+  onDone?: () => void;
+  stay?: boolean;
+  bare?: boolean;
   submitLabel?: string;
 }) {
   const [pending, setPending] = useState(false);
@@ -36,16 +44,24 @@ export default function ClientForm({
         setPending(true);
         try {
           await action(fd);
+          // Si l'action n'a pas redirigé, on est toujours là.
+          onDone?.();
         } finally {
           setPending(false);
         }
       }}
-      className="pro-card"
-      style={{ padding: "20px 22px", display: "grid", gap: 16, maxWidth: 620 }}
+      className={bare ? undefined : "pro-card"}
+      style={{
+        padding: bare ? 0 : "20px 22px",
+        display: "grid",
+        gap: 16,
+        maxWidth: bare ? undefined : 620,
+      }}
     >
       {fromMessage && (
         <input type="hidden" name="fromMessage" value={fromMessage} />
       )}
+      {stay && <input type="hidden" name="stay" value="1" />}
 
       <div>
         <label className="pro-lab">Nom / raison sociale *</label>
@@ -148,9 +164,15 @@ export default function ClientForm({
         >
           {pending ? "Enregistrement…" : submitLabel}
         </button>
-        <Link href={cancelHref} className="pro-btn ghost">
-          Annuler
-        </Link>
+        {onCancel ? (
+          <button type="button" className="pro-btn ghost" onClick={onCancel}>
+            Annuler
+          </button>
+        ) : cancelHref ? (
+          <Link href={cancelHref} className="pro-btn ghost">
+            Annuler
+          </Link>
+        ) : null}
       </div>
     </form>
   );

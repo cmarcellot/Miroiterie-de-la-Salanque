@@ -39,6 +39,7 @@ export async function createClient(formData: FormData) {
 
   await connectToDatabase();
   const doc = await Client.create(data);
+  revalidatePath("/pro/clients");
 
   const fromMessage = String(formData.get("fromMessage") || "");
   if (mongoose.isValidObjectId(fromMessage)) {
@@ -47,9 +48,12 @@ export async function createClient(formData: FormData) {
       status: "en_cours",
     });
     revalidatePath(`/pro/demandes/${fromMessage}`);
+    redirect(`/pro/demandes/${fromMessage}`);
   }
 
-  revalidatePath("/pro/clients");
+  // Depuis un modal (liste) : on ne redirige pas, le modal se ferme.
+  if (formData.get("stay") === "1") return;
+
   redirect(`/pro/clients/${doc._id}`);
 }
 

@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { connectToDatabase } from "@/lib/mongodb";
 import Client, { CLIENT_TYPE_LABELS, type ClientType } from "@/lib/models/Client";
+import ClientModal from "@/components/pro/ClientModal";
 
 export const dynamic = "force-dynamic";
 
@@ -35,9 +36,7 @@ export default async function ClientsPage({
             {q ? ` pour « ${q} »` : ""}.
           </div>
         </div>
-        <Link href="/pro/clients/nouveau" className="pro-btn solid">
-          Ajouter un client
-        </Link>
+        <ClientModal />
       </div>
 
       <form

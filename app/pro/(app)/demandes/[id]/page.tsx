@@ -6,6 +6,7 @@ import { connectToDatabase } from "@/lib/mongodb";
 import Message from "@/lib/models/Message";
 import Client from "@/lib/models/Client";
 import DemandeEditor from "@/components/pro/DemandeEditor";
+import ClientModal from "@/components/pro/ClientModal";
 
 export const dynamic = "force-dynamic";
 
@@ -128,12 +129,11 @@ export default async function DemandeDetailPage({
                 >
                   Aucune fiche client rattachée.
                 </p>
-                <Link
-                  href={`/pro/clients/nouveau?fromMessage=${m._id}`}
-                  className="pro-btn ghost"
-                >
-                  Créer une fiche client
-                </Link>
+                <ClientModal
+                  fromMessage={String(m._id)}
+                  label="Créer une fiche client"
+                  variant="ghost"
+                />
               </div>
             )}
           </div>
