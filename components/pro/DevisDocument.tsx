@@ -126,7 +126,7 @@ export default function DevisDocument({ d }: { d: any }) {
           <span>Total HT</span>
           <span>{formatEUR(d.totalHT ?? ht)}</span>
         </div>
-        {[...vatMap.entries()]
+        {Array.from(vatMap.entries())
           .filter(([rate]) => rate > 0)
           .map(([rate, amount]) => (
             <div key={rate}>
