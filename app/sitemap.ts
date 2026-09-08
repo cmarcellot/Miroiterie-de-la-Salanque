@@ -1,6 +1,6 @@
 import type { MetadataRoute } from "next";
 
-const base = "https://www.miroiterie-salanque.fr";
+const base = "https://www.miroiteriedelasalanque.fr";
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const routes = [

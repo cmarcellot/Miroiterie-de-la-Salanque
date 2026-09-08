@@ -4,7 +4,7 @@ import "./globals.css";
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
 
-const siteUrl = "https://www.miroiterie-salanque.fr";
+const siteUrl = "https://www.miroiteriedelasalanque.fr";
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
