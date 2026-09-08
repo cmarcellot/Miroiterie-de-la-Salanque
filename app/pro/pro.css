@@ -48,66 +48,29 @@
   color: var(--ink-3);
 }
 
-/* fond animé */
+/* fond statique — dégradés radiaux doux, sans filtre ni animation (perf) */
 .pro-aura {
   position: fixed;
-  inset: -25%;
+  inset: 0;
   z-index: 0;
   pointer-events: none;
-  filter: blur(100px);
-  opacity: 0.5;
+  background:
+    radial-gradient(
+      60vw 60vw at 12% -6%,
+      rgba(29, 63, 107, 0.16),
+      transparent 60%
+    ),
+    radial-gradient(
+      46vw 46vw at 92% 20%,
+      rgba(14, 145, 130, 0.1),
+      transparent 60%
+    );
 }
 .pro-aura i {
-  position: absolute;
-  display: block;
-  border-radius: 50%;
-}
-.pro-aura i:nth-child(1) {
-  width: 50vw;
-  height: 50vw;
-  left: -6vw;
-  top: -8vw;
-  background: radial-gradient(circle, rgba(29, 63, 107, 0.9), transparent 65%);
-  animation: pro-d1 24s ease-in-out infinite;
-}
-.pro-aura i:nth-child(2) {
-  width: 40vw;
-  height: 40vw;
-  right: -4vw;
-  top: 14vw;
-  background: radial-gradient(circle, rgba(14, 145, 130, 0.26), transparent 62%);
-  animation: pro-d2 30s ease-in-out infinite;
-}
-@keyframes pro-d1 {
-  0%,
-  100% {
-    transform: translate3d(0, 0, 0) scale(1);
-  }
-  50% {
-    transform: translate3d(5vw, 4vw, 0) scale(1.14);
-  }
-}
-@keyframes pro-d2 {
-  0%,
-  100% {
-    transform: translate3d(0, 0, 0) scale(1.06);
-  }
-  50% {
-    transform: translate3d(-4vw, 5vw, 0) scale(0.9);
-  }
-}
-@media (prefers-reduced-motion: reduce) {
-  .pro-aura i {
-    animation: none;
-  }
+  display: none;
 }
 .pro-grain {
-  position: fixed;
-  inset: 0;
-  z-index: 1;
-  pointer-events: none;
-  opacity: 0.16;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)' opacity='.5'/%3E%3C/svg%3E");
+  display: none;
 }
 
 .pro-shell {
@@ -283,12 +246,7 @@
   gap: 14px;
   padding: 15px 26px;
   border-bottom: 1px solid var(--line);
-  background: linear-gradient(
-    180deg,
-    rgba(255, 255, 255, 0.85),
-    rgba(255, 255, 255, 0.4)
-  );
-  backdrop-filter: blur(14px);
+  background: #fbfcfe;
   position: sticky;
   top: 0;
   z-index: 20;
@@ -339,18 +297,7 @@
   height: 6px;
   border-radius: 50%;
   background: var(--cyan);
-  animation: pro-pulse 2.4s ease-out infinite;
-}
-@keyframes pro-pulse {
-  0% {
-    box-shadow: 0 0 0 0 rgba(14, 145, 130, 0.5);
-  }
-  70% {
-    box-shadow: 0 0 0 8px rgba(14, 145, 130, 0);
-  }
-  100% {
-    box-shadow: 0 0 0 0 rgba(14, 145, 130, 0);
-  }
+  box-shadow: 0 0 0 3px rgba(14, 145, 130, 0.18);
 }
 .pro-me {
   display: flex;
