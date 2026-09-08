@@ -8,13 +8,6 @@ import Message, {
 
 export const dynamic = "force-dynamic";
 
-const badge: Record<MessageStatus, string> = {
-  nouveau: "bg-blue-100 text-blue-700",
-  en_cours: "bg-amber-100 text-amber-700",
-  traite: "bg-green-100 text-green-700",
-  archive: "bg-slate-100 text-slate-500",
-};
-
 export default async function DemandesPage({
   searchParams,
 }: {
@@ -32,9 +25,17 @@ export default async function DemandesPage({
 
   return (
     <div>
-      <h1 className="text-2xl font-bold text-navy">Demandes</h1>
+      <div className="pro-phead">
+        <div>
+          <div className="pro-lab">Boîte de réception</div>
+          <h1>Demandes</h1>
+          <div className="sub">
+            Demandes de contact et de devis reçues depuis le site vitrine.
+          </div>
+        </div>
+      </div>
 
-      <div className="mt-4 flex flex-wrap gap-2">
+      <div style={{ display: "flex", flexWrap: "wrap", gap: 8, marginBottom: 14 }}>
         <FilterLink label="Toutes" href="/pro/demandes" active={!status} />
         {MESSAGE_STATUSES.map((s) => (
           <FilterLink
@@ -46,49 +47,51 @@ export default async function DemandesPage({
         ))}
       </div>
 
-      <div className="mt-4 overflow-x-auto rounded-lg border border-slate-200 bg-white">
+      <div className="pro-card" style={{ overflowX: "auto" }}>
         {messages.length === 0 ? (
-          <p className="p-6 text-sm text-slate-500">Aucune demande.</p>
+          <p style={{ padding: 24, color: "var(--ink-3)", fontSize: 13 }}>
+            Aucune demande.
+          </p>
         ) : (
-          <table className="w-full text-sm">
-            <thead className="border-b border-slate-200 bg-slate-50 text-left text-xs uppercase text-slate-500">
+          <table className="pro-table">
+            <thead>
               <tr>
-                <th className="p-3">Nom</th>
-                <th className="p-3">Contact</th>
-                <th className="p-3">Type</th>
-                <th className="p-3">Statut</th>
-                <th className="p-3 text-right">Reçue le</th>
+                <th>Nom</th>
+                <th>Contact</th>
+                <th>Type</th>
+                <th>Statut</th>
+                <th style={{ textAlign: "right" }}>Reçue le</th>
               </tr>
             </thead>
             <tbody>
               {messages.map((m: any) => (
-                <tr
-                  key={String(m._id)}
-                  className="border-b border-slate-100 last:border-0 hover:bg-slate-50"
-                >
-                  <td className="p-3">
+                <tr key={String(m._id)}>
+                  <td>
                     <Link
                       href={`/pro/demandes/${m._id}`}
-                      className="font-medium text-navy hover:text-royal"
+                      style={{ fontWeight: 600 }}
                     >
                       {m.name}
                     </Link>
                   </td>
-                  <td className="p-3 text-slate-500">
+                  <td style={{ color: "var(--ink-3)" }}>
                     {m.email}
                     {m.phone ? ` · ${m.phone}` : ""}
                   </td>
-                  <td className="p-3 text-slate-500">{m.source}</td>
-                  <td className="p-3">
-                    <span
-                      className={`rounded px-2 py-0.5 text-xs font-medium ${
-                        badge[m.status as MessageStatus] ?? badge.archive
-                      }`}
-                    >
-                      {MESSAGE_STATUS_LABELS[m.status as MessageStatus] ?? m.status}
+                  <td style={{ color: "var(--ink-3)" }}>
+                    {m.source === "devis" ? "Devis" : "Contact"}
+                  </td>
+                  <td>
+                    <span className={`pro-st ${m.status}`}>
+                      <i />
+                      {MESSAGE_STATUS_LABELS[m.status as MessageStatus] ??
+                        m.status}
                     </span>
                   </td>
-                  <td className="p-3 text-right text-slate-400">
+                  <td
+                    className="pro-mono"
+                    style={{ textAlign: "right", color: "var(--ink-3)" }}
+                  >
                     {new Date(m.createdAt).toLocaleDateString("fr-FR", {
                       day: "2-digit",
                       month: "2-digit",
@@ -117,11 +120,8 @@ function FilterLink({
   return (
     <Link
       href={href}
-      className={`rounded-full px-3 py-1 text-xs font-medium ${
-        active
-          ? "bg-royal text-white"
-          : "border border-slate-300 text-slate-600 hover:bg-slate-100"
-      }`}
+      className={`pro-st${active ? " traite" : ""}`}
+      style={{ textDecoration: "none" }}
     >
       {label}
     </Link>

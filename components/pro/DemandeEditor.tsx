@@ -44,15 +44,17 @@ export default function DemandeEditor({
   }
 
   return (
-    <div className="space-y-4 rounded-lg border border-slate-200 bg-white p-5">
+    <div
+      className="pro-card"
+      style={{ padding: "16px 20px", display: "grid", gap: 16 }}
+    >
       <div>
-        <label className="text-sm font-semibold uppercase text-slate-500">
-          Statut
-        </label>
+        <label className="pro-lab">Statut</label>
         <select
           value={status}
           onChange={(e) => setStatus(e.target.value as MessageStatus)}
-          className="mt-2 w-full rounded-md border border-slate-300 px-3 py-2 text-sm"
+          className="pro-field"
+          style={{ marginTop: 8 }}
         >
           {MESSAGE_STATUSES.map((s) => (
             <option key={s} value={s}>
@@ -63,22 +65,25 @@ export default function DemandeEditor({
       </div>
 
       <div>
-        <label className="text-sm font-semibold uppercase text-slate-500">
-          Notes internes
-        </label>
+        <label className="pro-lab">Notes internes</label>
         <textarea
           value={notes}
           onChange={(e) => setNotes(e.target.value)}
-          rows={6}
+          rows={7}
           placeholder="Suivi, relances, éléments du dossier…"
-          className="mt-2 w-full rounded-md border border-slate-300 px-3 py-2 text-sm"
+          className="pro-field"
+          style={{ marginTop: 8, resize: "vertical" }}
         />
       </div>
 
       <button
         onClick={save}
         disabled={!dirty || state === "saving"}
-        className="btn-primary w-full justify-center disabled:opacity-50"
+        className="pro-btn solid"
+        style={{
+          justifyContent: "center",
+          opacity: !dirty || state === "saving" ? 0.5 : 1,
+        }}
       >
         {state === "saving"
           ? "Enregistrement…"
@@ -87,7 +92,9 @@ export default function DemandeEditor({
             : "Enregistrer"}
       </button>
       {state === "error" && (
-        <p className="text-sm text-red-600">Erreur, réessayez.</p>
+        <p style={{ fontSize: 13, color: "var(--danger)" }}>
+          Erreur, réessayez.
+        </p>
       )}
     </div>
   );

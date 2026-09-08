@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { connectToDatabase } from "@/lib/mongodb";
 import Message, { MESSAGE_STATUS_LABELS } from "@/lib/models/Message";
+import Kpis, { type Kpi } from "@/components/pro/Kpis";
 
 export const dynamic = "force-dynamic";
 
@@ -11,7 +12,7 @@ async function getStats() {
     Message.countDocuments({ status: "en_cours" }),
     Message.countDocuments({ status: "traite" }),
     Message.countDocuments({}),
-    Message.find({}).sort({ createdAt: -1 }).limit(5).lean(),
+    Message.find({}).sort({ createdAt: -1 }).limit(6).lean(),
   ]);
   return { nouveau, enCours, traite, total, recents };
 }
@@ -19,66 +20,111 @@ async function getStats() {
 export default async function DashboardPage() {
   const { nouveau, enCours, traite, total, recents } = await getStats();
 
-  const cards = [
-    { label: "Nouvelles demandes", value: nouveau, href: "/pro/demandes?status=nouveau" },
-    { label: "En cours", value: enCours, href: "/pro/demandes?status=en_cours" },
-    { label: "Traitées", value: traite, href: "/pro/demandes?status=traite" },
-    { label: "Total", value: total, href: "/pro/demandes" },
+  const today = new Date().toLocaleDateString("fr-FR", {
+    weekday: "long",
+    day: "numeric",
+    month: "long",
+    year: "numeric",
+  });
+
+  const kpis: Kpi[] = [
+    {
+      label: "Nouvelles demandes",
+      value: nouveau,
+      hint: "à traiter",
+      href: "/pro/demandes?status=nouveau",
+      spark: "0,30 20,26 40,24 60,16 80,14 100,9",
+      accent: "var(--cyan)",
+    },
+    {
+      label: "En cours",
+      value: enCours,
+      hint: "en discussion",
+      href: "/pro/demandes?status=en_cours",
+      spark: "0,20 20,22 40,18 60,20 80,17 100,19",
+    },
+    {
+      label: "Traitées",
+      value: traite,
+      hint: "clôturées",
+      href: "/pro/demandes?status=traite",
+      spark: "0,34 15,28 30,30 45,20 60,22 75,11 100,6",
+      accent: "var(--cyan)",
+    },
+    {
+      label: "Total reçu",
+      value: total,
+      hint: "depuis le lancement",
+      href: "/pro/demandes",
+      spark: "0,12 20,18 40,14 60,24 80,20 100,28",
+    },
   ];
 
   return (
     <div>
-      <h1 className="text-2xl font-bold text-navy">Tableau de bord</h1>
-
-      <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-        {cards.map((c) => (
-          <Link
-            key={c.label}
-            href={c.href}
-            className="rounded-lg border border-slate-200 bg-white p-5 transition hover:border-royal hover:shadow-sm"
-          >
-            <p className="text-3xl font-bold text-navy">{c.value}</p>
-            <p className="mt-1 text-sm text-slate-500">{c.label}</p>
-          </Link>
-        ))}
+      <div className="pro-phead">
+        <div>
+          <div className="pro-lab">{today}</div>
+          <h1>Tableau de bord</h1>
+          <div className="sub">
+            {nouveau > 0
+              ? `${nouveau} demande${nouveau > 1 ? "s" : ""} du site en attente de traitement.`
+              : "Aucune demande en attente. Tout est à jour."}
+          </div>
+        </div>
+        <Link href="/pro/demandes" className="pro-btn solid">
+          Voir les demandes
+        </Link>
       </div>
 
-      <div className="mt-10">
-        <div className="flex items-center justify-between">
-          <h2 className="text-lg font-semibold text-navy">Dernières demandes</h2>
-          <Link href="/pro/demandes" className="text-sm font-medium text-royal">
+      <Kpis items={kpis} />
+
+      <div className="pro-card" style={{ marginTop: 14 }}>
+        <div className="pro-chead">
+          <h3>Dernières demandes</h3>
+          <Link href="/pro/demandes" className="pro-lab" style={{ color: "var(--cyan)" }}>
             Tout voir
           </Link>
         </div>
-
-        <div className="mt-4 overflow-hidden rounded-lg border border-slate-200 bg-white">
-          {recents.length === 0 ? (
-            <p className="p-6 text-sm text-slate-500">Aucune demande pour l&apos;instant.</p>
-          ) : (
-            <table className="w-full text-sm">
-              <tbody>
-                {recents.map((m: any) => (
-                  <tr key={String(m._id)} className="border-b border-slate-100 last:border-0">
-                    <td className="p-3">
-                      <Link href={`/pro/demandes/${m._id}`} className="font-medium text-navy hover:text-royal">
-                        {m.name}
-                      </Link>
-                      <span className="ml-2 rounded bg-slate-100 px-1.5 py-0.5 text-[11px] uppercase text-slate-500">
-                        {m.source}
-                      </span>
-                    </td>
-                    <td className="p-3 text-slate-500">
-                      {MESSAGE_STATUS_LABELS[m.status as keyof typeof MESSAGE_STATUS_LABELS] ?? m.status}
-                    </td>
-                    <td className="p-3 text-right text-slate-400">
-                      {new Date(m.createdAt).toLocaleDateString("fr-FR")}
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          )}
-        </div>
+        {recents.length === 0 ? (
+          <p style={{ padding: "24px", color: "var(--ink-3)", fontSize: 13 }}>
+            Aucune demande pour l&apos;instant.
+          </p>
+        ) : (
+          <table className="pro-table">
+            <tbody>
+              {recents.map((m: any) => (
+                <tr key={String(m._id)}>
+                  <td>
+                    <Link
+                      href={`/pro/demandes/${m._id}`}
+                      style={{ fontWeight: 600 }}
+                    >
+                      {m.name}
+                    </Link>
+                    <span className="pro-lab" style={{ marginLeft: 8 }}>
+                      {m.source}
+                    </span>
+                  </td>
+                  <td>
+                    <span className={`pro-st ${m.status}`}>
+                      <i />
+                      {MESSAGE_STATUS_LABELS[
+                        m.status as keyof typeof MESSAGE_STATUS_LABELS
+                      ] ?? m.status}
+                    </span>
+                  </td>
+                  <td
+                    className="pro-mono"
+                    style={{ textAlign: "right", color: "var(--ink-3)" }}
+                  >
+                    {new Date(m.createdAt).toLocaleDateString("fr-FR")}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        )}
       </div>
     </div>
   );

@@ -24,60 +24,71 @@ export default async function DemandeDetailPage({
     <div>
       <Link
         href="/pro/demandes"
-        className="inline-flex items-center gap-1 text-sm text-royal"
+        className="pro-lab"
+        style={{
+          display: "inline-flex",
+          alignItems: "center",
+          gap: 6,
+          color: "var(--cyan)",
+        }}
       >
         <ArrowLeft className="h-4 w-4" /> Retour aux demandes
       </Link>
 
-      <h1 className="mt-3 text-2xl font-bold text-navy">{m.name}</h1>
-      <p className="text-sm text-slate-500">
-        Reçue le{" "}
-        {new Date(m.createdAt).toLocaleString("fr-FR", {
-          dateStyle: "long",
-          timeStyle: "short",
-        })}{" "}
-        · {m.source === "devis" ? "Demande de devis" : "Message de contact"}
-      </p>
+      <div className="pro-phead" style={{ marginTop: 10 }}>
+        <div>
+          <div className="pro-lab">
+            {new Date(m.createdAt).toLocaleString("fr-FR", {
+              dateStyle: "long",
+              timeStyle: "short",
+            })}{" "}
+            · {m.source === "devis" ? "Demande de devis" : "Message de contact"}
+          </div>
+          <h1>{m.name}</h1>
+        </div>
+      </div>
 
-      <div className="mt-6 grid gap-6 lg:grid-cols-3">
-        <div className="lg:col-span-2 space-y-4">
-          <div className="rounded-lg border border-slate-200 bg-white p-5">
-            <h2 className="text-sm font-semibold uppercase text-slate-500">
-              Coordonnées
-            </h2>
-            <dl className="mt-3 space-y-1 text-sm">
-              <div className="flex gap-2">
-                <dt className="w-24 text-slate-400">Email</dt>
-                <dd>
-                  <a href={`mailto:${m.email}`} className="text-royal">
-                    {m.email}
-                  </a>
-                </dd>
-              </div>
+      <div
+        style={{
+          display: "grid",
+          gap: 14,
+          gridTemplateColumns: "minmax(0,1.6fr) minmax(0,1fr)",
+          alignItems: "start",
+        }}
+        className="pro-detail-grid"
+      >
+        <div style={{ display: "grid", gap: 14 }}>
+          <div className="pro-card" style={{ padding: "16px 20px" }}>
+            <div className="pro-lab">Coordonnées</div>
+            <dl
+              style={{ marginTop: 12, display: "grid", gap: 6, fontSize: 13.5 }}
+            >
+              <Row label="Email">
+                <a href={`mailto:${m.email}`} style={{ color: "var(--cyan)" }}>
+                  {m.email}
+                </a>
+              </Row>
               {m.phone && (
-                <div className="flex gap-2">
-                  <dt className="w-24 text-slate-400">Téléphone</dt>
-                  <dd>
-                    <a href={`tel:${m.phone}`} className="text-royal">
-                      {m.phone}
-                    </a>
-                  </dd>
-                </div>
+                <Row label="Téléphone">
+                  <a href={`tel:${m.phone}`} style={{ color: "var(--cyan)" }}>
+                    {m.phone}
+                  </a>
+                </Row>
               )}
-              {m.subject && (
-                <div className="flex gap-2">
-                  <dt className="w-24 text-slate-400">Sujet</dt>
-                  <dd>{m.subject}</dd>
-                </div>
-              )}
+              {m.subject && <Row label="Sujet">{m.subject}</Row>}
             </dl>
           </div>
 
-          <div className="rounded-lg border border-slate-200 bg-white p-5">
-            <h2 className="text-sm font-semibold uppercase text-slate-500">
-              Message
-            </h2>
-            <p className="mt-3 whitespace-pre-wrap text-sm text-slate-700">
+          <div className="pro-card" style={{ padding: "16px 20px" }}>
+            <div className="pro-lab">Message</div>
+            <p
+              style={{
+                marginTop: 12,
+                whiteSpace: "pre-wrap",
+                fontSize: 13.5,
+                color: "var(--ink-2)",
+              }}
+            >
               {m.message}
             </p>
           </div>
@@ -89,6 +100,21 @@ export default async function DemandeDetailPage({
           notes={m.adminNotes ?? ""}
         />
       </div>
+    </div>
+  );
+}
+
+function Row({
+  label,
+  children,
+}: {
+  label: string;
+  children: React.ReactNode;
+}) {
+  return (
+    <div style={{ display: "flex", gap: 10 }}>
+      <dt style={{ width: 90, color: "var(--ink-3)" }}>{label}</dt>
+      <dd>{children}</dd>
     </div>
   );
 }
