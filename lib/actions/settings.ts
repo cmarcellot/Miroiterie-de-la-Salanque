@@ -49,5 +49,5 @@ export async function updateSettings(formData: FormData) {
 
   revalidatePath("/pro/parametres");
   revalidatePath("/pro/devis");
-  redirect("/pro/parametres?ok=1");
+  redirect(`/pro/parametres?ok=${Date.now()}`);
 }

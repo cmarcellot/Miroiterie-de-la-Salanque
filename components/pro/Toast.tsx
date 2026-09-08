@@ -1,12 +1,13 @@
 "use client";
 
 import { Suspense, useEffect, useState } from "react";
-import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { usePathname, useSearchParams } from "next/navigation";
 import { Check } from "lucide-react";
 
 /**
- * Affiche un toast flottant quand `?ok=1` (ou la valeur `param`) est présent
- * dans l'URL, puis nettoie l'URL et se masque au bout de `duration` ms.
+ * Affiche un toast flottant dès que le paramètre `param` apparaît dans l'URL
+ * (le serveur redirige vers `?ok=<timestamp>` après une sauvegarde).
+ * Nettoie l'URL sans re-render et se masque au bout de `duration` ms.
  */
 function ToastInner({
   message,
@@ -17,25 +18,22 @@ function ToastInner({
   param?: string;
   duration?: number;
 }) {
-  const router = useRouter();
   const pathname = usePathname();
   const search = useSearchParams();
   const [visible, setVisible] = useState(false);
+  const token = search.get(param);
 
   useEffect(() => {
-    if (search.get(param) !== "1") return;
+    if (!token) return;
     setVisible(true);
-
-    // Nettoie l'URL sans recharger
-    const next = new URLSearchParams(search.toString());
-    next.delete(param);
-    const qs = next.toString();
-    router.replace(qs ? `${pathname}?${qs}` : pathname, { scroll: false });
-
+    try {
+      window.history.replaceState(null, "", pathname);
+    } catch {
+      /* ignore */
+    }
     const t = setTimeout(() => setVisible(false), duration);
     return () => clearTimeout(t);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [token, pathname, duration]);
 
   if (!visible) return null;
 
