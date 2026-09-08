@@ -1,10 +1,27 @@
 import { withAuth } from "next-auth/middleware";
+import { NextResponse } from "next/server";
 
-// Protège tout l'espace pro. next-auth laisse passer la page de connexion.
-export default withAuth({
-  pages: { signIn: "/pro/login" },
-});
+const PUBLIC = ["/pro/login"];
 
+export default withAuth(
+  function middleware() {
+    return NextResponse.next();
+  },
+  {
+    pages: { signIn: "/pro/login" },
+    callbacks: {
+      authorized: ({ req, token }) => {
+        if (PUBLIC.includes(req.nextUrl.pathname)) return true;
+        return !!token;
+      },
+    },
+  }
+);
+
+// Ne matche PAS /pro/login : le middleware d'auth n'y touche jamais.
 export const config = {
-  matcher: ["/pro/:path*"],
+  matcher: [
+    "/pro",
+    "/pro/((?!login).*)",
+  ],
 };
