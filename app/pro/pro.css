@@ -76,22 +76,18 @@
 .pro-shell {
   position: relative;
   z-index: 2;
-  display: grid;
-  grid-template-columns: 250px 1fr;
   min-height: 100vh;
-}
-@media (max-width: 1023px) {
-  .pro-shell {
-    grid-template-columns: 1fr;
-  }
 }
 
 /* ---------- sidebar ---------- */
 .pro-side {
-  position: sticky;
+  position: fixed;
   top: 0;
+  left: 0;
+  width: 250px;
   height: 100vh;
   overflow-y: auto;
+  z-index: 30;
   display: flex;
   flex-direction: column;
   gap: 3px;
@@ -99,10 +95,18 @@
   border-right: 1px solid var(--line);
   background: linear-gradient(180deg, #ffffff, #fafcfe);
 }
+.pro-main {
+  margin-left: 250px;
+}
 @media (max-width: 1023px) {
   .pro-side {
     position: static;
+    width: auto;
     height: auto;
+    z-index: auto;
+  }
+  .pro-main {
+    margin-left: 0;
   }
 }
 .pro-brand {
