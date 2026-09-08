@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
 import { getClientOptions } from "@/lib/clients-list";
+import { getSettings } from "@/lib/settings";
 import { createDevis } from "@/lib/actions/devis";
 import DevisForm from "@/components/pro/DevisForm";
 
@@ -11,9 +12,16 @@ export default async function NewDevisPage({
 }: {
   searchParams: { client?: string };
 }) {
-  const clients = await getClientOptions();
+  const [clients, settings] = await Promise.all([
+    getClientOptions(),
+    getSettings(),
+  ]);
   const today = new Date().toISOString().slice(0, 10);
-  const in90 = new Date(Date.now() + 90 * 864e5).toISOString().slice(0, 10);
+  const validUntil = new Date(
+    Date.now() + settings.devis.validityDays * 864e5
+  )
+    .toISOString()
+    .slice(0, 10);
 
   return (
     <div>
@@ -57,8 +65,9 @@ export default async function NewDevisPage({
           values={{
             clientId: searchParams.client,
             date: today,
-            validUntil: in90,
-            depositPct: 30,
+            validUntil,
+            depositPct: settings.devis.depositPct,
+            notes: settings.devis.notes,
           }}
           cancelHref="/pro/devis"
           submitLabel="Créer le devis"

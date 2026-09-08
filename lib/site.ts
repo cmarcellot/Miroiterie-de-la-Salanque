@@ -21,16 +21,6 @@ export const site = {
     "Torreilles",
     "Toute la Salanque",
   ],
-  // Informations légales pour les devis / factures / mentions légales.
-  // À compléter par l'entreprise.
-  legal: {
-    forme: "", // ex. "SARL au capital de 10 000 €"
-    siret: "", // ex. "000 000 000 00000"
-    rcs: "", // ex. "RCS Perpignan 000 000 000"
-    ape: "", // ex. "4332A"
-    tvaIntra: "", // ex. "FR00 000000000"
-    assuranceDecennale: "", // ex. "AXA — police n° 000000"
-  },
 };
 
 export const mainNav: {

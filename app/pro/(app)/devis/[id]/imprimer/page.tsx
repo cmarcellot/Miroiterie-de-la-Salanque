@@ -4,6 +4,7 @@ import mongoose from "mongoose";
 import { ArrowLeft } from "lucide-react";
 import { connectToDatabase } from "@/lib/mongodb";
 import Devis from "@/lib/models/Devis";
+import { getSettings } from "@/lib/settings";
 import DevisDocument from "@/components/pro/DevisDocument";
 import PrintButton from "@/components/pro/PrintButton";
 
@@ -21,6 +22,8 @@ export default async function DevisPrintPage({
   const d: any = await Devis.findById(params.id).lean();
   if (!d) notFound();
 
+  const settings = await getSettings();
+
   return (
     <div className="print-wrap">
       <div className="no-print" style={{ display: "flex", gap: 10, marginBottom: 18 }}>
@@ -34,7 +37,11 @@ export default async function DevisPrintPage({
       </div>
 
       <div className="print-sheet">
-        <DevisDocument d={JSON.parse(JSON.stringify(d))} />
+        <DevisDocument
+          d={JSON.parse(JSON.stringify(d))}
+          company={settings.company}
+          legal={settings.legal}
+        />
       </div>
     </div>
   );

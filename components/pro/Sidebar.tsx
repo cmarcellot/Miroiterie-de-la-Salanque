@@ -35,7 +35,7 @@ const sections: { title: string; items: Item[] }[] = [
   },
   {
     title: "Système",
-    items: [{ href: "/pro/parametres", label: "Paramètres", soon: true }],
+    items: [{ href: "/pro/parametres", label: "Paramètres" }],
   },
 ];
 

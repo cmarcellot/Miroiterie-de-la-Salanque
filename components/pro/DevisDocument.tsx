@@ -1,11 +1,18 @@
 import Image from "next/image";
-import { site } from "@/lib/site";
 import { DEVIS_STATUS_LABELS, formatEUR, type DevisStatus } from "@/lib/pro-enums";
+import type { AppSettings } from "@/lib/settings";
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
-export default function DevisDocument({ d }: { d: any }) {
+export default function DevisDocument({
+  d,
+  company,
+  legal,
+}: {
+  d: any;
+  company: AppSettings["company"];
+  legal: AppSettings["legal"];
+}) {
   const items: any[] = d.items ?? [];
-  // Regroupe la TVA par taux
   const vatMap = new Map<number, number>();
   let ht = 0;
   for (const it of items) {
@@ -17,8 +24,6 @@ export default function DevisDocument({ d }: { d: any }) {
   const tva = d.totalTVA ?? 0;
   const ttc = d.totalTTC ?? ht + tva;
   const deposit = ((Number(d.depositPct) || 0) / 100) * ttc;
-
-  const L = site.legal;
 
   return (
     <div className="devis-doc">
@@ -32,23 +37,23 @@ export default function DevisDocument({ d }: { d: any }) {
             className="dd-logo"
           />
           <div>
-            <div className="dd-co">{site.name}</div>
+            <div className="dd-co">{company.name}</div>
             <div className="dd-co-lines">
-              {site.address.street}
+              {company.street}
               <br />
-              {site.address.zip} {site.address.city}
+              {company.zip} {company.city}
               <br />
-              {site.phone} · {site.email}
-              {L.siret && (
+              {company.phone} · {company.email}
+              {legal.siret && (
                 <>
                   <br />
-                  SIRET {L.siret}
+                  SIRET {legal.siret}
                 </>
               )}
-              {L.tvaIntra && (
+              {legal.tvaIntra && (
                 <>
                   <br />
-                  TVA {L.tvaIntra}
+                  TVA {legal.tvaIntra}
                 </>
               )}
             </div>
@@ -149,10 +154,12 @@ export default function DevisDocument({ d }: { d: any }) {
       {d.notes && <div className="dd-notes">{d.notes}</div>}
 
       <footer className="dd-foot">
-        {L.forme && <>{L.forme} — </>}
-        {L.rcs && <>{L.rcs} — </>}
-        {L.ape && <>APE {L.ape} — </>}
-        {L.assuranceDecennale && <>Assurance décennale : {L.assuranceDecennale}. </>}
+        {legal.forme && <>{legal.forme} — </>}
+        {legal.rcs && <>{legal.rcs} — </>}
+        {legal.ape && <>APE {legal.ape} — </>}
+        {legal.assuranceDecennale && (
+          <>Assurance décennale : {legal.assuranceDecennale}. </>
+        )}
         Bon pour accord (date et signature) :
       </footer>
     </div>
