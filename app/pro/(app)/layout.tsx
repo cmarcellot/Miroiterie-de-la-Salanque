@@ -1,7 +1,5 @@
 import type { Metadata } from "next";
-import { Instrument_Serif, Syne } from "next/font/google";
-import { GeistSans } from "geist/font/sans";
-import { GeistMono } from "geist/font/mono";
+import { proFontVars } from "../fonts";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { connectToDatabase } from "@/lib/mongodb";
@@ -11,21 +9,6 @@ import Devis from "@/lib/models/Devis";
 import Sidebar from "@/components/pro/Sidebar";
 import Topbar from "@/components/pro/Topbar";
 import "../pro.css";
-
-const serif = Instrument_Serif({
-  subsets: ["latin"],
-  weight: "400",
-  style: ["normal", "italic"],
-  variable: "--font-serif",
-  display: "swap",
-});
-
-// Police d'affichage du prototype (titres de modale)
-const syne = Syne({
-  subsets: ["latin"],
-  variable: "--font-syne",
-  display: "swap",
-});
 
 export const metadata: Metadata = {
   title: "Espace pro",
@@ -59,7 +42,7 @@ export default async function ProLayout({
 
   return (
     <div
-      className={`pro-root ${GeistSans.variable} ${GeistMono.variable} ${serif.variable} ${syne.variable}`}
+      className={`pro-root ${proFontVars}`}
     >
       <div className="pro-aura" aria-hidden>
         <i />

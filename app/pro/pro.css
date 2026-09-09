@@ -1,7 +1,13 @@
-/* Espace pro — repris du prototype Claude Design :
-   Geist (texte + titres de page, choix Camille) · Instrument Serif (marque sidebar + doc devis) · Geist Mono (labels/montants) */
+/* Espace pro — typographie reprise du prototype Claude Design :
+   Syne (titres / valeurs · --pro-display) · Space Grotesk (texte · --pro-sans) · Geist Mono (labels / montants · --pro-mono) */
 
 .pro-root {
+  --pro-sans: var(--font-space), "Space Grotesk", -apple-system,
+    BlinkMacSystemFont, "Helvetica Neue", Arial, sans-serif;
+  --pro-display: var(--font-syne), "Syne", var(--font-space), "Space Grotesk",
+    sans-serif;
+  --pro-mono: var(--font-geist-mono), "Geist Mono", ui-monospace, monospace;
+
   --bg: #f5f7fa;
   --bg-2: #eaeff6;
   --glass: rgba(20, 40, 66, 0.035);
@@ -23,8 +29,7 @@
   overflow-x: hidden;
   background: var(--bg);
   color: var(--ink);
-  font-family: var(--font-geist-sans), "Geist", -apple-system,
-    BlinkMacSystemFont, "Helvetica Neue", Arial, sans-serif;
+  font-family: var(--pro-sans);
   font-size: 15px;
   line-height: 1.5;
   -webkit-font-smoothing: antialiased;
@@ -34,10 +39,10 @@
 .pro-root h1,
 .pro-root h2,
 .pro-root h3 {
-  font-family: var(--font-geist-sans), "Geist", -apple-system, sans-serif;
-  font-weight: 700;
-  letter-spacing: -0.02em;
-  line-height: 1.12;
+  font-family: var(--pro-display);
+  font-weight: 500;
+  letter-spacing: -0.015em;
+  line-height: 1.1;
   color: var(--marine);
 }
 
@@ -50,19 +55,19 @@
 }
 
 .pro-mono {
-  font-family: var(--font-geist-mono), "Geist Mono", ui-monospace, monospace;
+  font-family: var(--pro-mono);
 }
 
 /* Montants : mono, comme les valeurs chiffrées du prototype */
 .pro-amt {
-  font-family: var(--font-geist-mono), "Geist Mono", ui-monospace, monospace;
+  font-family: var(--pro-mono);
   font-weight: 500;
   letter-spacing: 0;
   font-variant-numeric: tabular-nums;
 }
 
 .pro-lab {
-  font-family: var(--font-geist-mono), "Geist Mono", ui-monospace, monospace;
+  font-family: var(--pro-mono);
   font-size: 9.5px;
   letter-spacing: 0.2em;
   text-transform: uppercase;
@@ -139,8 +144,8 @@
   border-bottom: 1px solid var(--line);
 }
 .pro-brand .n {
-  font-family: var(--font-serif), "Instrument Serif", Georgia, serif;
-  font-weight: 400;
+  font-family: var(--pro-display);
+  font-weight: 500;
   font-style: normal;
   font-size: 21px;
   letter-spacing: -0.01em;
@@ -149,7 +154,7 @@
   word-break: break-word;
 }
 .pro-brand .r {
-  font-family: var(--font-geist-sans), sans-serif;
+  font-family: var(--pro-sans);
   font-size: 11px;
   letter-spacing: 0.14em;
   text-transform: uppercase;
@@ -157,7 +162,7 @@
   margin-top: 6px;
 }
 .pro-side h4 {
-  font-family: var(--font-geist-sans), sans-serif;
+  font-family: var(--pro-sans);
   font-size: 10px;
   letter-spacing: 0.18em;
   text-transform: uppercase;
@@ -196,7 +201,7 @@
 }
 .pro-nav .cnt {
   margin-left: auto;
-  font-family: var(--font-geist-mono), "Geist Mono", ui-monospace, monospace;
+  font-family: var(--pro-mono);
   font-size: 11px;
   padding: 2px 7px;
   border-radius: 999px;
@@ -209,7 +214,7 @@
 }
 .pro-nav .soon {
   margin-left: auto;
-  font-family: var(--font-geist-mono), "Geist Mono", ui-monospace, monospace;
+  font-family: var(--pro-mono);
   font-size: 8px;
   letter-spacing: 0.1em;
   text-transform: uppercase;
@@ -301,7 +306,7 @@
   border-radius: 999px;
   border: 1px solid var(--line);
   background: var(--glass);
-  font-family: var(--font-geist-mono), "Geist Mono", ui-monospace, monospace;
+  font-family: var(--pro-mono);
   font-size: 10.5px;
   letter-spacing: 0.08em;
   text-transform: uppercase;
@@ -328,7 +333,7 @@
   color: #05231f;
   display: grid;
   place-items: center;
-  font-family: var(--font-geist-sans), "Geist", sans-serif;
+  font-family: var(--pro-sans);
   font-weight: 600;
   font-size: 13px;
 }
@@ -339,7 +344,7 @@
 }
 .pro-me .t span {
   display: block;
-  font-family: var(--font-geist-mono), "Geist Mono", ui-monospace, monospace;
+  font-family: var(--pro-mono);
   font-size: 9px;
   letter-spacing: 0.14em;
   color: var(--ink-3);
@@ -431,10 +436,10 @@
   border-bottom: 1px solid var(--line);
 }
 .pro-chead h3 {
-  font-family: var(--font-geist-sans), "Geist", sans-serif;
-  font-size: 14px;
-  font-weight: 600;
-  letter-spacing: -0.005em;
+  font-family: var(--pro-display);
+  font-size: 19px;
+  font-weight: 400;
+  letter-spacing: -0.01em;
   color: var(--ink);
 }
 
@@ -462,16 +467,16 @@
   border-color: var(--line-2);
 }
 .pro-kpi .v {
-  font-family: var(--font-geist-sans), "Geist", sans-serif;
-  font-weight: 700;
+  font-family: var(--pro-display);
+  font-weight: 400;
   font-size: clamp(26px, 2.8vw, 36px);
-  letter-spacing: -0.03em;
+  letter-spacing: -0.02em;
   line-height: 1;
   margin-top: 8px;
   color: var(--marine);
 }
 .pro-kpi .d {
-  font-family: var(--font-geist-mono), "Geist Mono", ui-monospace, monospace;
+  font-family: var(--pro-mono);
   font-size: 10px;
   margin-top: 9px;
   color: var(--ink-3);
@@ -491,7 +496,7 @@
   border-collapse: collapse;
 }
 .pro-table th {
-  font-family: var(--font-geist-sans), "Geist", sans-serif;
+  font-family: var(--pro-sans);
   font-size: 10px;
   letter-spacing: 0.1em;
   text-transform: uppercase;
@@ -520,7 +525,7 @@
   background: var(--hover);
 }
 .pro-table td.num {
-  font-family: var(--font-geist-mono), "Geist Mono", ui-monospace, monospace;
+  font-family: var(--pro-mono);
   font-size: 11.5px;
   color: var(--acier);
 }
@@ -545,13 +550,13 @@
   gap: 10px;
 }
 .pro-namecell .nm {
-  font-family: var(--font-geist-sans), "Geist", sans-serif;
+  font-family: var(--pro-sans);
   font-weight: 500;
   font-size: 13.5px;
   color: var(--ink);
 }
 .pro-namecell .sb {
-  font-family: var(--font-geist-sans), "Geist", sans-serif;
+  font-family: var(--pro-sans);
   font-size: 12px;
   color: var(--ink-3);
   margin-top: 2px;
@@ -578,7 +583,7 @@
   display: inline-flex;
   align-items: center;
   gap: 7px;
-  font-family: var(--font-geist-mono), "Geist Mono", ui-monospace, monospace;
+  font-family: var(--pro-mono);
   font-size: 9.5px;
   letter-spacing: 0.12em;
   text-transform: uppercase;
@@ -656,7 +661,7 @@ select.pro-field {
 
 .pro-lbl {
   display: block;
-  font-family: var(--font-geist-sans), "Geist", sans-serif;
+  font-family: var(--pro-sans);
   font-size: 11px;
   letter-spacing: 0.14em;
   text-transform: uppercase;
@@ -753,7 +758,7 @@ select.pro-field {
   background: var(--hover);
 }
 .pro-ac li button .cp {
-  font-family: var(--font-geist-mono), "Geist Mono", monospace;
+  font-family: var(--pro-mono);
   font-size: 11.5px;
   color: var(--ink-3);
 }
@@ -774,7 +779,7 @@ select.pro-field {
 
 /* liste d'entités rattachées sur une fiche (repris de .client-block du proto) */
 .pro-rel h5 {
-  font-family: var(--font-geist-sans), "Geist", sans-serif;
+  font-family: var(--pro-sans);
   font-size: 10px;
   letter-spacing: 0.14em;
   text-transform: uppercase;
@@ -806,7 +811,7 @@ select.pro-field {
 }
 .pro-rel-item .mt {
   margin-left: auto;
-  font-family: var(--font-geist-mono), "Geist Mono", monospace;
+  font-family: var(--pro-mono);
   font-size: 11.5px;
   color: var(--ink-3);
   white-space: nowrap;
@@ -860,7 +865,7 @@ select.pro-field {
   padding-right: 36px;
 }
 .pro-modal-head h2 {
-  font-family: var(--font-syne), "Syne", var(--font-geist-sans), sans-serif;
+  font-family: var(--pro-display);
   font-weight: 400;
   font-size: 28px;
   letter-spacing: -0.01em;
@@ -1007,7 +1012,7 @@ select.pro-field {
   box-shadow: 0 24px 60px rgba(20, 40, 66, 0.1);
 }
 .devis-doc {
-  font-family: var(--font-geist-sans), "Geist", -apple-system, sans-serif;
+  font-family: var(--pro-sans);
   font-size: 12px;
   line-height: 1.5;
   color: #1a2330;
@@ -1028,7 +1033,7 @@ select.pro-field {
   width: auto;
 }
 .devis-doc .dd-co {
-  font-family: var(--font-serif), "Instrument Serif", Georgia, serif;
+  font-family: var(--pro-display);
   font-weight: 400;
   font-size: 17px;
   letter-spacing: -0.01em;
@@ -1045,7 +1050,7 @@ select.pro-field {
   text-align: right;
 }
 .devis-doc .dd-title {
-  font-family: var(--font-serif), "Instrument Serif", Georgia, serif;
+  font-family: var(--pro-display);
   font-weight: 400;
   font-size: 30px;
   letter-spacing: -0.01em;
@@ -1053,7 +1058,7 @@ select.pro-field {
   text-transform: uppercase;
 }
 .devis-doc .dd-num {
-  font-family: var(--font-geist-mono), monospace;
+  font-family: var(--pro-mono);
   font-size: 12px;
   color: #1a2330;
   margin-top: 2px;
@@ -1063,7 +1068,7 @@ select.pro-field {
 }
 .devis-doc .dd-label,
 .devis-doc .dd-table th {
-  font-family: var(--font-geist-mono), monospace;
+  font-family: var(--pro-mono);
   font-size: 8.5px;
   letter-spacing: 0.16em;
   text-transform: uppercase;
@@ -1103,12 +1108,12 @@ select.pro-field {
 .devis-doc .dd-totals > div {
   display: flex;
   justify-content: space-between;
-  font-family: var(--font-geist-mono), monospace;
+  font-family: var(--pro-mono);
   font-size: 11px;
   color: #5a6675;
 }
 .devis-doc .dd-grand {
-  font-family: var(--font-serif), "Instrument Serif", Georgia, serif !important;
+  font-family: var(--pro-display) !important;
   font-weight: 400;
   font-size: 17px !important;
   color: #1d3f6b !important;
