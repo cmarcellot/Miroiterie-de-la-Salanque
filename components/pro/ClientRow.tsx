@@ -3,6 +3,7 @@
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { FileText } from "lucide-react";
+import { formatPhone } from "@/lib/pro-enums";
 
 export default function ClientRow({
   id,
@@ -42,7 +43,9 @@ export default function ClientRow({
             >
               {name}
             </Link>
-            <div className="sb">{phone || email || "—"}</div>
+            <div className="sb">
+              {phone ? formatPhone(phone) : email || "—"}
+            </div>
           </div>
         </div>
       </td>

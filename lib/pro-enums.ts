@@ -95,3 +95,17 @@ export function formatEUR(n: number) {
     currency: "EUR",
   }).format(Number(n) || 0);
 }
+
+/** Met en forme un numéro de téléphone français en paires (06 12 34 56 78). */
+export function formatPhone(raw: string): string {
+  const s = (raw || "").trim();
+  if (!s) return "";
+  let digits = s.replace(/[^\d+]/g, "");
+  if (digits.startsWith("+33")) digits = "0" + digits.slice(3);
+  else if (digits.startsWith("0033")) digits = "0" + digits.slice(4);
+  digits = digits.replace(/\D/g, "");
+  if (digits.length === 10 && digits.startsWith("0")) {
+    return digits.replace(/(\d\d)(?=\d)/g, "$1 ").trim();
+  }
+  return s;
+}
