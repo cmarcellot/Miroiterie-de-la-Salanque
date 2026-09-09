@@ -16,6 +16,7 @@
   --ok: #0e9182;
   --warn: #b9791f;
   --danger: #d15660;
+  --hover: rgba(29, 63, 107, 0.1);
 
   position: relative;
   min-height: 100vh;
@@ -180,7 +181,7 @@
 }
 .pro-nav:hover {
   color: var(--ink);
-  background: var(--bg);
+  background: var(--hover);
 }
 .pro-nav.on {
   background: var(--ink);
@@ -241,7 +242,7 @@
   transition: background 0.15s;
 }
 .pro-signout:hover {
-  background: var(--bg);
+  background: var(--hover);
   color: var(--ink);
 }
 
@@ -413,6 +414,7 @@
 }
 .pro-btn.ghost:hover {
   border-color: var(--ink);
+  background: var(--hover);
 }
 
 .pro-card {
@@ -452,12 +454,12 @@
   position: relative;
   overflow: hidden;
   transition:
-    transform 0.35s cubic-bezier(0.16, 1, 0.3, 1),
-    border-color 0.3s;
+    background 0.2s,
+    border-color 0.2s;
 }
 .pro-kpi:hover {
-  transform: translateY(-5px);
-  border-color: rgba(14, 145, 130, 0.4);
+  background: var(--hover);
+  border-color: var(--line-2);
 }
 .pro-kpi .v {
   font-family: var(--font-geist-sans), "Geist", sans-serif;
@@ -515,7 +517,7 @@
   cursor: pointer;
 }
 .pro-table tbody tr:hover {
-  background: var(--bg);
+  background: var(--hover);
 }
 .pro-table td.num {
   font-family: var(--font-geist-mono), "Geist Mono", ui-monospace, monospace;
@@ -670,6 +672,13 @@
 .pro-rel-item:last-child {
   border-bottom: none;
 }
+.pro-rel-item {
+  border-radius: 6px;
+  transition: background 0.15s;
+}
+.pro-rel-item:hover {
+  background: var(--hover);
+}
 .pro-rel-item .nm {
   font-weight: 500;
   color: var(--ink);
@@ -740,7 +749,7 @@
   transition: background 0.2s;
 }
 .pro-modal-close:hover {
-  background: var(--glass);
+  background: var(--hover);
 }
 .pro-modal-body {
   padding: 20px;
