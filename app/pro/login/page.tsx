@@ -1,22 +1,16 @@
 import type { Metadata } from "next";
-import { Chivo, Manrope, Roboto_Mono } from "next/font/google";
+import { Instrument_Serif } from "next/font/google";
+import { GeistSans } from "geist/font/sans";
+import { GeistMono } from "geist/font/mono";
 import LoginForm from "@/components/pro/LoginForm";
 import "../pro.css";
 
-const chivo = Chivo({
+const serif = Instrument_Serif({
   subsets: ["latin"],
-  weight: ["400", "700", "800", "900"],
-  variable: "--font-chivo",
-});
-const manrope = Manrope({
-  subsets: ["latin"],
-  weight: ["300", "400", "500", "600", "700"],
-  variable: "--font-manrope",
-});
-const mono = Roboto_Mono({
-  subsets: ["latin"],
-  weight: ["400", "500"],
-  variable: "--font-pro-mono",
+  weight: "400",
+  style: ["normal", "italic"],
+  variable: "--font-serif",
+  display: "swap",
 });
 
 export const metadata: Metadata = {
@@ -27,7 +21,7 @@ export const metadata: Metadata = {
 export default function LoginPage() {
   return (
     <div
-      className={`pro-root ${chivo.variable} ${manrope.variable} ${mono.variable}`}
+      className={`pro-root ${GeistSans.variable} ${GeistMono.variable} ${serif.variable}`}
     >
       <div className="pro-aura" aria-hidden>
         <i />

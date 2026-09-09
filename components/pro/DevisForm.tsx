@@ -229,7 +229,7 @@ export default function DevisForm({
           display: "flex",
           justifyContent: "flex-end",
           gap: 28,
-          fontFamily: "var(--font-pro-mono)",
+          fontFamily: "var(--font-geist-mono)",
           fontSize: 13,
         }}
       >
@@ -238,9 +238,8 @@ export default function DevisForm({
           <div>TVA&nbsp;&nbsp;{formatEUR(totals.totalTVA)}</div>
           <div
             style={{
-              fontFamily: "var(--font-chivo)",
-              fontWeight: 900,
-              fontSize: 16,
+              fontWeight: 600,
+              fontSize: 15,
               color: "var(--marine)",
             }}
           >
