@@ -48,12 +48,10 @@ const sections: { title: string; items: Item[] }[] = [
 ];
 
 export default function Sidebar({
-  email,
   pending,
   clients,
   devisEnAttente,
 }: {
-  email?: string | null;
   pending: number;
   clients: number;
   devisEnAttente: number;
@@ -138,11 +136,6 @@ export default function Sidebar({
             </span>
             Paramètres
           </Link>
-          {email && (
-            <div className="pro-mono" style={{ padding: "8px 12px 0" }}>
-              {email}
-            </div>
-          )}
           <button
             type="button"
             className="pro-signout"

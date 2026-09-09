@@ -61,7 +61,6 @@ export default async function ProLayout({
 
       <div className="pro-shell">
         <Sidebar
-          email={session?.user?.email}
           pending={pending}
           clients={clients}
           devisEnAttente={devisEnAttente}
