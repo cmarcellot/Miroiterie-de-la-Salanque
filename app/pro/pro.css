@@ -545,15 +545,16 @@
   gap: 10px;
 }
 .pro-namecell .nm {
+  font-family: var(--font-geist-sans), "Geist", sans-serif;
   font-weight: 500;
+  font-size: 13.5px;
   color: var(--ink);
 }
 .pro-namecell .sb {
-  font-size: 11px;
+  font-family: var(--font-geist-sans), "Geist", sans-serif;
+  font-size: 12px;
   color: var(--ink-3);
-  margin-top: 1px;
-  font-family: var(--font-geist-mono), "Geist Mono", ui-monospace, monospace;
-  letter-spacing: -0.02em;
+  margin-top: 2px;
 }
 
 /* petit tag de compteur (repris de .tag du prototype) */
