@@ -5,11 +5,24 @@ import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { signOut } from "next-auth/react";
-import { LogOut, Menu, X } from "lucide-react";
+import {
+  LayoutGrid,
+  Inbox,
+  FileText,
+  Users,
+  ReceiptText,
+  HardHat,
+  Settings,
+  LogOut,
+  Menu,
+  X,
+  type LucideIcon,
+} from "lucide-react";
 
 type Item = {
   href: string;
   label: string;
+  icon: LucideIcon;
   exact?: boolean;
   soon?: boolean;
   count?: number;
@@ -17,25 +30,20 @@ type Item = {
 
 const sections: { title: string; items: Item[] }[] = [
   {
-    title: "Pilotage",
+    title: "Activité",
     items: [
-      { href: "/pro", label: "Tableau de bord", exact: true },
-      { href: "/pro/demandes", label: "Demandes" },
-      { href: "/pro/devis", label: "Devis" },
-      { href: "/pro/planning", label: "Planning", soon: true },
+      { href: "/pro", label: "Tableau de bord", icon: LayoutGrid, exact: true },
+      { href: "/pro/demandes", label: "Demandes", icon: Inbox },
+      { href: "/pro/devis", label: "Devis", icon: FileText },
+      { href: "/pro/clients", label: "Clients", icon: Users },
     ],
   },
   {
-    title: "Gestion",
+    title: "Production",
     items: [
-      { href: "/pro/clients", label: "Clients" },
-      { href: "/pro/factures", label: "Factures", soon: true },
-      { href: "/pro/chantiers", label: "Chantiers", soon: true },
+      { href: "/pro/factures", label: "Factures", icon: ReceiptText, soon: true },
+      { href: "/pro/chantiers", label: "Chantiers", icon: HardHat, soon: true },
     ],
-  },
-  {
-    title: "Système",
-    items: [{ href: "/pro/parametres", label: "Paramètres" }],
   },
 ];
 
@@ -53,6 +61,13 @@ export default function Sidebar({
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
 
+  const countFor = (href: string) => {
+    if (href === "/pro/demandes") return pending;
+    if (href === "/pro/clients") return clients;
+    if (href === "/pro/devis") return devisEnAttente;
+    return 0;
+  };
+
   return (
     <aside className="pro-side">
       <div className="pro-brand">
@@ -61,14 +76,10 @@ export default function Sidebar({
           alt="Miroiterie de la Salanque"
           width={120}
           height={120}
-          className="h-9 w-auto"
+          className="h-10 w-auto shrink-0"
         />
         <div>
-          <div className="n">
-            Miroiterie
-            <br />
-            de la Salanque
-          </div>
+          <div className="n">Miroiterie de la Salanque</div>
           <div className="r">Espace pro</div>
         </div>
         <button
@@ -90,11 +101,8 @@ export default function Sidebar({
                 ? pathname === item.href
                 : pathname === item.href ||
                   pathname.startsWith(item.href + "/");
-              let count = item.count;
-              if (item.href === "/pro/demandes" && pending > 0) count = pending;
-              if (item.href === "/pro/clients" && clients > 0) count = clients;
-              if (item.href === "/pro/devis" && devisEnAttente > 0)
-                count = devisEnAttente;
+              const Icon = item.icon;
+              const count = countFor(item.href);
               return (
                 <Link
                   key={item.href}
@@ -102,9 +110,11 @@ export default function Sidebar({
                   onClick={() => setOpen(false)}
                   className={`pro-nav${active ? " on" : ""}`}
                 >
-                  <i className="ic" />
+                  <span className="ico">
+                    <Icon className="h-4 w-4" strokeWidth={1.75} />
+                  </span>
                   {item.label}
-                  {count ? (
+                  {count > 0 ? (
                     <span className="cnt">{count}</span>
                   ) : item.soon ? (
                     <span className="soon">bientôt</span>
@@ -116,13 +126,31 @@ export default function Sidebar({
         ))}
 
         <div className="foot">
-          {email && <div className="pro-mono">{email}</div>}
+          <Link
+            href="/pro/parametres"
+            onClick={() => setOpen(false)}
+            className={`pro-nav${
+              pathname.startsWith("/pro/parametres") ? " on" : ""
+            }`}
+          >
+            <span className="ico">
+              <Settings className="h-4 w-4" strokeWidth={1.75} />
+            </span>
+            Paramètres
+          </Link>
+          {email && (
+            <div className="pro-mono" style={{ padding: "8px 12px 0" }}>
+              {email}
+            </div>
+          )}
           <button
             type="button"
-            className="pro-signout mt-2"
+            className="pro-signout"
             onClick={() => signOut({ callbackUrl: "/pro/login" })}
           >
-            <LogOut className="h-4 w-4" strokeWidth={1.6} />
+            <span className="ico">
+              <LogOut className="h-4 w-4" strokeWidth={1.75} />
+            </span>
             Se déconnecter
           </button>
         </div>
