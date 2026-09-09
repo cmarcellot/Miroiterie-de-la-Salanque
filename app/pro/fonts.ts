@@ -9,12 +9,14 @@ import { GeistMono } from "geist/font/mono";
 
 const syne = Syne({
   subsets: ["latin"],
+  weight: ["400", "500", "600", "700"],
   variable: "--font-syne",
   display: "swap",
 });
 
 const space = Space_Grotesk({
   subsets: ["latin"],
+  weight: ["400", "500", "600", "700"],
   variable: "--font-space",
   display: "swap",
 });
