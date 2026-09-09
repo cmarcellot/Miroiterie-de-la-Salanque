@@ -33,11 +33,26 @@
   font-family: var(--font-chivo), "Chivo", system-ui, sans-serif;
   font-weight: 900;
   letter-spacing: -0.03em;
-  line-height: 1;
+  line-height: 0.98;
+}
+
+.pro-root a {
+  color: inherit;
+  text-decoration: none;
+}
+.pro-main a:not(.pro-btn):not(.pro-st):hover {
+  color: var(--cyan);
 }
 
 .pro-mono {
   font-family: var(--font-pro-mono), "Roboto Mono", ui-monospace, monospace;
+}
+
+/* Montants : Chivo condensé (comme .amt du prototype) */
+.pro-amt {
+  font-family: var(--font-chivo), "Chivo", sans-serif;
+  font-weight: 800;
+  letter-spacing: -0.02em;
 }
 
 .pro-lab {
@@ -119,7 +134,7 @@
 }
 .pro-brand .n {
   font-family: var(--font-chivo), "Chivo", sans-serif;
-  font-weight: 700;
+  font-weight: 800;
   font-size: 12.5px;
   text-transform: uppercase;
   letter-spacing: -0.01em;
@@ -363,7 +378,7 @@
   margin-bottom: 24px;
 }
 .pro-phead h1 {
-  font-size: clamp(24px, 3vw, 38px);
+  font-size: clamp(26px, 3.2vw, 42px);
   margin-top: 8px;
 }
 .pro-phead .sub {

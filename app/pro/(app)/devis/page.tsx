@@ -94,10 +94,7 @@ export default async function DevisListPage({
                       {DEVIS_STATUS_LABELS[d.status as DevisStatus] ?? d.status}
                     </span>
                   </td>
-                  <td
-                    className="pro-mono"
-                    style={{ textAlign: "right", fontWeight: 700 }}
-                  >
+                  <td className="pro-amt" style={{ textAlign: "right" }}>
                     {formatEUR(d.totalTTC || 0)}
                   </td>
                 </tr>

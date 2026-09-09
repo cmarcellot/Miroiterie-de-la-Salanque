@@ -12,7 +12,7 @@ import "../pro.css";
 
 const chivo = Chivo({
   subsets: ["latin"],
-  weight: ["400", "700", "900"],
+  weight: ["400", "700", "800", "900"],
   variable: "--font-chivo",
 });
 const manrope = Manrope({
