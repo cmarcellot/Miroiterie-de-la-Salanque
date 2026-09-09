@@ -1,5 +1,5 @@
 /* Espace pro — typographie du prototype Claude Design :
-   Geist (sans) · DM Serif Display (titres + marque, gras) · Geist Mono (labels) */
+   Geist (texte ET titres de page, gras) · DM Serif Display (marque sidebar + doc devis) · Geist Mono (labels/montants) */
 
 .pro-root {
   --bg: #f5f7fa;
@@ -33,10 +33,11 @@
 .pro-root h1,
 .pro-root h2,
 .pro-root h3 {
-  font-family: var(--font-serif), "DM Serif Display", Georgia, serif;
-  font-weight: 400;
-  letter-spacing: -0.015em;
-  line-height: 1;
+  font-family: var(--font-geist-sans), "Geist", -apple-system, sans-serif;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  line-height: 1.12;
+  color: var(--marine);
 }
 
 .pro-root a {
@@ -364,7 +365,7 @@
   margin-bottom: 24px;
 }
 .pro-phead h1 {
-  font-size: clamp(28px, 3vw, 40px);
+  font-size: clamp(26px, 2.6vw, 34px);
   margin-top: 6px;
 }
 .pro-phead .sub {
@@ -424,7 +425,8 @@
 }
 .pro-chead h3 {
   font-size: 15px;
-  letter-spacing: -0.02em;
+  font-weight: 600;
+  letter-spacing: -0.015em;
 }
 
 /* KPI */
@@ -451,12 +453,13 @@
   border-color: rgba(14, 145, 130, 0.4);
 }
 .pro-kpi .v {
-  font-family: var(--font-serif), "DM Serif Display", Georgia, serif;
-  font-weight: 400;
-  font-size: clamp(28px, 3vw, 40px);
-  letter-spacing: -0.01em;
+  font-family: var(--font-geist-sans), "Geist", sans-serif;
+  font-weight: 700;
+  font-size: clamp(26px, 2.8vw, 36px);
+  letter-spacing: -0.03em;
   line-height: 1;
   margin-top: 8px;
+  color: var(--marine);
 }
 .pro-kpi .d {
   font-family: var(--font-geist-mono), "Geist Mono", ui-monospace, monospace;
