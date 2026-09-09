@@ -4,9 +4,10 @@ import ContactForm from "@/components/ContactForm";
 import { site } from "@/lib/site";
 
 export const metadata: Metadata = {
-  title: "Contact",
+  title: "Contact — menuisier à Perpignan et dans la Salanque",
   description:
-    "Contactez la Miroiterie de la Salanque à Saint-Laurent-de-la-Salanque : devis, informations, dépannage.",
+    "Contactez la Miroiterie de la Salanque (Canet-en-Roussillon) : devis gratuit, informations, dépannage. Intervention dans tout le département des Pyrénées-Orientales.",
+  alternates: { canonical: "/contact" },
 };
 
 export default function ContactPage() {

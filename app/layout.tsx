@@ -10,16 +10,19 @@ export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
   title: {
     default:
-      "Miroiterie de la Salanque | Menuiserie & serrurerie à Perpignan",
+      "Menuisier à Perpignan et dans la Salanque | Miroiterie de la Salanque",
     template: "%s | Miroiterie de la Salanque",
   },
   description:
-    "30 ans d'expérience en menuiserie et serrurerie à Perpignan et dans la Salanque : fenêtres et portes-fenêtres PVC ou aluminium, portails, clôtures, pergolas, vérandas, volets roulants, portes de garage et rideaux métalliques. Produits fabriqués en France.",
+    "Menuisier à Perpignan et dans la Salanque (66) : fenêtres et portes-fenêtres alu ou PVC, portails, portillons, clôtures, pergolas, vérandas, volets roulants, portes de garage et rideaux métalliques. Réparation et dépannage. 30 ans d'expérience, fabriqué en France.",
   openGraph: {
     type: "website",
     locale: "fr_FR",
     siteName: "Miroiterie de la Salanque",
     url: siteUrl,
+  },
+  twitter: {
+    card: "summary_large_image",
   },
 };
 

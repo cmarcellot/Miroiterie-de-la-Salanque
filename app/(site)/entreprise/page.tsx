@@ -4,9 +4,10 @@ import Placeholder from "@/components/Placeholder";
 import { BadgeIcon, FranceIcon, RulerIcon, UserIcon } from "@/components/icons";
 
 export const metadata: Metadata = {
-  title: "L'entreprise",
+  title: "L'entreprise — 30 ans de menuiserie à Perpignan",
   description:
-    "Miroiterie de la Salanque : 30 ans d'expérience en menuiserie et serrurerie à Perpignan, avec une fabrication française et un suivi attentif de chaque chantier.",
+    "Miroiterie de la Salanque : 30 ans d'expérience en menuiserie et serrurerie à Perpignan et dans la Salanque, fabrication française et suivi attentif de chaque chantier.",
+  alternates: { canonical: "/entreprise" },
 };
 
 const values = [

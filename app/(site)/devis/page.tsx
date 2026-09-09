@@ -4,9 +4,10 @@ import ContactForm from "@/components/ContactForm";
 import { CheckIcon } from "@/components/icons";
 
 export const metadata: Metadata = {
-  title: "Demander un devis",
+  title: "Devis gratuit — fenêtres, portails, vérandas, volets",
   description:
-    "Demandez un devis gratuit pour vos fenêtres, portails, clôtures, pergolas, vérandas ou portes de garage.",
+    "Demandez un devis gratuit et sans engagement pour vos fenêtres, portails, clôtures, pergolas, vérandas, volets roulants ou portes de garage, à Perpignan et dans la Salanque.",
+  alternates: { canonical: "/devis" },
 };
 
 const points = [

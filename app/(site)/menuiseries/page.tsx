@@ -5,9 +5,10 @@ import Placeholder from "@/components/Placeholder";
 import { ArrowRight } from "@/components/icons";
 
 export const metadata: Metadata = {
-  title: "Menuiseries aluminium & PVC",
+  title: "Menuisier à Perpignan — Fenêtres, portails, vérandas alu & PVC",
   description:
-    "Fenêtres et portes-fenêtres PVC ou aluminium, baies vitrées, portes d'entrée, portails, portillons, clôtures, pergolas et vérandas — fabriqués en France à Perpignan.",
+    "Fenêtres et portes-fenêtres alu ou PVC, baies vitrées, portes d'entrée, portails, portillons, clôtures, pergolas, vérandas, volets roulants et portes de garage à Perpignan et dans la Salanque. Fabriqué en France.",
+  alternates: { canonical: "/menuiseries" },
 };
 
 const blocks = [
@@ -67,8 +68,8 @@ export default function MenuiseriesPage() {
   return (
     <>
       <PageHeader
-        title="Nos menuiseries"
-        subtitle="Fenêtres, portes, portails, clôtures, pergolas, vérandas, volets roulants et portes de garage en aluminium et PVC, fabriqués en France à Perpignan. Réparation et dépannage assurés."
+        title="Menuiseries alu & PVC à Perpignan"
+        subtitle="Fenêtres, portes, portails, clôtures, pergolas, vérandas, volets roulants et portes de garage en aluminium et PVC, fabriqués en France. Réparation et dépannage assurés dans toute la Salanque."
       />
       <div className="container-mds space-y-16 py-16">
         {blocks.map((b, i) => (

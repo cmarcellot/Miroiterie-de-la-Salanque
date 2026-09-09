@@ -2,7 +2,11 @@ import type { Metadata } from "next";
 import PageHeader from "@/components/PageHeader";
 import { site } from "@/lib/site";
 
-export const metadata: Metadata = { title: "Politique de confidentialité" };
+export const metadata: Metadata = {
+  title: "Politique de confidentialité",
+  alternates: { canonical: "/politique-de-confidentialite" },
+  robots: { index: false, follow: true },
+};
 
 export default function ConfidentialitePage() {
   return (

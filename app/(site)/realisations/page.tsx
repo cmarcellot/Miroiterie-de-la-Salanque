@@ -4,9 +4,10 @@ import Placeholder from "@/components/Placeholder";
 import { realisations } from "@/lib/site";
 
 export const metadata: Metadata = {
-  title: "Réalisations",
+  title: "Réalisations — chantiers de menuiserie dans la Salanque",
   description:
-    "Découvrez nos chantiers de menuiserie à Perpignan et dans la Salanque : fenêtres, baies vitrées, portails, clôtures, pergolas, vérandas et portes de garage.",
+    "Nos chantiers de menuiserie à Perpignan et dans la Salanque : fenêtres, baies vitrées, portails, clôtures, pergolas, vérandas et portes de garage.",
+  alternates: { canonical: "/realisations" },
 };
 
 // 3 vignettes par catégorie en attendant les vraies photos.
