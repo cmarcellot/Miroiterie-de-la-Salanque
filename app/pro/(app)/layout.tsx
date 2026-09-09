@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Instrument_Serif } from "next/font/google";
+import { Instrument_Serif, Syne } from "next/font/google";
 import { GeistSans } from "geist/font/sans";
 import { GeistMono } from "geist/font/mono";
 import { getServerSession } from "next-auth";
@@ -17,6 +17,13 @@ const serif = Instrument_Serif({
   weight: "400",
   style: ["normal", "italic"],
   variable: "--font-serif",
+  display: "swap",
+});
+
+// Police d'affichage du prototype (titres de modale)
+const syne = Syne({
+  subsets: ["latin"],
+  variable: "--font-syne",
   display: "swap",
 });
 
@@ -52,7 +59,7 @@ export default async function ProLayout({
 
   return (
     <div
-      className={`pro-root ${GeistSans.variable} ${GeistMono.variable} ${serif.variable}`}
+      className={`pro-root ${GeistSans.variable} ${GeistMono.variable} ${serif.variable} ${syne.variable}`}
     >
       <div className="pro-aura" aria-hidden>
         <i />
