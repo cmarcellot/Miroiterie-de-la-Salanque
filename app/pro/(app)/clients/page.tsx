@@ -1,11 +1,23 @@
-import Link from "next/link";
+import { Search } from "lucide-react";
 import { connectToDatabase } from "@/lib/mongodb";
 import Client, { CLIENT_TYPE_LABELS, type ClientType } from "@/lib/models/Client";
+import Devis from "@/lib/models/Devis";
 import { clientDisplayName } from "@/lib/pro-enums";
 import ClientModal from "@/components/pro/ClientModal";
+import ClientRow from "@/components/pro/ClientRow";
 import Toast from "@/components/pro/Toast";
 
 export const dynamic = "force-dynamic";
+
+function initialsOf(name: string) {
+  return name
+    .split(/[\s'-]+/)
+    .map((s) => s[0])
+    .filter(Boolean)
+    .slice(0, 2)
+    .join("")
+    .toUpperCase();
+}
 
 export default async function ClientsPage({
   searchParams,
@@ -27,10 +39,17 @@ export default async function ClientsPage({
         ],
       }
     : {};
-  const clientsRaw = await Client.find(filter)
-    .sort({ lastName: 1, company: 1 })
-    .limit(300)
-    .lean();
+
+  const [clientsRaw, devisCounts] = await Promise.all([
+    Client.find(filter).limit(300).lean(),
+    Devis.aggregate([{ $group: { _id: "$clientId", n: { $sum: 1 } } }]),
+  ]);
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const countByClient = new Map<string, number>(
+    (devisCounts as any[]).map((d) => [String(d._id), d.n as number])
+  );
+
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const clients = (clientsRaw as any[])
     .map((c) => ({ ...c, display: clientDisplayName(c) }))
@@ -42,21 +61,17 @@ export default async function ClientsPage({
 
       <div className="pro-phead">
         <div>
-          <div className="pro-lab">Répertoire</div>
           <h1>Clients</h1>
           <div className="sub">
             {clients.length} fiche{clients.length > 1 ? "s" : ""}
-            {q ? ` pour « ${q} »` : ""}.
+            {q ? ` pour « ${q} »` : " · cliquez sur une ligne pour ouvrir la fiche"}.
           </div>
         </div>
-        <ClientModal />
+        <ClientModal label="Nouveau client" />
       </div>
 
-      <form
-        method="get"
-        style={{ marginBottom: 14, maxWidth: 420 }}
-        className="pro-search"
-      >
+      <form method="get" className="pro-search" style={{ marginBottom: 16 }}>
+        <Search />
         <input
           name="q"
           defaultValue={q}
@@ -75,29 +90,23 @@ export default async function ClientsPage({
               <tr>
                 <th>Nom</th>
                 <th>Type</th>
-                <th>Contact</th>
                 <th>Ville</th>
+                <th>Devis</th>
               </tr>
             </thead>
             <tbody>
-              {clients.map((c: any) => (
-                <tr key={String(c._id)}>
-                  <td>
-                    <Link
-                      href={`/pro/clients/${c._id}`}
-                      style={{ fontWeight: 600 }}
-                    >
-                      {c.display}
-                    </Link>
-                  </td>
-                  <td style={{ color: "var(--ink-3)" }}>
-                    {CLIENT_TYPE_LABELS[c.type as ClientType] ?? c.type}
-                  </td>
-                  <td style={{ color: "var(--ink-3)" }}>
-                    {[c.phone, c.email].filter(Boolean).join(" · ") || "—"}
-                  </td>
-                  <td style={{ color: "var(--ink-3)" }}>{c.city || "—"}</td>
-                </tr>
+              {clients.map((c) => (
+                <ClientRow
+                  key={String(c._id)}
+                  id={String(c._id)}
+                  initials={initialsOf(c.display)}
+                  name={c.display}
+                  typeLabel={CLIENT_TYPE_LABELS[c.type as ClientType] ?? c.type}
+                  phone={c.phone}
+                  email={c.email}
+                  city={c.city}
+                  devisCount={countByClient.get(String(c._id)) ?? 0}
+                />
               ))}
             </tbody>
           </table>

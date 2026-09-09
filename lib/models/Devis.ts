@@ -34,7 +34,7 @@ const DevisSchema = new Schema(
     number: { type: String, required: true, unique: true },
     year: { type: Number, required: true },
     seq: { type: Number, required: true },
-    clientId: { type: Schema.Types.ObjectId, ref: "Client", required: true },
+    clientId: { type: Schema.Types.ObjectId, ref: "Client", default: null },
     client: { type: ClientSnapSchema, default: {} },
     date: { type: Date, default: Date.now },
     validUntil: { type: Date },

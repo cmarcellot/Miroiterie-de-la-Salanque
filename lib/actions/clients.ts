@@ -8,6 +8,7 @@ import { authOptions } from "@/lib/auth";
 import { connectToDatabase } from "@/lib/mongodb";
 import Client, { CLIENT_TYPES, type ClientType } from "@/lib/models/Client";
 import Message from "@/lib/models/Message";
+import Devis from "@/lib/models/Devis";
 
 async function requireSession() {
   const session = await getServerSession(authOptions);
@@ -89,6 +90,7 @@ export async function deleteClient(id: string) {
   await connectToDatabase();
   await Client.findByIdAndDelete(id);
   await Message.updateMany({ clientId: id }, { clientId: null });
+  await Devis.updateMany({ clientId: id }, { clientId: null });
 
   revalidatePath("/pro/clients");
   redirect("/pro/clients");

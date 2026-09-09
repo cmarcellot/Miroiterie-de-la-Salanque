@@ -1,5 +1,5 @@
-/* Espace pro — typographie du prototype Claude Design :
-   Geist (texte ET titres de page, gras) · DM Serif Display (marque sidebar + doc devis) · Geist Mono (labels/montants) */
+/* Espace pro — repris du prototype Claude Design :
+   Geist (texte + titres de page, choix Camille) · Instrument Serif (marque sidebar + doc devis) · Geist Mono (labels/montants) */
 
 .pro-root {
   --bg: #f5f7fa;
@@ -138,7 +138,7 @@
   border-bottom: 1px solid var(--line);
 }
 .pro-brand .n {
-  font-family: var(--font-serif), "DM Serif Display", Georgia, serif;
+  font-family: var(--font-serif), "Instrument Serif", Georgia, serif;
   font-weight: 400;
   font-style: normal;
   font-size: 21px;
@@ -257,31 +257,40 @@
   top: 0;
   z-index: 20;
 }
+/* barre de recherche — reprise de .admin-search du prototype */
 .pro-search {
   flex: 1;
   max-width: 420px;
-  position: relative;
-}
-.pro-search input {
-  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 10px;
   background: #fff;
   border: 1px solid var(--line);
   border-radius: 999px;
-  padding: 9px 16px 9px 16px;
+  padding: 9px 16px;
+  color: var(--ink-3);
+  transition: border-color 0.2s;
+}
+.pro-search:focus-within {
+  border-color: var(--ink);
+}
+.pro-search svg {
+  width: 15px;
+  height: 15px;
+  flex-shrink: 0;
+}
+.pro-search input {
+  flex: 1;
+  min-width: 0;
+  border: none;
+  background: transparent;
+  outline: none;
   color: var(--ink);
   font-family: inherit;
-  font-size: 13.5px;
-  outline: none;
-  transition:
-    border-color 0.25s,
-    box-shadow 0.25s;
+  font-size: 13px;
 }
 .pro-search input::placeholder {
   color: var(--ink-3);
-}
-.pro-search input:focus {
-  border-color: var(--cyan);
-  box-shadow: 0 0 0 4px rgba(14, 145, 130, 0.12);
 }
 .pro-pill {
   display: inline-flex;
@@ -369,51 +378,47 @@
   margin-top: 6px;
 }
 .pro-phead .sub {
-  color: var(--ink-2);
+  color: var(--ink-3);
   font-size: 13.5px;
   margin-top: 8px;
-  max-width: 60ch;
+  max-width: 62ch;
 }
 
+/* boutons — repris de .btn-primary / .btn-secondary du prototype (plats) */
 .pro-btn {
   display: inline-flex;
   align-items: center;
-  gap: 9px;
-  padding: 10px 20px;
+  gap: 7px;
+  padding: 9px 16px;
   border-radius: 999px;
   font-size: 13px;
-  font-weight: 600;
-  position: relative;
-  overflow: hidden;
+  font-weight: 500;
+  white-space: nowrap;
   transition:
-    transform 0.25s cubic-bezier(0.16, 1, 0.3, 1),
-    box-shadow 0.3s,
-    border-color 0.25s,
-    color 0.25s;
+    background 0.2s,
+    border-color 0.2s,
+    color 0.2s;
 }
 .pro-btn.solid {
-  background: linear-gradient(120deg, var(--marine), var(--acier));
-  color: #fff;
+  background: var(--ink);
+  color: var(--bg);
 }
 .pro-btn.solid:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 14px 34px rgba(14, 145, 130, 0.24);
+  background: var(--marine);
 }
 .pro-btn.ghost {
-  border: 1px solid var(--line-2);
-  background: var(--glass);
+  border: 1px solid var(--line);
+  background: #fff;
   color: var(--ink);
 }
 .pro-btn.ghost:hover {
-  border-color: var(--cyan);
-  color: var(--cyan);
-  transform: translateY(-2px);
+  border-color: var(--ink);
 }
 
 .pro-card {
   border: 1px solid var(--line);
-  border-radius: 18px;
-  background: linear-gradient(180deg, #ffffff, #fafcfe);
+  border-radius: 16px;
+  background: #ffffff;
 }
 .pro-chead {
   display: flex;
@@ -424,9 +429,11 @@
   border-bottom: 1px solid var(--line);
 }
 .pro-chead h3 {
-  font-size: 15px;
+  font-family: var(--font-geist-sans), "Geist", sans-serif;
+  font-size: 14px;
   font-weight: 600;
-  letter-spacing: -0.015em;
+  letter-spacing: -0.005em;
+  color: var(--ink);
 }
 
 /* KPI */
@@ -482,31 +489,85 @@
   border-collapse: collapse;
 }
 .pro-table th {
-  font-family: var(--font-geist-mono), "Geist Mono", ui-monospace, monospace;
-  font-size: 9px;
-  letter-spacing: 0.18em;
+  font-family: var(--font-geist-sans), "Geist", sans-serif;
+  font-size: 10px;
+  letter-spacing: 0.1em;
   text-transform: uppercase;
   color: var(--ink-3);
   text-align: left;
-  font-weight: 400;
-  padding: 11px 16px;
+  font-weight: 500;
+  padding: 12px 16px;
   border-bottom: 1px solid var(--line);
 }
 .pro-table td {
   padding: 13px 16px;
-  border-bottom: 1px solid rgba(20, 40, 66, 0.08);
-  font-size: 13.5px;
+  border-bottom: 1px solid var(--line);
+  font-size: 13px;
+  vertical-align: middle;
+}
+.pro-table tbody tr:last-child td {
+  border-bottom: none;
 }
 .pro-table tbody tr {
-  transition: background 0.22s;
+  transition: background 0.15s;
+}
+.pro-table tbody tr.clickable {
+  cursor: pointer;
 }
 .pro-table tbody tr:hover {
-  background: var(--glass);
+  background: var(--bg);
 }
 .pro-table td.num {
   font-family: var(--font-geist-mono), "Geist Mono", ui-monospace, monospace;
   font-size: 11.5px;
   color: var(--acier);
+}
+
+/* avatar en ligne (repris de .avatar du prototype) */
+.pro-avatar {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background: var(--bg-2);
+  display: grid;
+  place-items: center;
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--ink-2);
+  flex-shrink: 0;
+  text-transform: uppercase;
+}
+.pro-namecell {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.pro-namecell .nm {
+  font-weight: 500;
+  color: var(--ink);
+}
+.pro-namecell .sb {
+  font-size: 11.5px;
+  color: var(--ink-3);
+  margin-top: 1px;
+  font-family: var(--font-geist-mono), "Geist Mono", monospace;
+}
+
+/* petit tag de compteur (repris de .tag du prototype) */
+.pro-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 10.5px;
+  background: var(--bg-2);
+  color: var(--ink-2);
+  padding: 3px 8px;
+  border-radius: 999px;
+  white-space: nowrap;
+}
+.pro-tag.muted {
+  background: transparent;
+  color: var(--ink-3);
 }
 
 .pro-st {
@@ -577,7 +638,7 @@
 .pro-empty {
   border: 1px dashed var(--line-2);
   border-radius: 16px;
-  background: linear-gradient(180deg, #ffffff, #fafcfe);
+  background: #ffffff;
   padding: 44px 24px;
   text-align: center;
 }
@@ -586,6 +647,44 @@
   .pro-detail-grid {
     grid-template-columns: 1fr !important;
   }
+}
+
+/* liste d'entités rattachées sur une fiche (repris de .client-block du proto) */
+.pro-rel h5 {
+  font-family: var(--font-geist-sans), "Geist", sans-serif;
+  font-size: 10px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+  font-weight: 500;
+  margin-bottom: 8px;
+}
+.pro-rel-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 9px 0;
+  border-bottom: 1px solid var(--line);
+  font-size: 13px;
+}
+.pro-rel-item:last-child {
+  border-bottom: none;
+}
+.pro-rel-item .nm {
+  font-weight: 500;
+  color: var(--ink);
+}
+.pro-rel-item .mt {
+  margin-left: auto;
+  font-family: var(--font-geist-mono), "Geist Mono", monospace;
+  font-size: 11.5px;
+  color: var(--ink-3);
+  white-space: nowrap;
+}
+.pro-rel-empty {
+  font-size: 12.5px;
+  color: var(--ink-3);
+  padding: 4px 0;
 }
 
 /* ---------- modal ---------- */
@@ -605,7 +704,7 @@
   width: 100%;
   max-width: 600px;
   border-radius: 16px;
-  background: linear-gradient(180deg, #ffffff, #fafcfe);
+  background: #ffffff;
   border: 1px solid var(--line);
   box-shadow: 0 30px 80px rgba(15, 26, 43, 0.35);
   animation: pro-modal-in 0.22s cubic-bezier(0.16, 1, 0.3, 1);
@@ -776,7 +875,7 @@
   width: auto;
 }
 .devis-doc .dd-co {
-  font-family: var(--font-serif), "DM Serif Display", Georgia, serif;
+  font-family: var(--font-serif), "Instrument Serif", Georgia, serif;
   font-weight: 400;
   font-size: 17px;
   letter-spacing: -0.01em;
@@ -793,7 +892,7 @@
   text-align: right;
 }
 .devis-doc .dd-title {
-  font-family: var(--font-serif), "DM Serif Display", Georgia, serif;
+  font-family: var(--font-serif), "Instrument Serif", Georgia, serif;
   font-weight: 400;
   font-size: 30px;
   letter-spacing: -0.01em;
@@ -856,7 +955,7 @@
   color: #5a6675;
 }
 .devis-doc .dd-grand {
-  font-family: var(--font-serif), "DM Serif Display", Georgia, serif !important;
+  font-family: var(--font-serif), "Instrument Serif", Georgia, serif !important;
   font-weight: 400;
   font-size: 17px !important;
   color: #1d3f6b !important;
