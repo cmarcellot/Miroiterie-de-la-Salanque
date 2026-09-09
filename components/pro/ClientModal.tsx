@@ -2,12 +2,12 @@
 
 import { useEffect, useState } from "react";
 import { usePathname, useRouter } from "next/navigation";
-import { X } from "lucide-react";
+import { X, Plus } from "lucide-react";
 import { createClient } from "@/lib/actions/clients";
 import ClientForm, { type ClientValues } from "@/components/pro/ClientForm";
 
 export default function ClientModal({
-  label = "Ajouter un client",
+  label = "Nouveau client",
   variant = "solid",
   fromMessage,
   prefill,
@@ -41,6 +41,7 @@ export default function ClientModal({
         className={`pro-btn ${variant}`}
         onClick={() => setOpen(true)}
       >
+        {variant === "solid" && <Plus className="h-4 w-4" />}
         {label}
       </button>
 
@@ -55,18 +56,20 @@ export default function ClientModal({
             className="pro-modal"
             role="dialog"
             aria-modal="true"
-            aria-label="Nouvelle fiche client"
+            aria-label="Nouveau client"
           >
+            <button
+              type="button"
+              onClick={() => setOpen(false)}
+              aria-label="Fermer"
+              className="pro-modal-close"
+            >
+              <X className="h-4 w-4" />
+            </button>
+
             <div className="pro-modal-head">
-              <h3>Nouvelle fiche client</h3>
-              <button
-                type="button"
-                onClick={() => setOpen(false)}
-                aria-label="Fermer"
-                className="pro-modal-close"
-              >
-                <X className="h-4 w-4" />
-              </button>
+              <h2>Nouveau client</h2>
+              <p>Créez une fiche client complète pour vos devis et factures.</p>
             </div>
 
             <div className="pro-modal-body">
@@ -81,7 +84,7 @@ export default function ClientModal({
                   setOpen(false);
                   router.push(`${pathname}?created=${Date.now()}`);
                 }}
-                submitLabel="Créer la fiche"
+                submitLabel="Créer"
               />
             </div>
           </div>

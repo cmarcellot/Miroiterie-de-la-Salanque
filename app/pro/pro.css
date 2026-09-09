@@ -620,23 +620,142 @@
   background: var(--cyan);
 }
 
+/* champs de formulaire — repris du prototype (fond teinté, bord au focus) */
 .pro-field {
   width: 100%;
-  background: #fff;
-  border: 1px solid var(--line-2);
-  border-radius: 10px;
-  padding: 10px 12px;
+  background: var(--bg);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 12px 14px;
   font-family: inherit;
-  font-size: 13.5px;
+  font-size: 14px;
   color: var(--ink);
   outline: none;
   transition:
-    border-color 0.2s,
-    box-shadow 0.2s;
+    border-color 0.14s,
+    background 0.14s;
+}
+.pro-field::placeholder {
+  color: var(--ink-3);
 }
 .pro-field:focus {
-  border-color: var(--cyan);
-  box-shadow: 0 0 0 4px rgba(14, 145, 130, 0.12);
+  border-color: var(--ink);
+  background: #ffffff;
+}
+textarea.pro-field {
+  resize: vertical;
+  min-height: 88px;
+  line-height: 1.5;
+}
+select.pro-field {
+  appearance: none;
+  -webkit-appearance: none;
+  padding-right: 32px;
+  cursor: pointer;
+}
+
+.pro-lbl {
+  display: block;
+  font-family: var(--font-geist-sans), "Geist", sans-serif;
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+  margin-bottom: 6px;
+  font-weight: 500;
+}
+
+/* interrupteur segmenté (Particulier / Professionnel) */
+.pro-seg {
+  display: flex;
+  gap: 4px;
+  background: var(--bg);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 4px;
+}
+.pro-seg button {
+  flex: 1;
+  border: none;
+  background: transparent;
+  padding: 8px 10px;
+  border-radius: 6px;
+  font-size: 12.5px;
+  color: var(--ink-2);
+  transition:
+    background 0.14s,
+    color 0.14s;
+}
+.pro-seg button:hover {
+  color: var(--ink);
+}
+.pro-seg button.active {
+  background: var(--ink);
+  color: var(--bg);
+  font-weight: 500;
+}
+
+/* formulaire client */
+.pro-cform {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+.pro-row2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+}
+@media (max-width: 520px) {
+  .pro-row2 {
+    grid-template-columns: 1fr;
+  }
+}
+.pro-cform-foot {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  margin-top: 10px;
+  padding-top: 18px;
+  border-top: 1px solid var(--line);
+}
+
+/* auto-complétion ville/CP */
+.pro-ac {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: calc(100% + 4px);
+  z-index: 20;
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  box-shadow: 0 16px 40px rgba(14, 31, 51, 0.14);
+  max-height: 240px;
+  overflow-y: auto;
+  padding: 4px;
+}
+.pro-ac li button {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  width: 100%;
+  padding: 8px 10px;
+  border: none;
+  background: transparent;
+  border-radius: 6px;
+  text-align: left;
+  font-size: 13px;
+  color: var(--ink);
+}
+.pro-ac li button:hover {
+  background: var(--hover);
+}
+.pro-ac li button .cp {
+  font-family: var(--font-geist-mono), "Geist Mono", monospace;
+  font-size: 11.5px;
+  color: var(--ink-3);
 }
 
 .pro-empty {
@@ -698,7 +817,7 @@
   padding: 4px 0;
 }
 
-/* ---------- modal ---------- */
+/* ---------- modal (repris du prototype .modal-overlay / .modal-card) ---------- */
 .pro-modal-overlay {
   position: fixed;
   inset: 0;
@@ -706,24 +825,30 @@
   display: flex;
   align-items: flex-start;
   justify-content: center;
-  padding: 6vh 16px 16px;
-  background: rgba(15, 26, 43, 0.45);
+  padding: 5vh 16px 16px;
+  background: rgba(6, 14, 26, 0.45);
+  backdrop-filter: blur(4px);
   overflow-y: auto;
   animation: pro-fade 0.18s ease;
 }
 .pro-modal {
+  position: relative;
   width: 100%;
-  max-width: 600px;
+  max-width: 560px;
+  max-height: calc(100vh - 10vh);
+  overflow-y: auto;
   border-radius: 16px;
   background: #ffffff;
-  border: 1px solid var(--line);
-  box-shadow: 0 30px 80px rgba(15, 26, 43, 0.35);
-  animation: pro-modal-in 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+  padding: 32px;
+  box-shadow:
+    0 24px 60px rgba(14, 31, 51, 0.16),
+    0 2px 8px rgba(14, 31, 51, 0.05);
+  animation: pro-modal-in 0.22s cubic-bezier(0.2, 0.8, 0.2, 1);
 }
 @keyframes pro-modal-in {
   from {
     opacity: 0;
-    transform: translateY(14px) scale(0.98);
+    transform: translateY(12px);
   }
   to {
     opacity: 1;
@@ -731,30 +856,46 @@
   }
 }
 .pro-modal-head {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 16px 20px;
-  border-bottom: 1px solid var(--line);
+  margin-bottom: 20px;
+  padding-right: 36px;
 }
-.pro-modal-head h3 {
-  font-size: 15px;
-  letter-spacing: -0.02em;
+.pro-modal-head h2 {
+  font-family: var(--font-serif), "Instrument Serif", Georgia, serif;
+  font-weight: 400;
+  font-size: 28px;
+  letter-spacing: -0.01em;
+  line-height: 1.1;
+  color: var(--marine);
+  margin-bottom: 6px;
+}
+.pro-modal-head p {
+  font-size: 13px;
+  color: var(--ink-3);
 }
 .pro-modal-close {
+  position: absolute;
+  top: 16px;
+  right: 16px;
   display: grid;
   place-items: center;
   width: 30px;
   height: 30px;
-  border-radius: 8px;
-  color: var(--ink-2);
-  transition: background 0.2s;
+  border-radius: 50%;
+  border: 1px solid var(--line);
+  background: transparent;
+  color: var(--ink-3);
+  transition:
+    border-color 0.15s,
+    color 0.15s;
 }
 .pro-modal-close:hover {
-  background: var(--hover);
+  border-color: var(--ink);
+  color: var(--ink);
 }
 .pro-modal-body {
-  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
 }
 @media (prefers-reduced-motion: reduce) {
   .pro-modal-overlay,

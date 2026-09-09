@@ -2,7 +2,9 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import { Plus } from "lucide-react";
 import { CLIENT_TYPES, CLIENT_TYPE_LABELS } from "@/lib/pro-enums";
+import CityAutocomplete from "@/components/pro/CityAutocomplete";
 
 export type ClientValues = {
   type?: string;
@@ -42,8 +44,6 @@ export default function ClientForm({
   const [type, setType] = useState(values.type ?? "particulier");
   const isPro = type === "professionnel";
 
-  const fieldStyle = { marginTop: 8 } as const;
-
   return (
     <form
       action={async (fd) => {
@@ -55,148 +55,115 @@ export default function ClientForm({
           setPending(false);
         }
       }}
-      className={bare ? undefined : "pro-card"}
-      style={{
-        padding: bare ? 0 : "20px 22px",
-        display: "grid",
-        gap: 16,
-        maxWidth: bare ? undefined : 620,
-      }}
+      className={bare ? "pro-cform" : "pro-card pro-cform"}
+      style={bare ? undefined : { padding: "20px 22px", maxWidth: 620 }}
     >
       {fromMessage && (
         <input type="hidden" name="fromMessage" value={fromMessage} />
       )}
       {stay && <input type="hidden" name="stay" value="1" />}
+      <input type="hidden" name="type" value={type} />
 
       <div>
-        <label className="pro-lab">Type</label>
-        <select
-          name="type"
-          value={type}
-          onChange={(e) => setType(e.target.value)}
-          className="pro-field"
-          style={fieldStyle}
-        >
+        <label className="pro-lbl">Type</label>
+        <div className="pro-seg">
           {CLIENT_TYPES.map((t) => (
-            <option key={t} value={t}>
+            <button
+              key={t}
+              type="button"
+              className={type === t ? "active" : ""}
+              onClick={() => setType(t)}
+            >
               {CLIENT_TYPE_LABELS[t]}
-            </option>
+            </button>
           ))}
-        </select>
+        </div>
       </div>
 
       {isPro && (
         <div>
-          <label className="pro-lab">Raison sociale *</label>
+          <label className="pro-lbl">Raison sociale *</label>
           <input
             name="company"
             required={isPro}
             defaultValue={values.company}
             className="pro-field"
-            style={fieldStyle}
             placeholder="ex. SCI Les Pins"
           />
         </div>
       )}
 
-      <div style={{ display: "grid", gap: 12, gridTemplateColumns: "1fr 1fr" }}>
+      <div className="pro-row2">
         <div>
-          <label className="pro-lab">
-            Nom {isPro ? "du contact" : "*"}
-          </label>
+          <label className="pro-lbl">Prénom</label>
+          <input
+            name="firstName"
+            defaultValue={values.firstName}
+            className="pro-field"
+            placeholder="ex. Jean"
+          />
+        </div>
+        <div>
+          <label className="pro-lbl">Nom {isPro ? "du contact" : "*"}</label>
           <input
             name="lastName"
             required={!isPro}
             defaultValue={values.lastName}
             className="pro-field"
-            style={fieldStyle}
-          />
-        </div>
-        <div>
-          <label className="pro-lab">Prénom</label>
-          <input
-            name="firstName"
-            defaultValue={values.firstName}
-            className="pro-field"
-            style={fieldStyle}
+            placeholder="ex. Bernard"
           />
         </div>
       </div>
 
-      <div style={{ display: "grid", gap: 12, gridTemplateColumns: "1fr 1fr" }}>
+      <div className="pro-row2">
         <div>
-          <label className="pro-lab">Email</label>
+          <label className="pro-lbl">Téléphone</label>
+          <input
+            name="phone"
+            defaultValue={values.phone}
+            className="pro-field"
+            placeholder="06 . . . ."
+          />
+        </div>
+        <div>
+          <label className="pro-lbl">Email</label>
           <input
             type="email"
             name="email"
             defaultValue={values.email}
             className="pro-field"
-            style={fieldStyle}
-          />
-        </div>
-        <div>
-          <label className="pro-lab">Téléphone</label>
-          <input
-            name="phone"
-            defaultValue={values.phone}
-            className="pro-field"
-            style={fieldStyle}
+            placeholder="email@…"
           />
         </div>
       </div>
 
       <div>
-        <label className="pro-lab">Adresse</label>
+        <label className="pro-lbl">Rue</label>
         <input
           name="street"
-          placeholder="Rue"
           defaultValue={values.street}
           className="pro-field"
-          style={fieldStyle}
+          placeholder="N° et voie"
         />
-        <div
-          style={{
-            display: "grid",
-            gap: 12,
-            gridTemplateColumns: "120px 1fr",
-            marginTop: 8,
-          }}
-        >
-          <input
-            name="zip"
-            placeholder="Code postal"
-            defaultValue={values.zip}
-            className="pro-field"
-          />
-          <input
-            name="city"
-            placeholder="Ville"
-            defaultValue={values.city}
-            className="pro-field"
-          />
-        </div>
       </div>
+
+      <CityAutocomplete
+        defaultZip={values.zip ?? ""}
+        defaultCity={values.city ?? ""}
+      />
 
       <div>
-        <label className="pro-lab">Notes</label>
+        <label className="pro-lbl">Notes (optionnel)</label>
         <textarea
           name="notes"
-          rows={4}
+          rows={3}
           defaultValue={values.notes}
           className="pro-field"
-          style={{ marginTop: 8, resize: "vertical" }}
+          placeholder="Préférences, contraintes d'accès, historique…"
         />
       </div>
 
-      <div style={{ display: "flex", gap: 10 }}>
-        <button
-          type="submit"
-          disabled={pending}
-          className="pro-btn solid"
-          style={{ opacity: pending ? 0.6 : 1 }}
-        >
-          {pending ? "Enregistrement…" : submitLabel}
-        </button>
+      <div className="pro-cform-foot">
         {onCancel ? (
           <button type="button" className="pro-btn ghost" onClick={onCancel}>
             Annuler
@@ -206,6 +173,15 @@ export default function ClientForm({
             Annuler
           </Link>
         ) : null}
+        <button
+          type="submit"
+          disabled={pending}
+          className="pro-btn solid"
+          style={{ opacity: pending ? 0.6 : 1 }}
+        >
+          <Plus className="h-4 w-4" />
+          {pending ? "Enregistrement…" : submitLabel}
+        </button>
       </div>
     </form>
   );
