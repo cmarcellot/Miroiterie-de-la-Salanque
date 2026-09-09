@@ -1,5 +1,5 @@
 /* Espace pro — typographie du prototype Claude Design :
-   Geist (sans) · Instrument Serif (titres, italique pour la marque) · Geist Mono (labels) */
+   Geist (sans) · DM Serif Display (titres + marque, gras) · Geist Mono (labels) */
 
 .pro-root {
   --bg: #f5f7fa;
@@ -33,7 +33,7 @@
 .pro-root h1,
 .pro-root h2,
 .pro-root h3 {
-  font-family: var(--font-serif), "Instrument Serif", Georgia, serif;
+  font-family: var(--font-serif), "DM Serif Display", Georgia, serif;
   font-weight: 400;
   letter-spacing: -0.015em;
   line-height: 1;
@@ -137,12 +137,12 @@
   border-bottom: 1px solid var(--line);
 }
 .pro-brand .n {
-  font-family: var(--font-serif), "Instrument Serif", Georgia, serif;
+  font-family: var(--font-serif), "DM Serif Display", Georgia, serif;
   font-weight: 400;
-  font-style: italic;
-  font-size: 16.5px;
+  font-style: normal;
+  font-size: 16px;
   letter-spacing: 0;
-  line-height: 1.12;
+  line-height: 1.15;
   color: var(--ink);
 }
 .pro-brand .r {
@@ -470,7 +470,7 @@
   border-color: rgba(14, 145, 130, 0.4);
 }
 .pro-kpi .v {
-  font-family: var(--font-serif), "Instrument Serif", Georgia, serif;
+  font-family: var(--font-serif), "DM Serif Display", Georgia, serif;
   font-weight: 400;
   font-size: clamp(28px, 3vw, 40px);
   letter-spacing: -0.01em;
@@ -792,7 +792,7 @@
   width: auto;
 }
 .devis-doc .dd-co {
-  font-family: var(--font-serif), "Instrument Serif", Georgia, serif;
+  font-family: var(--font-serif), "DM Serif Display", Georgia, serif;
   font-weight: 400;
   font-size: 17px;
   letter-spacing: -0.01em;
@@ -809,7 +809,7 @@
   text-align: right;
 }
 .devis-doc .dd-title {
-  font-family: var(--font-serif), "Instrument Serif", Georgia, serif;
+  font-family: var(--font-serif), "DM Serif Display", Georgia, serif;
   font-weight: 400;
   font-size: 30px;
   letter-spacing: -0.01em;
@@ -872,7 +872,7 @@
   color: #5a6675;
 }
 .devis-doc .dd-grand {
-  font-family: var(--font-serif), "Instrument Serif", Georgia, serif !important;
+  font-family: var(--font-serif), "DM Serif Display", Georgia, serif !important;
   font-weight: 400;
   font-size: 17px !important;
   color: #1d3f6b !important;

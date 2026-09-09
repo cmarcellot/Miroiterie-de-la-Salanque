@@ -1,14 +1,13 @@
 import type { Metadata } from "next";
-import { Instrument_Serif } from "next/font/google";
+import { DM_Serif_Display } from "next/font/google";
 import { GeistSans } from "geist/font/sans";
 import { GeistMono } from "geist/font/mono";
 import LoginForm from "@/components/pro/LoginForm";
 import "../pro.css";
 
-const serif = Instrument_Serif({
+const serif = DM_Serif_Display({
   subsets: ["latin"],
   weight: "400",
-  style: ["normal", "italic"],
   variable: "--font-serif",
   display: "swap",
 });
