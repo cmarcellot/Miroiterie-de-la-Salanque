@@ -14,8 +14,6 @@ const ClientSchema = new Schema(
     firstName: { type: String, trim: true, maxlength: 80, default: "" },
     lastName: { type: String, trim: true, maxlength: 80, default: "" },
     company: { type: String, trim: true, maxlength: 160, default: "" },
-    // Nom d'affichage dérivé, recalculé à chaque écriture (recherche / tri / snapshots).
-    name: { type: String, required: true, trim: true, maxlength: 200 },
     email: { type: String, trim: true, maxlength: 160, default: "" },
     phone: { type: String, trim: true, maxlength: 40, default: "" },
     street: { type: String, trim: true, maxlength: 200, default: "" },
@@ -25,8 +23,6 @@ const ClientSchema = new Schema(
   },
   { timestamps: true }
 );
-
-ClientSchema.index({ name: "text", company: "text", city: "text" });
 
 export type ClientDoc = InferSchemaType<typeof ClientSchema>;
 

@@ -5,7 +5,7 @@ import { ArrowLeft } from "lucide-react";
 import { connectToDatabase } from "@/lib/mongodb";
 import Message from "@/lib/models/Message";
 import Client from "@/lib/models/Client";
-import { splitName } from "@/lib/pro-enums";
+import { clientDisplayName, splitName } from "@/lib/pro-enums";
 import DemandeEditor from "@/components/pro/DemandeEditor";
 import ClientModal from "@/components/pro/ClientModal";
 
@@ -111,7 +111,7 @@ export default async function DemandeDetailPage({
                   href={`/pro/clients/${client._id}`}
                   style={{ fontWeight: 600, fontSize: 13.5 }}
                 >
-                  {client.name}
+                  {clientDisplayName(client)}
                 </Link>
                 <div
                   style={{ marginTop: 4, fontSize: 12.5, color: "var(--ink-3)" }}

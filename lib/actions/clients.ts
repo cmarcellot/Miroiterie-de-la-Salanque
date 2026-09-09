@@ -6,11 +6,7 @@ import { getServerSession } from "next-auth";
 import mongoose from "mongoose";
 import { authOptions } from "@/lib/auth";
 import { connectToDatabase } from "@/lib/mongodb";
-import Client, {
-  CLIENT_TYPES,
-  clientDisplayName,
-  type ClientType,
-} from "@/lib/models/Client";
+import Client, { CLIENT_TYPES, type ClientType } from "@/lib/models/Client";
 import Message from "@/lib/models/Message";
 
 async function requireSession() {
@@ -23,16 +19,14 @@ function parse(formData: FormData) {
   const type: ClientType = CLIENT_TYPES.includes(typeRaw as ClientType)
     ? (typeRaw as ClientType)
     : "particulier";
-  const firstName = String(formData.get("firstName") || "").trim();
-  const lastName = String(formData.get("lastName") || "").trim();
-  const company = String(formData.get("company") || "").trim();
-  const name = clientDisplayName({ type, firstName, lastName, company });
   return {
     type,
-    firstName,
-    lastName,
-    company: type === "professionnel" ? company : "",
-    name,
+    firstName: String(formData.get("firstName") || "").trim(),
+    lastName: String(formData.get("lastName") || "").trim(),
+    company:
+      type === "professionnel"
+        ? String(formData.get("company") || "").trim()
+        : "",
     email: String(formData.get("email") || "").trim(),
     phone: String(formData.get("phone") || "").trim(),
     street: String(formData.get("street") || "").trim(),
@@ -42,11 +36,17 @@ function parse(formData: FormData) {
   };
 }
 
+function assertValid(data: ReturnType<typeof parse>) {
+  if (data.type === "professionnel" && !data.company)
+    throw new Error("Raison sociale requise.");
+  if (data.type !== "professionnel" && !data.lastName)
+    throw new Error("Nom du client requis.");
+}
+
 export async function createClient(formData: FormData) {
   await requireSession();
   const data = parse(formData);
-  if (data.name.length < 2 || data.name === "Client")
-    throw new Error("Nom du client requis.");
+  assertValid(data);
 
   await connectToDatabase();
   const doc = await Client.create(data);
@@ -72,8 +72,7 @@ export async function updateClient(id: string, formData: FormData) {
   await requireSession();
   if (!mongoose.isValidObjectId(id)) throw new Error("Identifiant invalide.");
   const data = parse(formData);
-  if (data.name.length < 2 || data.name === "Client")
-    throw new Error("Nom du client requis.");
+  assertValid(data);
 
   await connectToDatabase();
   await Client.findByIdAndUpdate(id, data);

@@ -10,6 +10,7 @@ import Devis from "@/lib/models/Devis";
 import Client from "@/lib/models/Client";
 import {
   DEVIS_STATUSES,
+  clientDisplayName,
   computeTotals,
   type DevisStatus,
   type LineItem,
@@ -87,7 +88,7 @@ export async function createDevis(formData: FormData) {
     seq,
     clientId,
     client: {
-      name: client.name,
+      name: clientDisplayName(client),
       street: client.street,
       zip: client.zip,
       city: client.city,

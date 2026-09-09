@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { connectToDatabase } from "@/lib/mongodb";
 import Client, { CLIENT_TYPE_LABELS, type ClientType } from "@/lib/models/Client";
+import { clientDisplayName } from "@/lib/pro-enums";
 import ClientModal from "@/components/pro/ClientModal";
 
 export const dynamic = "force-dynamic";
@@ -16,7 +17,6 @@ export default async function ClientsPage({
   const filter = q
     ? {
         $or: [
-          { name: { $regex: q, $options: "i" } },
           { firstName: { $regex: q, $options: "i" } },
           { lastName: { $regex: q, $options: "i" } },
           { company: { $regex: q, $options: "i" } },
@@ -26,7 +26,14 @@ export default async function ClientsPage({
         ],
       }
     : {};
-  const clients = await Client.find(filter).sort({ name: 1 }).limit(300).lean();
+  const clientsRaw = await Client.find(filter)
+    .sort({ lastName: 1, company: 1 })
+    .limit(300)
+    .lean();
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const clients = (clientsRaw as any[])
+    .map((c) => ({ ...c, display: clientDisplayName(c) }))
+    .sort((a, b) => a.display.localeCompare(b.display, "fr"));
 
   return (
     <div>
@@ -77,7 +84,7 @@ export default async function ClientsPage({
                       href={`/pro/clients/${c._id}`}
                       style={{ fontWeight: 600 }}
                     >
-                      {c.name}
+                      {c.display}
                     </Link>
                   </td>
                   <td style={{ color: "var(--ink-3)" }}>

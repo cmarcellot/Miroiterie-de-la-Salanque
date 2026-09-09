@@ -5,6 +5,7 @@ import { ArrowLeft } from "lucide-react";
 import { connectToDatabase } from "@/lib/mongodb";
 import Client from "@/lib/models/Client";
 import Message, { MESSAGE_STATUS_LABELS } from "@/lib/models/Message";
+import { clientDisplayName } from "@/lib/pro-enums";
 import { updateClient, deleteClient } from "@/lib/actions/clients";
 import ClientForm from "@/components/pro/ClientForm";
 import DeleteButton from "@/components/pro/DeleteButton";
@@ -22,6 +23,7 @@ export default async function ClientDetailPage({
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const c: any = await Client.findById(params.id).lean();
   if (!c) notFound();
+  const displayName = clientDisplayName(c);
 
   const demandes = await Message.find({ clientId: c._id })
     .sort({ createdAt: -1 })
@@ -45,7 +47,7 @@ export default async function ClientDetailPage({
       <div className="pro-phead" style={{ marginTop: 10 }}>
         <div>
           <div className="pro-lab">Fiche client</div>
-          <h1>{c.name}</h1>
+          <h1>{displayName}</h1>
         </div>
         <Link
           href={`/pro/devis/nouveau?client=${c._id}`}
@@ -69,7 +71,7 @@ export default async function ClientDetailPage({
           values={{
             type: c.type,
             firstName: c.firstName,
-            lastName: c.lastName || (c.firstName ? "" : c.name),
+            lastName: c.lastName,
             company: c.company,
             email: c.email,
             phone: c.phone,
@@ -127,7 +129,7 @@ export default async function ClientDetailPage({
             </p>
             <DeleteButton
               action={deleteClient.bind(null, String(c._id))}
-              confirmText={`Supprimer définitivement la fiche de ${c.name} ?`}
+              confirmText={`Supprimer définitivement la fiche de ${displayName} ?`}
               label="Supprimer la fiche"
             />
           </div>
