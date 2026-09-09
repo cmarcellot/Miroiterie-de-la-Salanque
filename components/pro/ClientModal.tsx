@@ -69,7 +69,7 @@ export default function ClientModal({
 
             <div className="pro-modal-head">
               <h2>Nouveau client</h2>
-              <p>Créez une fiche client complète pour vos devis et factures.</p>
+              <p>Créer une fiche client définitive.</p>
             </div>
 
             <div className="pro-modal-body">
