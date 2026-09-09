@@ -23,6 +23,30 @@ export const CLIENT_TYPE_LABELS: Record<ClientType, string> = {
   professionnel: "Professionnel",
 };
 
+/** Découpe un nom complet en { firstName, lastName } (best effort). */
+export function splitName(full: string): { firstName: string; lastName: string } {
+  const parts = (full || "").trim().split(/\s+/).filter(Boolean);
+  if (parts.length === 0) return { firstName: "", lastName: "" };
+  if (parts.length === 1) return { firstName: "", lastName: parts[0] };
+  return { firstName: parts[0], lastName: parts.slice(1).join(" ") };
+}
+
+/** Nom d'affichage d'un client à partir de ses champs. */
+export function clientDisplayName(c: {
+  type?: string;
+  firstName?: string;
+  lastName?: string;
+  company?: string;
+}): string {
+  const person = [c.firstName, c.lastName]
+    .map((s) => (s || "").trim())
+    .filter(Boolean)
+    .join(" ");
+  const company = (c.company || "").trim();
+  if (c.type === "professionnel") return company || person || "Client";
+  return person || company || "Client";
+}
+
 /* ---------- Devis ---------- */
 
 export const DEVIS_STATUSES = [

@@ -4,16 +4,18 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { X } from "lucide-react";
 import { createClient } from "@/lib/actions/clients";
-import ClientForm from "@/components/pro/ClientForm";
+import ClientForm, { type ClientValues } from "@/components/pro/ClientForm";
 
 export default function ClientModal({
   label = "Ajouter un client",
   variant = "solid",
   fromMessage,
+  prefill,
 }: {
   label?: string;
   variant?: "solid" | "ghost";
   fromMessage?: string;
+  prefill?: ClientValues;
 }) {
   const router = useRouter();
   const [open, setOpen] = useState(false);
@@ -69,6 +71,7 @@ export default function ClientModal({
             <div className="pro-modal-body">
               <ClientForm
                 action={createClient}
+                values={prefill}
                 fromMessage={fromMessage}
                 stay={!fromMessage}
                 bare

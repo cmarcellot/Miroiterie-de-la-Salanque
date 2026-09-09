@@ -6,7 +6,11 @@ import { getServerSession } from "next-auth";
 import mongoose from "mongoose";
 import { authOptions } from "@/lib/auth";
 import { connectToDatabase } from "@/lib/mongodb";
-import Client, { CLIENT_TYPES, type ClientType } from "@/lib/models/Client";
+import Client, {
+  CLIENT_TYPES,
+  clientDisplayName,
+  type ClientType,
+} from "@/lib/models/Client";
 import Message from "@/lib/models/Message";
 
 async function requireSession() {
@@ -15,14 +19,20 @@ async function requireSession() {
 }
 
 function parse(formData: FormData) {
-  const name = String(formData.get("name") || "").trim();
   const typeRaw = String(formData.get("type") || "particulier");
   const type: ClientType = CLIENT_TYPES.includes(typeRaw as ClientType)
     ? (typeRaw as ClientType)
     : "particulier";
+  const firstName = String(formData.get("firstName") || "").trim();
+  const lastName = String(formData.get("lastName") || "").trim();
+  const company = String(formData.get("company") || "").trim();
+  const name = clientDisplayName({ type, firstName, lastName, company });
   return {
-    name,
     type,
+    firstName,
+    lastName,
+    company: type === "professionnel" ? company : "",
+    name,
     email: String(formData.get("email") || "").trim(),
     phone: String(formData.get("phone") || "").trim(),
     street: String(formData.get("street") || "").trim(),
@@ -35,7 +45,8 @@ function parse(formData: FormData) {
 export async function createClient(formData: FormData) {
   await requireSession();
   const data = parse(formData);
-  if (data.name.length < 2) throw new Error("Nom requis.");
+  if (data.name.length < 2 || data.name === "Client")
+    throw new Error("Nom du client requis.");
 
   await connectToDatabase();
   const doc = await Client.create(data);
@@ -61,7 +72,8 @@ export async function updateClient(id: string, formData: FormData) {
   await requireSession();
   if (!mongoose.isValidObjectId(id)) throw new Error("Identifiant invalide.");
   const data = parse(formData);
-  if (data.name.length < 2) throw new Error("Nom requis.");
+  if (data.name.length < 2 || data.name === "Client")
+    throw new Error("Nom du client requis.");
 
   await connectToDatabase();
   await Client.findByIdAndUpdate(id, data);

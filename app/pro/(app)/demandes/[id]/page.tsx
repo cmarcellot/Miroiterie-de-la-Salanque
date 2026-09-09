@@ -5,6 +5,7 @@ import { ArrowLeft } from "lucide-react";
 import { connectToDatabase } from "@/lib/mongodb";
 import Message from "@/lib/models/Message";
 import Client from "@/lib/models/Client";
+import { splitName } from "@/lib/pro-enums";
 import DemandeEditor from "@/components/pro/DemandeEditor";
 import ClientModal from "@/components/pro/ClientModal";
 
@@ -131,6 +132,11 @@ export default async function DemandeDetailPage({
                 </p>
                 <ClientModal
                   fromMessage={String(m._id)}
+                  prefill={{
+                    ...splitName(m.name),
+                    email: m.email,
+                    phone: m.phone,
+                  }}
                   label="Créer une fiche client"
                   variant="ghost"
                 />

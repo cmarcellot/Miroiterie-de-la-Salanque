@@ -17,6 +17,9 @@ export default async function ClientsPage({
     ? {
         $or: [
           { name: { $regex: q, $options: "i" } },
+          { firstName: { $regex: q, $options: "i" } },
+          { lastName: { $regex: q, $options: "i" } },
+          { company: { $regex: q, $options: "i" } },
           { email: { $regex: q, $options: "i" } },
           { phone: { $regex: q, $options: "i" } },
           { city: { $regex: q, $options: "i" } },

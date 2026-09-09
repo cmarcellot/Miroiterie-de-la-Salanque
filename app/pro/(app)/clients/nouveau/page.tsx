@@ -4,6 +4,7 @@ import mongoose from "mongoose";
 import { ArrowLeft } from "lucide-react";
 import { connectToDatabase } from "@/lib/mongodb";
 import Message from "@/lib/models/Message";
+import { splitName } from "@/lib/pro-enums";
 import { createClient } from "@/lib/actions/clients";
 import ClientForm, { type ClientValues } from "@/components/pro/ClientForm";
 
@@ -23,7 +24,7 @@ export default async function NewClientPage({
     const m: any = await Message.findById(fromMessage).lean();
     if (!m) notFound();
     values = {
-      name: m.name,
+      ...splitName(m.name),
       email: m.email,
       phone: m.phone,
       notes: m.subject ? `Demande initiale : ${m.subject}\n\n${m.message}` : m.message,

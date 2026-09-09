@@ -5,8 +5,10 @@ import Link from "next/link";
 import { CLIENT_TYPES, CLIENT_TYPE_LABELS } from "@/lib/pro-enums";
 
 export type ClientValues = {
-  name?: string;
   type?: string;
+  firstName?: string;
+  lastName?: string;
+  company?: string;
   email?: string;
   phone?: string;
   street?: string;
@@ -37,6 +39,10 @@ export default function ClientForm({
   submitLabel?: string;
 }) {
   const [pending, setPending] = useState(false);
+  const [type, setType] = useState(values.type ?? "particulier");
+  const isPro = type === "professionnel";
+
+  const fieldStyle = { marginTop: 8 } as const;
 
   return (
     <form
@@ -44,7 +50,6 @@ export default function ClientForm({
         setPending(true);
         try {
           await action(fd);
-          // Si l'action n'a pas redirigé, on est toujours là.
           onDone?.();
         } finally {
           setPending(false);
@@ -64,23 +69,13 @@ export default function ClientForm({
       {stay && <input type="hidden" name="stay" value="1" />}
 
       <div>
-        <label className="pro-lab">Nom / raison sociale *</label>
-        <input
-          name="name"
-          required
-          defaultValue={values.name}
-          className="pro-field"
-          style={{ marginTop: 8 }}
-        />
-      </div>
-
-      <div>
         <label className="pro-lab">Type</label>
         <select
           name="type"
-          defaultValue={values.type ?? "particulier"}
+          value={type}
+          onChange={(e) => setType(e.target.value)}
           className="pro-field"
-          style={{ marginTop: 8 }}
+          style={fieldStyle}
         >
           {CLIENT_TYPES.map((t) => (
             <option key={t} value={t}>
@@ -88,6 +83,44 @@ export default function ClientForm({
             </option>
           ))}
         </select>
+      </div>
+
+      {isPro && (
+        <div>
+          <label className="pro-lab">Raison sociale *</label>
+          <input
+            name="company"
+            required={isPro}
+            defaultValue={values.company}
+            className="pro-field"
+            style={fieldStyle}
+            placeholder="ex. SCI Les Pins"
+          />
+        </div>
+      )}
+
+      <div style={{ display: "grid", gap: 12, gridTemplateColumns: "1fr 1fr" }}>
+        <div>
+          <label className="pro-lab">
+            Nom {isPro ? "du contact" : "*"}
+          </label>
+          <input
+            name="lastName"
+            required={!isPro}
+            defaultValue={values.lastName}
+            className="pro-field"
+            style={fieldStyle}
+          />
+        </div>
+        <div>
+          <label className="pro-lab">Prénom</label>
+          <input
+            name="firstName"
+            defaultValue={values.firstName}
+            className="pro-field"
+            style={fieldStyle}
+          />
+        </div>
       </div>
 
       <div style={{ display: "grid", gap: 12, gridTemplateColumns: "1fr 1fr" }}>
@@ -98,7 +131,7 @@ export default function ClientForm({
             name="email"
             defaultValue={values.email}
             className="pro-field"
-            style={{ marginTop: 8 }}
+            style={fieldStyle}
           />
         </div>
         <div>
@@ -107,7 +140,7 @@ export default function ClientForm({
             name="phone"
             defaultValue={values.phone}
             className="pro-field"
-            style={{ marginTop: 8 }}
+            style={fieldStyle}
           />
         </div>
       </div>
@@ -119,7 +152,7 @@ export default function ClientForm({
           placeholder="Rue"
           defaultValue={values.street}
           className="pro-field"
-          style={{ marginTop: 8 }}
+          style={fieldStyle}
         />
         <div
           style={{

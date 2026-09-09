@@ -67,8 +67,10 @@ export default async function ClientDetailPage({
         <ClientForm
           action={updateClient.bind(null, String(c._id))}
           values={{
-            name: c.name,
             type: c.type,
+            firstName: c.firstName,
+            lastName: c.lastName || (c.firstName ? "" : c.name),
+            company: c.company,
             email: c.email,
             phone: c.phone,
             street: c.street,
