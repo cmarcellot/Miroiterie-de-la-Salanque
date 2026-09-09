@@ -3,6 +3,7 @@ import { connectToDatabase } from "@/lib/mongodb";
 import Client, { CLIENT_TYPE_LABELS, type ClientType } from "@/lib/models/Client";
 import { clientDisplayName } from "@/lib/pro-enums";
 import ClientModal from "@/components/pro/ClientModal";
+import Toast from "@/components/pro/Toast";
 
 export const dynamic = "force-dynamic";
 
@@ -37,6 +38,8 @@ export default async function ClientsPage({
 
   return (
     <div>
+      <Toast param="created" message="Fiche client créée." />
+
       <div className="pro-phead">
         <div>
           <div className="pro-lab">Répertoire</div>

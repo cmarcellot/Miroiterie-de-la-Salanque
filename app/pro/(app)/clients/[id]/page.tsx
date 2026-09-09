@@ -9,6 +9,7 @@ import { clientDisplayName } from "@/lib/pro-enums";
 import { updateClient, deleteClient } from "@/lib/actions/clients";
 import ClientForm from "@/components/pro/ClientForm";
 import DeleteButton from "@/components/pro/DeleteButton";
+import Toast from "@/components/pro/Toast";
 
 export const dynamic = "force-dynamic";
 
@@ -31,6 +32,9 @@ export default async function ClientDetailPage({
 
   return (
     <div>
+      <Toast param="created" message="Fiche client créée." />
+      <Toast param="updated" message="Fiche client mise à jour." />
+
       <Link
         href="/pro/clients"
         className="pro-lab"

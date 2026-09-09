@@ -59,13 +59,13 @@ export async function createClient(formData: FormData) {
       status: "en_cours",
     });
     revalidatePath(`/pro/demandes/${fromMessage}`);
-    redirect(`/pro/demandes/${fromMessage}`);
+    redirect(`/pro/demandes/${fromMessage}?created=${Date.now()}`);
   }
 
   // Depuis un modal (liste) : on ne redirige pas, le modal se ferme.
   if (formData.get("stay") === "1") return;
 
-  redirect(`/pro/clients/${doc._id}`);
+  redirect(`/pro/clients/${doc._id}?created=${Date.now()}`);
 }
 
 export async function updateClient(id: string, formData: FormData) {
@@ -79,7 +79,7 @@ export async function updateClient(id: string, formData: FormData) {
 
   revalidatePath("/pro/clients");
   revalidatePath(`/pro/clients/${id}`);
-  redirect(`/pro/clients/${id}`);
+  redirect(`/pro/clients/${id}?updated=${Date.now()}`);
 }
 
 export async function deleteClient(id: string) {

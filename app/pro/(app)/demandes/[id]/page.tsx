@@ -8,6 +8,7 @@ import Client from "@/lib/models/Client";
 import { clientDisplayName, splitName } from "@/lib/pro-enums";
 import DemandeEditor from "@/components/pro/DemandeEditor";
 import ClientModal from "@/components/pro/ClientModal";
+import Toast from "@/components/pro/Toast";
 
 export const dynamic = "force-dynamic";
 
@@ -30,6 +31,8 @@ export default async function DemandeDetailPage({
 
   return (
     <div>
+      <Toast param="created" message="Fiche client créée." />
+
       <Link
         href="/pro/demandes"
         className="pro-lab"

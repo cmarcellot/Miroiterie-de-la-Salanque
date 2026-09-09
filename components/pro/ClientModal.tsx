@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { X } from "lucide-react";
 import { createClient } from "@/lib/actions/clients";
 import ClientForm, { type ClientValues } from "@/components/pro/ClientForm";
@@ -18,6 +18,7 @@ export default function ClientModal({
   prefill?: ClientValues;
 }) {
   const router = useRouter();
+  const pathname = usePathname();
   const [open, setOpen] = useState(false);
 
   useEffect(() => {
@@ -78,7 +79,7 @@ export default function ClientModal({
                 onCancel={() => setOpen(false)}
                 onDone={() => {
                   setOpen(false);
-                  router.refresh();
+                  router.push(`${pathname}?created=${Date.now()}`);
                 }}
                 submitLabel="Créer la fiche"
               />
