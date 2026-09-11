@@ -110,6 +110,8 @@ export default async function DemandeDetailPage({
                     ...splitName(m.name),
                     email: m.email,
                     phone: m.phone,
+                    zip: m.zip,
+                    city: m.city,
                   }}
                   label="Créer une fiche client"
                 />
@@ -140,6 +142,14 @@ export default async function DemandeDetailPage({
               <a href={`mailto:${m.email}`} style={{ fontSize: 14 }}>
                 {m.email}
               </a>
+            </div>
+            <div>
+              <div className="pro-lbl">Ville</div>
+              <div style={{ fontSize: 14 }}>
+                {m.zip || m.city
+                  ? [m.zip, m.city].filter(Boolean).join(" ")
+                  : "—"}
+              </div>
             </div>
             <div>
               <div className="pro-lbl">Origine</div>

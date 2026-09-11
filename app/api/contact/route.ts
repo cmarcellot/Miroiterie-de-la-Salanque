@@ -17,7 +17,8 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: "Requête invalide." }, { status: 400 });
   }
 
-  const { name, email, phone, subject, message, source, company } = body;
+  const { name, email, phone, subject, message, source, company, zip, city } =
+    body;
 
   // Honeypot anti-spam : le champ "company" doit rester vide
   if (typeof company === "string" && company.trim() !== "") {
@@ -41,6 +42,8 @@ export async function POST(req: Request) {
       email: email.trim(),
       phone: typeof phone === "string" ? phone.trim() : undefined,
       subject: typeof subject === "string" ? subject.trim() : undefined,
+      zip: typeof zip === "string" ? zip.trim() : undefined,
+      city: typeof city === "string" ? city.trim() : undefined,
       message: message.trim(),
       source: source === "devis" ? "devis" : "contact",
     });

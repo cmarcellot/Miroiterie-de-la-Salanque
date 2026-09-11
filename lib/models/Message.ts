@@ -13,6 +13,8 @@ const MessageSchema = new Schema(
     email: { type: String, required: true, trim: true, maxlength: 160 },
     phone: { type: String, trim: true, maxlength: 40 },
     subject: { type: String, trim: true, maxlength: 160 },
+    zip: { type: String, trim: true, maxlength: 12, default: "" },
+    city: { type: String, trim: true, maxlength: 120, default: "" },
     message: { type: String, required: true, trim: true, maxlength: 5000 },
     source: { type: String, enum: ["contact", "devis"], default: "contact" },
     status: { type: String, enum: MESSAGE_STATUSES, default: "nouveau" },
