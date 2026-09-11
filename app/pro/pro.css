@@ -177,11 +177,18 @@
   padding: 9px 12px;
   border-radius: 8px;
   font-size: 13.5px;
-  color: var(--ink-2);
   text-align: left;
   transition:
     color 0.15s,
     background 0.15s;
+}
+/* Spécificité (.pro-side .pro-nav) volontairement plus élevée que
+   .pro-root a { color: inherit } — sinon ce dernier l'emporte sur les
+   liens du menu (Link -> <a>) mais pas sur le bouton "Se déconnecter"
+   (pas un <a>), et les deux affichent une couleur différente malgré la
+   même classe. */
+.pro-side .pro-nav {
+  color: var(--ink-2);
 }
 .pro-nav:hover {
   color: var(--ink);
