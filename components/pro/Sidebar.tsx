@@ -141,7 +141,7 @@ export default function Sidebar({
           </Link>
           <button
             type="button"
-            className="pro-signout"
+            className="pro-nav"
             onClick={() => signOut({ callbackUrl: "/pro/login" })}
           >
             <span className="ico">
