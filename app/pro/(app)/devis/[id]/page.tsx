@@ -33,17 +33,8 @@ export default async function DevisDetailPage({
 
   return (
     <div>
-      <Link
-        href="/pro/devis"
-        className="pro-lab"
-        style={{
-          display: "inline-flex",
-          alignItems: "center",
-          gap: 6,
-          color: "var(--cyan)",
-        }}
-      >
-        <ArrowLeft className="h-4 w-4" /> Retour aux devis
+      <Link href="/pro/devis" className="pro-btn ghost">
+        <ArrowLeft className="h-4 w-4" /> Retour
       </Link>
 
       <div className="pro-phead" style={{ marginTop: 10 }}>

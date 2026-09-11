@@ -43,7 +43,7 @@ export default async function DashboardPage() {
       hint: "à traiter",
       href: "/pro/demandes?status=nouveau",
       spark: "0,30 20,26 40,24 60,16 80,14 100,9",
-      accent: "var(--cyan)",
+      accent: "var(--marine)",
     },
     {
       label: "Devis en attente",
@@ -65,7 +65,6 @@ export default async function DashboardPage() {
       hint: "fiches enregistrées",
       href: "/pro/clients",
       spark: "0,34 15,28 30,30 45,20 60,22 75,11 100,6",
-      accent: "var(--cyan)",
     },
   ];
 
@@ -91,7 +90,7 @@ export default async function DashboardPage() {
       <div className="pro-card" style={{ marginTop: 14 }}>
         <div className="pro-chead">
           <h3>Dernières demandes</h3>
-          <Link href="/pro/demandes" className="pro-lab" style={{ color: "var(--cyan)" }}>
+          <Link href="/pro/demandes" className="pro-lab" style={{ color: "var(--ink-2)" }}>
             Tout voir
           </Link>
         </div>

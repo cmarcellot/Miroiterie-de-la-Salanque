@@ -14,9 +14,7 @@ export default function ComingSoon({
         </div>
       </div>
       <div className="pro-empty">
-        <div className="pro-lab" style={{ color: "var(--cyan)" }}>
-          Bientôt disponible
-        </div>
+        <div className="pro-lab">Bientôt disponible</div>
         <p
           style={{
             margin: "10px auto 0",

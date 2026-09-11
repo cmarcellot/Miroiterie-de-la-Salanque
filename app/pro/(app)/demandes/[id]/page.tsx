@@ -33,17 +33,8 @@ export default async function DemandeDetailPage({
     <div>
       <Toast param="created" message="Fiche client créée." />
 
-      <Link
-        href="/pro/demandes"
-        className="pro-lab"
-        style={{
-          display: "inline-flex",
-          alignItems: "center",
-          gap: 6,
-          color: "var(--cyan)",
-        }}
-      >
-        <ArrowLeft className="h-4 w-4" /> Retour aux demandes
+      <Link href="/pro/demandes" className="pro-btn ghost">
+        <ArrowLeft className="h-4 w-4" /> Retour
       </Link>
 
       <div className="pro-phead" style={{ marginTop: 10 }}>
@@ -75,15 +66,11 @@ export default async function DemandeDetailPage({
               style={{ marginTop: 12, display: "grid", gap: 6, fontSize: 13.5 }}
             >
               <Row label="Email">
-                <a href={`mailto:${m.email}`} style={{ color: "var(--cyan)" }}>
-                  {m.email}
-                </a>
+                <a href={`mailto:${m.email}`}>{m.email}</a>
               </Row>
               {m.phone && (
                 <Row label="Téléphone">
-                  <a href={`tel:${m.phone}`} style={{ color: "var(--cyan)" }}>
-                    {m.phone}
-                  </a>
+                  <a href={`tel:${m.phone}`}>{m.phone}</a>
                 </Row>
               )}
               {m.subject && <Row label="Sujet">{m.subject}</Row>}

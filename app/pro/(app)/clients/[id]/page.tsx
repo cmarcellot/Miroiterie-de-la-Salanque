@@ -69,7 +69,7 @@ export default async function ClientDetailPage({
       value: montantSigne,
       display: formatEUR(montantSigne),
       hint: `${signes.length} devis accepté${signes.length > 1 ? "s" : ""}`,
-      accent: "var(--cyan)",
+      accent: "var(--ok)",
     },
     {
       label: "En attente",
@@ -218,7 +218,7 @@ export default async function ClientDetailPage({
           <Link
             href={`/pro/devis/nouveau?client=${c._id}`}
             className="pro-lab"
-            style={{ color: "var(--cyan)" }}
+            style={{ color: "var(--ink-2)" }}
           >
             + Nouveau devis
           </Link>

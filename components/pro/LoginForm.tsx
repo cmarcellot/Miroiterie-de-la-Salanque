@@ -56,7 +56,7 @@ function Form() {
         />
         <div
           className="pro-lab"
-          style={{ textAlign: "center", marginTop: 16, color: "var(--cyan)" }}
+          style={{ textAlign: "center", marginTop: 16 }}
         >
           Miroiterie de la Salanque
         </div>

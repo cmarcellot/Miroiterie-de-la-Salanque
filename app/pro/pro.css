@@ -16,10 +16,9 @@
   --ink: #132033;
   --ink-2: #4d5f76;
   --ink-3: #5f7183;
-  --cyan: #0e9182;
   --acier: #2f6ba3;
   --marine: #1d3f6b;
-  --ok: #0e9182;
+  --ok: #2d6a4f;
   --warn: #b9791f;
   --danger: #d15660;
   --hover: rgba(29, 63, 107, 0.1);
@@ -51,7 +50,7 @@
   text-decoration: none;
 }
 .pro-main a:not(.pro-btn):not(.pro-st):hover {
-  color: var(--cyan);
+  color: var(--marine);
 }
 
 .pro-mono {
@@ -317,8 +316,8 @@
   width: 6px;
   height: 6px;
   border-radius: 50%;
-  background: var(--cyan);
-  box-shadow: 0 0 0 3px rgba(14, 145, 130, 0.18);
+  background: var(--marine);
+  box-shadow: 0 0 0 3px rgba(29, 63, 107, 0.18);
 }
 .pro-me {
   display: flex;
@@ -329,8 +328,8 @@
   width: 36px;
   height: 36px;
   border-radius: 50%;
-  background: linear-gradient(135deg, var(--cyan), var(--acier));
-  color: #05231f;
+  background: var(--bg-2);
+  color: var(--ink-2);
   display: grid;
   place-items: center;
   font-family: var(--pro-sans);
@@ -617,12 +616,12 @@
   background: var(--warn);
 }
 .pro-st.traite {
-  color: var(--cyan);
-  border-color: rgba(14, 145, 130, 0.4);
-  background: rgba(14, 145, 130, 0.08);
+  color: var(--ok);
+  border-color: rgba(45, 106, 79, 0.4);
+  background: rgba(45, 106, 79, 0.08);
 }
 .pro-st.traite i {
-  background: var(--cyan);
+  background: var(--ok);
 }
 
 /* champs de formulaire — repris du prototype (fond teinté, bord au focus) */
@@ -937,8 +936,8 @@ select.pro-field {
   width: 20px;
   height: 20px;
   border-radius: 50%;
-  background: var(--cyan);
-  color: #04231f;
+  background: var(--ok);
+  color: #fff;
 }
 @keyframes pro-toast-in {
   from {
@@ -978,12 +977,12 @@ select.pro-field {
   background: var(--warn);
 }
 .pro-st.devis-accepte {
-  color: var(--cyan);
-  border-color: rgba(14, 145, 130, 0.4);
-  background: rgba(14, 145, 130, 0.08);
+  color: var(--ok);
+  border-color: rgba(45, 106, 79, 0.4);
+  background: rgba(45, 106, 79, 0.08);
 }
 .pro-st.devis-accepte i {
-  background: var(--cyan);
+  background: var(--ok);
 }
 .pro-st.devis-refuse {
   color: var(--danger);

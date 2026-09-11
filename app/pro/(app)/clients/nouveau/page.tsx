@@ -35,13 +35,7 @@ export default async function NewClientPage({
     <div>
       <Link
         href={fromMessage ? `/pro/demandes/${fromMessage}` : "/pro/clients"}
-        className="pro-lab"
-        style={{
-          display: "inline-flex",
-          alignItems: "center",
-          gap: 6,
-          color: "var(--cyan)",
-        }}
+        className="pro-btn ghost"
       >
         <ArrowLeft className="h-4 w-4" /> Retour
       </Link>
