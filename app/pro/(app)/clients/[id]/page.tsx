@@ -6,6 +6,11 @@ import { connectToDatabase } from "@/lib/mongodb";
 import Client, { CLIENT_TYPE_LABELS, type ClientType } from "@/lib/models/Client";
 import Message, { MESSAGE_STATUS_LABELS } from "@/lib/models/Message";
 import Devis, { DEVIS_STATUS_LABELS, type DevisStatus } from "@/lib/models/Devis";
+import Facture, {
+  FACTURE_STATUS_LABELS,
+  isFactureLate,
+  type FactureStatus,
+} from "@/lib/models/Facture";
 import {
   clientDisplayName,
   formatEUR,
@@ -33,9 +38,10 @@ export default async function ClientDetailPage({
   if (!c) notFound();
   const displayName = clientDisplayName(c);
 
-  const [demandes, devis] = await Promise.all([
+  const [demandes, devis, factures] = await Promise.all([
     Message.find({ clientId: c._id }).sort({ createdAt: -1 }).lean(),
     Devis.find({ clientId: c._id }).sort({ seq: -1, year: -1 }).lean(),
+    Facture.find({ clientId: c._id }).sort({ seq: -1, year: -1 }).lean(),
   ]);
 
   const signes = devis.filter((d: any) => d.status === "accepte");
@@ -272,11 +278,59 @@ export default async function ClientDetailPage({
 
       <div className="pro-card" style={{ marginTop: 14, overflowX: "auto" }}>
         <div className="pro-chead">
-          <h3>Factures</h3>
+          <h3>Factures · {factures.length}</h3>
         </div>
-        <p style={{ padding: 24, color: "var(--ink-3)", fontSize: 13 }}>
-          Module factures à venir.
-        </p>
+        {factures.length === 0 ? (
+          <p style={{ padding: 24, color: "var(--ink-3)", fontSize: 13 }}>
+            Aucune facture pour ce client.
+          </p>
+        ) : (
+          <table className="pro-table">
+            <thead>
+              <tr>
+                <th>Numéro</th>
+                <th>Émise</th>
+                <th>Échéance</th>
+                <th>Statut</th>
+                <th style={{ textAlign: "right" }}>Montant TTC</th>
+              </tr>
+            </thead>
+            <tbody>
+              {factures.map((f: any) => {
+                const late = isFactureLate(f);
+                return (
+                  <tr key={String(f._id)}>
+                    <td className="num">
+                      <Link href={`/pro/factures/${f._id}`}>{f.number}</Link>
+                    </td>
+                    <td style={{ color: "var(--ink-3)" }}>
+                      {f.date
+                        ? new Date(f.date).toLocaleDateString("fr-FR")
+                        : "—"}
+                    </td>
+                    <td style={{ color: late ? "var(--danger)" : "var(--ink-3)" }}>
+                      {f.dueDate
+                        ? new Date(f.dueDate).toLocaleDateString("fr-FR")
+                        : "—"}
+                    </td>
+                    <td>
+                      <span className={`pro-st facture-${late ? "retard" : f.status}`}>
+                        <i />
+                        {late
+                          ? "En retard"
+                          : FACTURE_STATUS_LABELS[f.status as FactureStatus] ??
+                            f.status}
+                      </span>
+                    </td>
+                    <td className="pro-amt" style={{ textAlign: "right" }}>
+                      {formatEUR(f.totalTTC || 0)}
+                    </td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
+        )}
       </div>
 
       <div className="pro-card" style={{ marginTop: 14, overflowX: "auto" }}>

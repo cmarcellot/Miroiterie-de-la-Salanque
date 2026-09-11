@@ -39,6 +39,10 @@ export async function updateSettings(formData: FormData) {
       depositPct: n("devis.depositPct", 30),
       notes: s("devis.notes"),
     },
+    factures: {
+      paymentDelayDays: n("factures.paymentDelayDays", 30),
+      notes: s("factures.notes"),
+    },
   };
 
   await connectToDatabase();
@@ -49,5 +53,6 @@ export async function updateSettings(formData: FormData) {
 
   revalidatePath("/pro/parametres");
   revalidatePath("/pro/devis");
+  revalidatePath("/pro/factures");
   redirect(`/pro/parametres?ok=${Date.now()}`);
 }

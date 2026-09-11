@@ -57,7 +57,7 @@ export default function SettingsForm({
   settings: AppSettings;
 }) {
   const [pending, setPending] = useState(false);
-  const { company, legal, devis } = settings;
+  const { company, legal, devis, factures } = settings;
 
   return (
     <form
@@ -149,6 +149,26 @@ export default function SettingsForm({
             rows={3}
             defaultValue={devis.notes}
             placeholder="Conditions de règlement, garanties…"
+            className="pro-field"
+            style={{ marginTop: 8, resize: "vertical" }}
+          />
+        </div>
+      </Card>
+
+      <Card title="Valeurs par défaut des factures">
+        <Field
+          name="factures.paymentDelayDays"
+          label="Délai de paiement (jours)"
+          type="number"
+          defaultValue={factures.paymentDelayDays}
+        />
+        <div>
+          <label className="pro-lab">Mentions par défaut</label>
+          <textarea
+            name="factures.notes"
+            rows={3}
+            defaultValue={factures.notes}
+            placeholder="Conditions de règlement, pénalités de retard…"
             className="pro-field"
             style={{ marginTop: 8, resize: "vertical" }}
           />

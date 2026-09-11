@@ -1,32 +1,33 @@
 import Link from "next/link";
 import { connectToDatabase } from "@/lib/mongodb";
 import Message, { MESSAGE_STATUS_LABELS } from "@/lib/models/Message";
-import Client from "@/lib/models/Client";
 import Devis from "@/lib/models/Devis";
 import { formatEUR } from "@/lib/pro-enums";
+import { getMonthlyRevenue } from "@/lib/factures-stats";
 import Kpis, { type Kpi } from "@/components/pro/Kpis";
+import BarChart from "@/components/pro/BarChart";
 
 export const dynamic = "force-dynamic";
 
 async function getStats() {
   await connectToDatabase();
-  const [nouveau, enCours, clients, recents, devisWaiting] = await Promise.all([
+  const [nouveau, enCours, recents, devisWaiting, revenue] = await Promise.all([
     Message.countDocuments({ status: "nouveau" }),
     Message.countDocuments({ status: "en_cours" }),
-    Client.countDocuments({}),
     Message.find({}).sort({ createdAt: -1 }).limit(6).lean(),
     Devis.find({ status: { $in: ["brouillon", "envoye"] } }, { totalTTC: 1 }).lean(),
+    getMonthlyRevenue(),
   ]);
   const devisCount = devisWaiting.length;
   const devisAmount = (devisWaiting as any[]).reduce(
     (s, d) => s + (d.totalTTC || 0),
     0
   );
-  return { nouveau, enCours, clients, recents, devisCount, devisAmount };
+  return { nouveau, enCours, recents, devisCount, devisAmount, revenue };
 }
 
 export default async function DashboardPage() {
-  const { nouveau, enCours, clients, recents, devisCount, devisAmount } =
+  const { nouveau, enCours, recents, devisCount, devisAmount, revenue } =
     await getStats();
 
   const today = new Date().toLocaleDateString("fr-FR", {
@@ -60,11 +61,12 @@ export default async function DashboardPage() {
       spark: "0,12 20,18 40,14 60,24 80,20 100,28",
     },
     {
-      label: "Clients",
-      value: clients,
-      hint: "fiches enregistrées",
-      href: "/pro/clients",
-      spark: "0,34 15,28 30,30 45,20 60,22 75,11 100,6",
+      label: "CA encaissé ce mois",
+      value: revenue.thisMonth,
+      display: formatEUR(revenue.thisMonth),
+      hint: "factures payées ce mois",
+      href: "/pro/factures?status=payee",
+      accent: "var(--ok)",
     },
   ];
 
@@ -86,6 +88,19 @@ export default async function DashboardPage() {
       </div>
 
       <Kpis items={kpis} />
+
+      <div className="pro-card" style={{ marginTop: 14, padding: "0 20px 14px" }}>
+        <div className="pro-chead" style={{ padding: "15px 0" }}>
+          <h3>Évolution du CA</h3>
+          <span className="pro-lab">6 derniers mois · encaissé</span>
+        </div>
+        <BarChart
+          data={revenue.series}
+          height={190}
+          color="var(--ok)"
+          format={(v) => (v >= 1000 ? `${Math.round(v / 1000)}k€` : formatEUR(v))}
+        />
+      </div>
 
       <div className="pro-card" style={{ marginTop: 14 }}>
         <div className="pro-chead">

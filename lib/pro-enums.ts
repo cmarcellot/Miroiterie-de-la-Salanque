@@ -77,6 +77,25 @@ export const DEVIS_STATUS_LABELS: Record<DevisStatus, string> = {
   expire: "Expiré",
 };
 
+/* ---------- Factures ---------- */
+
+export const FACTURE_STATUSES = ["emise", "payee"] as const;
+export type FactureStatus = (typeof FACTURE_STATUSES)[number];
+
+export const FACTURE_STATUS_LABELS: Record<FactureStatus, string> = {
+  emise: "Émise",
+  payee: "Payée",
+};
+
+/** Une facture émise (non payée) dont l'échéance est dépassée. */
+export function isFactureLate(f: {
+  status?: string;
+  dueDate?: string | Date | null;
+}): boolean {
+  if (f.status !== "emise" || !f.dueDate) return false;
+  return new Date(f.dueDate).getTime() < Date.now();
+}
+
 export const VAT_RATES = [20, 10, 5.5, 0] as const;
 
 export type LineItem = {

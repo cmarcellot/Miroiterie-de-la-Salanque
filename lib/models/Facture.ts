@@ -1,35 +1,38 @@
 import { Schema, models, model, InferSchemaType } from "mongoose";
-import { DEVIS_STATUSES } from "@/lib/pro-enums";
+import { FACTURE_STATUSES } from "@/lib/pro-enums";
 import { ItemSchema, ClientSnapSchema } from "@/lib/models/_shared";
 
 export {
-  DEVIS_STATUSES,
-  DEVIS_STATUS_LABELS,
-  type DevisStatus,
+  FACTURE_STATUSES,
+  FACTURE_STATUS_LABELS,
+  isFactureLate,
+  type FactureStatus,
 } from "@/lib/pro-enums";
 
-const DevisSchema = new Schema(
+const FactureSchema = new Schema(
   {
     number: { type: String, required: true, unique: true },
     year: { type: Number, required: true },
     seq: { type: Number, required: true },
     clientId: { type: Schema.Types.ObjectId, ref: "Client", default: null },
     client: { type: ClientSnapSchema, default: {} },
+    /** Devis d'origine, si la facture a été générée depuis un devis accepté. */
+    devisId: { type: Schema.Types.ObjectId, ref: "Devis", default: null },
     date: { type: Date, default: Date.now },
-    validUntil: { type: Date },
-    status: { type: String, enum: DEVIS_STATUSES, default: "brouillon" },
+    dueDate: { type: Date },
+    status: { type: String, enum: FACTURE_STATUSES, default: "emise" },
+    paidAt: { type: Date, default: null },
     items: { type: [ItemSchema], default: [] },
     totalHT: { type: Number, default: 0 },
     totalTVA: { type: Number, default: 0 },
     totalTTC: { type: Number, default: 0 },
-    depositPct: { type: Number, default: 30 },
     notes: { type: String, default: "", maxlength: 4000 },
   },
   { timestamps: true }
 );
 
-export type DevisDoc = InferSchemaType<typeof DevisSchema>;
+export type FactureDoc = InferSchemaType<typeof FactureSchema>;
 
-export const Devis = models.Devis || model("Devis", DevisSchema);
+export const Facture = models.Facture || model("Facture", FactureSchema);
 
-export default Devis;
+export default Facture;

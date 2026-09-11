@@ -24,6 +24,10 @@ export type AppSettings = {
     depositPct: number;
     notes: string;
   };
+  factures: {
+    paymentDelayDays: number;
+    notes: string;
+  };
 };
 
 /** Paramètres entreprise, avec repli sur lib/site.ts pour les infos de base. */
@@ -34,6 +38,7 @@ export async function getSettings(): Promise<AppSettings> {
   const c = d?.company ?? {};
   const l = d?.legal ?? {};
   const v = d?.devis ?? {};
+  const f = d?.factures ?? {};
   return {
     company: {
       name: c.name || site.name,
@@ -55,6 +60,10 @@ export async function getSettings(): Promise<AppSettings> {
       validityDays: Number(v.validityDays) || 90,
       depositPct: v.depositPct ?? 30,
       notes: v.notes || "",
+    },
+    factures: {
+      paymentDelayDays: Number(f.paymentDelayDays) || 30,
+      notes: f.notes || "",
     },
   };
 }

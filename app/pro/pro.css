@@ -998,6 +998,30 @@ select.pro-field {
 .pro-st.devis-expire i {
   background: var(--ink-3);
 }
+.pro-st.facture-emise {
+  color: var(--warn);
+  border-color: rgba(185, 121, 31, 0.4);
+  background: rgba(185, 121, 31, 0.08);
+}
+.pro-st.facture-emise i {
+  background: var(--warn);
+}
+.pro-st.facture-payee {
+  color: var(--ok);
+  border-color: rgba(45, 106, 79, 0.4);
+  background: rgba(45, 106, 79, 0.08);
+}
+.pro-st.facture-payee i {
+  background: var(--ok);
+}
+.pro-st.facture-retard {
+  color: var(--danger);
+  border-color: rgba(209, 86, 96, 0.4);
+  background: rgba(209, 86, 96, 0.08);
+}
+.pro-st.facture-retard i {
+  background: var(--danger);
+}
 
 /* ---------- document imprimable ---------- */
 .print-sheet {
@@ -1010,6 +1034,8 @@ select.pro-field {
   padding: 40px 44px;
   box-shadow: 0 24px 60px rgba(20, 40, 66, 0.1);
 }
+/* .devis-doc / .dd-* : mise en page du document imprimable, partagée par
+   DevisDocument ET FactureDocument (seul le contenu — "Devis"/"Facture" — change). */
 .devis-doc {
   font-family: var(--pro-sans);
   font-size: 12px;

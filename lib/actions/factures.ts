@@ -6,14 +6,15 @@ import { getServerSession } from "next-auth";
 import mongoose from "mongoose";
 import { authOptions } from "@/lib/auth";
 import { connectToDatabase } from "@/lib/mongodb";
+import Facture from "@/lib/models/Facture";
 import Devis from "@/lib/models/Devis";
 import Client from "@/lib/models/Client";
-import Facture from "@/lib/models/Facture";
+import { getSettings } from "@/lib/settings";
 import {
-  DEVIS_STATUSES,
+  FACTURE_STATUSES,
   clientDisplayName,
   computeTotals,
-  type DevisStatus,
+  type FactureStatus,
   type LineItem,
 } from "@/lib/pro-enums";
 
@@ -49,10 +50,9 @@ function parseForm(formData: FormData) {
     items,
     ...totals,
     date: new Date(String(formData.get("date") || "") || Date.now()),
-    validUntil: formData.get("validUntil")
-      ? new Date(String(formData.get("validUntil")))
+    dueDate: formData.get("dueDate")
+      ? new Date(String(formData.get("dueDate")))
       : undefined,
-    depositPct: Number(formData.get("depositPct")) || 0,
     notes: String(formData.get("notes") || "").trim().slice(0, 4000),
   };
 }
@@ -60,16 +60,16 @@ function parseForm(formData: FormData) {
 async function nextNumber() {
   const year = new Date().getFullYear();
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const last: any = await Devis.findOne({ year }).sort({ seq: -1 }).lean();
+  const last: any = await Facture.findOne({ year }).sort({ seq: -1 }).lean();
   const seq = (last?.seq ?? 0) + 1;
   return {
     year,
     seq,
-    number: `D-${year}-${String(seq).padStart(3, "0")}`,
+    number: `F-${year}-${String(seq).padStart(3, "0")}`,
   };
 }
 
-export async function createDevis(formData: FormData) {
+export async function createFacture(formData: FormData) {
   await requireSession();
   const clientId = String(formData.get("clientId") || "");
   if (!mongoose.isValidObjectId(clientId))
@@ -83,7 +83,7 @@ export async function createDevis(formData: FormData) {
   const { year, seq, number } = await nextNumber();
   const data = parseForm(formData);
 
-  const doc = await Devis.create({
+  const doc = await Facture.create({
     number,
     year,
     seq,
@@ -96,46 +96,90 @@ export async function createDevis(formData: FormData) {
       email: client.email,
       phone: client.phone,
     },
-    status: "brouillon",
+    status: "emise",
     ...data,
   });
 
-  revalidatePath("/pro/devis");
-  redirect(`/pro/devis/${doc._id}`);
+  revalidatePath("/pro/factures");
+  redirect(`/pro/factures/${doc._id}`);
 }
 
-export async function updateDevis(id: string, formData: FormData) {
+/** Génère une facture reprenant les lignes et le client d'un devis. */
+export async function createFactureFromDevis(devisId: string) {
+  await requireSession();
+  if (!mongoose.isValidObjectId(devisId))
+    throw new Error("Identifiant invalide.");
+
+  await connectToDatabase();
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const devis: any = await Devis.findById(devisId).lean();
+  if (!devis) throw new Error("Devis introuvable.");
+
+  const [{ year, seq, number }, settings] = await Promise.all([
+    nextNumber(),
+    getSettings(),
+  ]);
+
+  const doc = await Facture.create({
+    number,
+    year,
+    seq,
+    clientId: devis.clientId ?? null,
+    client: devis.client ?? {},
+    devisId: devis._id,
+    date: new Date(),
+    dueDate: new Date(
+      Date.now() + settings.factures.paymentDelayDays * 864e5
+    ),
+    status: "emise",
+    items: devis.items ?? [],
+    totalHT: devis.totalHT ?? 0,
+    totalTVA: devis.totalTVA ?? 0,
+    totalTTC: devis.totalTTC ?? 0,
+    notes: settings.factures.notes || devis.notes || "",
+  });
+
+  revalidatePath("/pro/factures");
+  revalidatePath(`/pro/devis/${devisId}`);
+  redirect(`/pro/factures/${doc._id}`);
+}
+
+export async function updateFacture(id: string, formData: FormData) {
   await requireSession();
   if (!mongoose.isValidObjectId(id)) throw new Error("Identifiant invalide.");
 
   await connectToDatabase();
   const data = parseForm(formData);
-  await Devis.findByIdAndUpdate(id, data);
+  await Facture.findByIdAndUpdate(id, data);
 
-  revalidatePath("/pro/devis");
-  revalidatePath(`/pro/devis/${id}`);
-  redirect(`/pro/devis/${id}`);
+  revalidatePath("/pro/factures");
+  revalidatePath(`/pro/factures/${id}`);
+  redirect(`/pro/factures/${id}`);
 }
 
-export async function setDevisStatus(id: string, status: string) {
+export async function setFactureStatus(id: string, status: string) {
   await requireSession();
   if (!mongoose.isValidObjectId(id)) throw new Error("Identifiant invalide.");
-  if (!DEVIS_STATUSES.includes(status as DevisStatus))
+  if (!FACTURE_STATUSES.includes(status as FactureStatus))
     throw new Error("Statut invalide.");
 
   await connectToDatabase();
-  await Devis.findByIdAndUpdate(id, { status });
-  revalidatePath("/pro/devis");
-  revalidatePath(`/pro/devis/${id}`);
+  await Facture.findByIdAndUpdate(id, {
+    status,
+    paidAt: status === "payee" ? new Date() : null,
+  });
+
+  revalidatePath("/pro/factures");
+  revalidatePath(`/pro/factures/${id}`);
+  revalidatePath("/pro");
 }
 
-export async function deleteDevis(id: string) {
+export async function deleteFacture(id: string) {
   await requireSession();
   if (!mongoose.isValidObjectId(id)) throw new Error("Identifiant invalide.");
 
   await connectToDatabase();
-  await Devis.findByIdAndDelete(id);
-  await Facture.updateMany({ devisId: id }, { devisId: null });
-  revalidatePath("/pro/devis");
-  redirect("/pro/devis");
+  await Facture.findByIdAndDelete(id);
+  revalidatePath("/pro/factures");
+  redirect("/pro/factures");
 }

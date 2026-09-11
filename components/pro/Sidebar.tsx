@@ -41,7 +41,7 @@ const sections: { title: string; items: Item[] }[] = [
   {
     title: "Production",
     items: [
-      { href: "/pro/factures", label: "Factures", icon: ReceiptText, soon: true },
+      { href: "/pro/factures", label: "Factures", icon: ReceiptText },
       { href: "/pro/chantiers", label: "Chantiers", icon: HardHat, soon: true },
     ],
   },
@@ -51,10 +51,12 @@ export default function Sidebar({
   pending,
   clients,
   devisEnAttente,
+  facturesEnRetard,
 }: {
   pending: number;
   clients: number;
   devisEnAttente: number;
+  facturesEnRetard: number;
 }) {
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
@@ -63,6 +65,7 @@ export default function Sidebar({
     if (href === "/pro/demandes") return pending;
     if (href === "/pro/clients") return clients;
     if (href === "/pro/devis") return devisEnAttente;
+    if (href === "/pro/factures") return facturesEnRetard;
     return 0;
   };
 

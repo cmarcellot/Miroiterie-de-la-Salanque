@@ -33,12 +33,21 @@ const DevisDefaultsSchema = new Schema(
   { _id: false }
 );
 
+const FactureDefaultsSchema = new Schema(
+  {
+    paymentDelayDays: { type: Number, default: 30 },
+    notes: { type: String, default: "" },
+  },
+  { _id: false }
+);
+
 const SettingsSchema = new Schema(
   {
     singleton: { type: String, default: "main", unique: true },
     company: { type: CompanySchema, default: () => ({}) },
     legal: { type: LegalSchema, default: () => ({}) },
     devis: { type: DevisDefaultsSchema, default: () => ({}) },
+    factures: { type: FactureDefaultsSchema, default: () => ({}) },
   },
   { timestamps: true }
 );
