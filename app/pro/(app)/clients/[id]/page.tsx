@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import mongoose from "mongoose";
-import { ArrowLeft } from "lucide-react";
+import { ArrowLeft, Plus } from "lucide-react";
 import { connectToDatabase } from "@/lib/mongodb";
 import Client, { CLIENT_TYPE_LABELS, type ClientType } from "@/lib/models/Client";
 import Message, { MESSAGE_STATUS_LABELS } from "@/lib/models/Message";
@@ -91,16 +91,10 @@ export default async function ClientDetailPage({
 
       <Link
         href="/pro/clients"
-        className="pro-lab"
-        style={{
-          display: "inline-flex",
-          alignItems: "center",
-          gap: 6,
-          color: "var(--cyan)",
-          marginBottom: 14,
-        }}
+        className="pro-btn ghost"
+        style={{ marginBottom: 14 }}
       >
-        <ArrowLeft className="h-4 w-4" /> Retour aux clients
+        <ArrowLeft className="h-4 w-4" /> Retour
       </Link>
 
       <div className="pro-phead">
@@ -140,7 +134,7 @@ export default async function ClientDetailPage({
             href={`/pro/devis/nouveau?client=${c._id}`}
             className="pro-btn solid"
           >
-            Nouveau devis
+            <Plus className="h-4 w-4" /> Nouveau devis
           </Link>
         </div>
       </div>
