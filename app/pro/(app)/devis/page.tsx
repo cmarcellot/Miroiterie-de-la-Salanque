@@ -52,17 +52,17 @@ export default async function DevisListPage({
 
   const kpis: Kpi[] = [
     {
-      label: "En attente de réponse",
-      value: montantEnvoye,
-      display: formatEUR(montantEnvoye),
-      hint: `${envoyes.length} devis envoyé${envoyes.length > 1 ? "s" : ""}`,
-    },
-    {
       label: "Acceptés",
       value: montantAccepte,
       display: formatEUR(montantAccepte),
       hint: `${acceptes.length} devis accepté${acceptes.length > 1 ? "s" : ""}`,
       accent: "var(--ok)",
+    },
+    {
+      label: "En attente de réponse",
+      value: montantEnvoye,
+      display: formatEUR(montantEnvoye),
+      hint: `${envoyes.length} devis envoyé${envoyes.length > 1 ? "s" : ""}`,
     },
     {
       label: "Taux de signature",
