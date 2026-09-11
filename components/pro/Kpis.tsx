@@ -7,9 +7,11 @@ export type Kpi = {
   label: string;
   value: number;
   hint?: string;
-  href: string;
-  spark: string; // points for the <polyline>
+  href?: string;
+  spark?: string; // points for the <polyline>
   accent?: string;
+  /** Affiche la valeur telle quelle (ex. un montant déjà formaté) au lieu du compteur animé. */
+  display?: string;
 };
 
 function useCountUp(target: number, run: boolean) {
@@ -33,21 +35,31 @@ function useCountUp(target: number, run: boolean) {
 function KpiCard({ kpi, run }: { kpi: Kpi; run: boolean }) {
   const n = useCountUp(kpi.value, run);
   const stroke = kpi.accent ?? "var(--acier)";
-  return (
-    <Link href={kpi.href} className="pro-card pro-kpi">
+  const inner = (
+    <>
       <div className="pro-lab">{kpi.label}</div>
-      <div className="v">{n.toLocaleString("fr-FR")}</div>
+      <div className="v">{kpi.display ?? n.toLocaleString("fr-FR")}</div>
       {kpi.hint && <div className="d">{kpi.hint}</div>}
-      <svg viewBox="0 0 100 40" preserveAspectRatio="none">
-        <polyline
-          points={kpi.spark}
-          fill="none"
-          stroke={stroke}
-          strokeWidth={2}
-        />
-      </svg>
-    </Link>
+      {kpi.spark && (
+        <svg viewBox="0 0 100 40" preserveAspectRatio="none">
+          <polyline
+            points={kpi.spark}
+            fill="none"
+            stroke={stroke}
+            strokeWidth={2}
+          />
+        </svg>
+      )}
+    </>
   );
+  if (kpi.href) {
+    return (
+      <Link href={kpi.href} className="pro-card pro-kpi">
+        {inner}
+      </Link>
+    );
+  }
+  return <div className="pro-card pro-kpi">{inner}</div>;
 }
 
 export default function Kpis({ items }: { items: Kpi[] }) {

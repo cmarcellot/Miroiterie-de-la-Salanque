@@ -31,6 +31,17 @@ export function splitName(full: string): { firstName: string; lastName: string }
   return { firstName: parts[0], lastName: parts.slice(1).join(" ") };
 }
 
+/** Initiales (2 max) à partir d'un nom d'affichage, pour les avatars. */
+export function initialsOf(name: string): string {
+  return (name || "")
+    .split(/[\s'-]+/)
+    .map((s) => s[0])
+    .filter(Boolean)
+    .slice(0, 2)
+    .join("")
+    .toUpperCase();
+}
+
 /** Nom d'affichage d'un client à partir de ses champs. */
 export function clientDisplayName(c: {
   type?: string;

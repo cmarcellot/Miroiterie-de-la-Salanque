@@ -2,24 +2,28 @@
 
 import { useEffect, useState } from "react";
 import { usePathname, useRouter } from "next/navigation";
-import { X, Plus } from "lucide-react";
-import { createClient } from "@/lib/actions/clients";
+import { X, Plus, Settings } from "lucide-react";
+import { createClient, updateClient } from "@/lib/actions/clients";
 import ClientForm, { type ClientValues } from "@/components/pro/ClientForm";
 
 export default function ClientModal({
-  label = "Nouveau client",
-  variant = "solid",
+  label,
+  variant,
   fromMessage,
   prefill,
+  client,
 }: {
   label?: string;
   variant?: "solid" | "ghost";
   fromMessage?: string;
   prefill?: ClientValues;
+  /** Fiche existante : bascule le modal en mode « Modifier ». */
+  client?: ClientValues & { id: string };
 }) {
   const router = useRouter();
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
+  const isEdit = !!client;
 
   useEffect(() => {
     if (!open) return;
@@ -34,15 +38,26 @@ export default function ClientModal({
     };
   }, [open]);
 
+  const btnLabel = label ?? (isEdit ? "Modifier" : "Nouveau client");
+  const btnVariant = variant ?? (isEdit ? "ghost" : "solid");
+  const title = isEdit ? "Modifier la fiche" : "Nouveau client";
+  const subtitle = isEdit
+    ? "Mettre à jour les coordonnées de ce client."
+    : "Créer une fiche client définitive.";
+
   return (
     <>
       <button
         type="button"
-        className={`pro-btn ${variant}`}
+        className={`pro-btn ${btnVariant}`}
         onClick={() => setOpen(true)}
       >
-        {variant === "solid" && <Plus className="h-4 w-4" />}
-        {label}
+        {isEdit ? (
+          <Settings className="h-4 w-4" />
+        ) : btnVariant === "solid" ? (
+          <Plus className="h-4 w-4" />
+        ) : null}
+        {btnLabel}
       </button>
 
       {open && (
@@ -56,7 +71,7 @@ export default function ClientModal({
             className="pro-modal"
             role="dialog"
             aria-modal="true"
-            aria-label="Nouveau client"
+            aria-label={title}
           >
             <button
               type="button"
@@ -68,23 +83,29 @@ export default function ClientModal({
             </button>
 
             <div className="pro-modal-head">
-              <h2>Nouveau client</h2>
-              <p>Créer une fiche client définitive.</p>
+              <h2>{title}</h2>
+              <p>{subtitle}</p>
             </div>
 
             <div className="pro-modal-body">
               <ClientForm
-                action={createClient}
-                values={prefill}
+                action={
+                  isEdit ? updateClient.bind(null, client!.id) : createClient
+                }
+                values={isEdit ? client : prefill}
                 fromMessage={fromMessage}
-                stay={!fromMessage}
+                stay={!isEdit && !fromMessage}
                 bare
                 onCancel={() => setOpen(false)}
-                onDone={() => {
-                  setOpen(false);
-                  router.push(`${pathname}?created=${Date.now()}`);
-                }}
-                submitLabel="Créer"
+                onDone={
+                  isEdit
+                    ? undefined
+                    : () => {
+                        setOpen(false);
+                        router.push(`${pathname}?created=${Date.now()}`);
+                      }
+                }
+                submitLabel={isEdit ? "Enregistrer" : "Créer"}
               />
             </div>
           </div>

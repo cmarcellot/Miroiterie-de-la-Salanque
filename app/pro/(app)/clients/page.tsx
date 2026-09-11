@@ -2,22 +2,12 @@ import { Search } from "lucide-react";
 import { connectToDatabase } from "@/lib/mongodb";
 import Client, { CLIENT_TYPE_LABELS, type ClientType } from "@/lib/models/Client";
 import Devis from "@/lib/models/Devis";
-import { clientDisplayName } from "@/lib/pro-enums";
+import { clientDisplayName, initialsOf } from "@/lib/pro-enums";
 import ClientModal from "@/components/pro/ClientModal";
 import ClientRow from "@/components/pro/ClientRow";
 import Toast from "@/components/pro/Toast";
 
 export const dynamic = "force-dynamic";
-
-function initialsOf(name: string) {
-  return name
-    .split(/[\s'-]+/)
-    .map((s) => s[0])
-    .filter(Boolean)
-    .slice(0, 2)
-    .join("")
-    .toUpperCase();
-}
 
 export default async function ClientsPage({
   searchParams,
