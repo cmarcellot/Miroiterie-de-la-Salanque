@@ -12,6 +12,8 @@ export type Kpi = {
   accent?: string;
   /** Affiche la valeur telle quelle (ex. un montant déjà formaté) au lieu du compteur animé. */
   display?: string;
+  /** Couleur de la valeur elle-même (ex. rouge quand il y a du retard) — indépendant de `accent` (sparkline). */
+  valueColor?: string;
 };
 
 function useCountUp(target: number, run: boolean) {
@@ -38,8 +40,14 @@ function KpiCard({ kpi, run }: { kpi: Kpi; run: boolean }) {
   const inner = (
     <>
       <div className="pro-lab">{kpi.label}</div>
-      <div className="v">{kpi.display ?? n.toLocaleString("fr-FR")}</div>
-      {kpi.hint && <div className="d">{kpi.hint}</div>}
+      <div className="v" style={kpi.valueColor ? { color: kpi.valueColor } : undefined}>
+        {kpi.display ?? n.toLocaleString("fr-FR")}
+      </div>
+      {kpi.hint && (
+        <div className="d" style={kpi.valueColor ? { color: kpi.valueColor } : undefined}>
+          {kpi.hint}
+        </div>
+      )}
       {kpi.spark && (
         <svg viewBox="0 0 100 40" preserveAspectRatio="none">
           <polyline

@@ -529,6 +529,82 @@
   color: var(--acier);
 }
 
+/* carte de table avec onglets — reprise de .tbl-wrap/.tbl-head/.tbl-tab du prototype */
+.pro-tblwrap {
+  background: #ffffff;
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  overflow: hidden;
+}
+.pro-tblhead {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--line);
+  background: var(--bg);
+}
+.pro-tbltabs {
+  display: flex;
+  gap: 4px;
+}
+.pro-tbltab {
+  background: transparent;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 999px;
+  font-size: 12.5px;
+  color: var(--ink-2);
+}
+.pro-tbltab.active {
+  background: #ffffff;
+  color: var(--ink);
+  font-weight: 500;
+  box-shadow: 0 1px 2px rgba(20, 40, 66, 0.08);
+}
+
+/* boutons d'action en fin de ligne — repris de .row-actions/.ra-btn du prototype */
+.pro-rowactions {
+  display: inline-flex;
+  gap: 4px;
+  justify-content: flex-end;
+  width: 100%;
+}
+.pro-rowactions .ra {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background: #ffffff;
+  border: 1px solid var(--line);
+  color: var(--ink-3);
+  display: grid;
+  place-items: center;
+  transition:
+    color 0.14s,
+    background 0.14s,
+    border-color 0.14s,
+    transform 0.12s;
+}
+.pro-rowactions .ra:hover {
+  color: var(--ink);
+  border-color: var(--ink);
+  transform: translateY(-1px);
+}
+.pro-rowactions .ra.ra-ok {
+  color: var(--ok);
+  background: rgba(45, 106, 79, 0.08);
+  border-color: rgba(45, 106, 79, 0.3);
+}
+.pro-rowactions .ra.ra-ok:hover {
+  background: var(--ok);
+  color: #ffffff;
+  border-color: var(--ok);
+}
+.pro-rowactions .ra.ra-danger:hover {
+  color: var(--danger);
+  border-color: var(--danger);
+}
+
 /* avatar en ligne (repris de .avatar du prototype) */
 .pro-avatar {
   width: 30px;
