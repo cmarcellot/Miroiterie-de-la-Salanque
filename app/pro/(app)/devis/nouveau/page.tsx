@@ -62,6 +62,7 @@ export default async function NewDevisPage({
           }}
           cancelHref="/pro/devis"
           submitLabel="Créer le devis"
+          defaultVatRate={settings.devis.defaultVatRate}
         />
       )}
     </div>

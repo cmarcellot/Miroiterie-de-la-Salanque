@@ -153,6 +153,13 @@ export default function FactureDocument({
 
       {f.notes && <div className="dd-notes">{f.notes}</div>}
 
+      {company.iban && (
+        <div className="dd-notes">
+          Coordonnées bancaires : règlement par virement à l&apos;ordre de{" "}
+          {company.name}. IBAN {company.iban}.
+        </div>
+      )}
+
       <footer className="dd-foot">
         {legal.forme && <>{legal.forme} — </>}
         {legal.rcs && <>{legal.rcs} — </>}

@@ -10,6 +10,7 @@ export type AppSettings = {
     street: string;
     zip: string;
     city: string;
+    iban: string;
   };
   legal: {
     forme: string;
@@ -22,11 +23,20 @@ export type AppSettings = {
   devis: {
     validityDays: number;
     depositPct: number;
+    defaultVatRate: number;
+    deliveryWeeks: number;
+    warranty: string;
     notes: string;
   };
   factures: {
     paymentDelayDays: number;
     notes: string;
+  };
+  notifications: {
+    emailNewLead: boolean;
+    emailQuoteSigned: boolean;
+    emailInvoiceLate: boolean;
+    smsReminder: boolean;
   };
 };
 
@@ -39,6 +49,7 @@ export async function getSettings(): Promise<AppSettings> {
   const l = d?.legal ?? {};
   const v = d?.devis ?? {};
   const f = d?.factures ?? {};
+  const n = d?.notifications ?? {};
   return {
     company: {
       name: c.name || site.name,
@@ -47,6 +58,7 @@ export async function getSettings(): Promise<AppSettings> {
       street: c.street || site.address.street,
       zip: c.zip || site.address.zip,
       city: c.city || site.address.city,
+      iban: c.iban || "",
     },
     legal: {
       forme: l.forme || "",
@@ -59,11 +71,20 @@ export async function getSettings(): Promise<AppSettings> {
     devis: {
       validityDays: Number(v.validityDays) || 90,
       depositPct: v.depositPct ?? 30,
+      defaultVatRate: v.defaultVatRate ?? 20,
+      deliveryWeeks: Number(v.deliveryWeeks) || 4,
+      warranty: v.warranty || "10 ans (garantie décennale)",
       notes: v.notes || "",
     },
     factures: {
       paymentDelayDays: Number(f.paymentDelayDays) || 30,
       notes: f.notes || "",
+    },
+    notifications: {
+      emailNewLead: n.emailNewLead ?? true,
+      emailQuoteSigned: n.emailQuoteSigned ?? true,
+      emailInvoiceLate: n.emailInvoiceLate ?? true,
+      smsReminder: n.smsReminder ?? false,
     },
   };
 }

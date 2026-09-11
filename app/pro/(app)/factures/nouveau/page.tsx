@@ -61,6 +61,7 @@ export default async function NewFacturePage({
           }}
           cancelHref="/pro/factures"
           submitLabel="Créer la facture"
+          defaultVatRate={settings.devis.defaultVatRate}
         />
       )}
     </div>

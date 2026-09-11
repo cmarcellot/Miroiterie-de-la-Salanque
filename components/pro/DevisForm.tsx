@@ -13,11 +13,11 @@ type Values = {
   items?: LineItem[];
 };
 
-const emptyItem = (): LineItem => ({
+const emptyItem = (vatRate = 20): LineItem => ({
   label: "",
   qty: 1,
   unitPrice: 0,
-  vatRate: 20,
+  vatRate,
 });
 
 export default function DevisForm({
@@ -27,6 +27,7 @@ export default function DevisForm({
   lockClient = false,
   cancelHref,
   submitLabel = "Enregistrer",
+  defaultVatRate = 20,
 }: {
   action: (formData: FormData) => Promise<void>;
   clients: { id: string; name: string }[];
@@ -34,9 +35,10 @@ export default function DevisForm({
   lockClient?: boolean;
   cancelHref: string;
   submitLabel?: string;
+  defaultVatRate?: number;
 }) {
   const [items, setItems] = useState<LineItem[]>(
-    values.items && values.items.length ? values.items : [emptyItem()]
+    values.items && values.items.length ? values.items : [emptyItem(defaultVatRate)]
   );
   const [pending, setPending] = useState(false);
 
@@ -216,7 +218,7 @@ export default function DevisForm({
         </div>
         <button
           type="button"
-          onClick={() => setItems((p) => [...p, emptyItem()])}
+          onClick={() => setItems((p) => [...p, emptyItem(defaultVatRate)])}
           className="pro-btn ghost"
           style={{ marginTop: 10, padding: "7px 14px", fontSize: 12 }}
         >

@@ -1,11 +1,35 @@
 import { getSettings } from "@/lib/settings";
-import { updateSettings } from "@/lib/actions/settings";
-import SettingsForm from "@/components/pro/SettingsForm";
+import { connectToDatabase } from "@/lib/mongodb";
+import Client from "@/lib/models/Client";
+import Devis from "@/lib/models/Devis";
+import Facture from "@/lib/models/Facture";
+import Message from "@/lib/models/Message";
+import {
+  updateCompanySettings,
+  updateBillingSettings,
+  updateNotificationSettings,
+} from "@/lib/actions/settings";
+import SettingsTabs from "@/components/pro/SettingsTabs";
 
 export const dynamic = "force-dynamic";
 
-export default async function ParametresPage() {
-  const settings = await getSettings();
+async function getStats() {
+  await connectToDatabase();
+  const [clients, devis, factures, demandes] = await Promise.all([
+    Client.countDocuments({}),
+    Devis.countDocuments({}),
+    Facture.countDocuments({}),
+    Message.countDocuments({}),
+  ]);
+  return { clients, devis, factures, demandes };
+}
+
+export default async function ParametresPage({
+  searchParams,
+}: {
+  searchParams: { tab?: string };
+}) {
+  const [settings, stats] = await Promise.all([getSettings(), getStats()]);
 
   return (
     <div>
@@ -14,12 +38,19 @@ export default async function ParametresPage() {
           <div className="pro-lab">Configuration</div>
           <h1>Paramètres</h1>
           <div className="sub">
-            Ces informations apparaissent sur les devis et factures.
+            Paramétrez votre entreprise, vos conditions et vos préférences.
           </div>
         </div>
       </div>
 
-      <SettingsForm action={updateSettings} settings={settings} />
+      <SettingsTabs
+        settings={settings}
+        stats={stats}
+        initialTab={searchParams.tab}
+        companyAction={updateCompanySettings}
+        billingAction={updateBillingSettings}
+        notificationsAction={updateNotificationSettings}
+      />
     </div>
   );
 }

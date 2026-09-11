@@ -699,6 +699,107 @@ select.pro-field {
   font-weight: 500;
 }
 
+/* barre d'onglets — repris de .TabBar du prototype (pilule, largeur au contenu) */
+.pro-tabbar {
+  display: inline-flex;
+  gap: 4px;
+  padding: 4px;
+  background: #ffffff;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  margin-bottom: 20px;
+}
+.pro-tabbar button {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  border: none;
+  background: transparent;
+  color: var(--ink-2);
+  padding: 8px 16px;
+  border-radius: 999px;
+  font-size: 13px;
+  font-weight: 500;
+  white-space: nowrap;
+}
+.pro-tabbar button.active {
+  background: var(--ink);
+  color: var(--bg);
+}
+
+/* interrupteur on/off — repris du prototype (notifications) */
+.pro-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+  font-size: 13px;
+  width: fit-content;
+}
+.pro-toggle input {
+  display: none;
+}
+.pro-toggle .track {
+  position: relative;
+  width: 36px;
+  height: 20px;
+  border-radius: 999px;
+  background: var(--line-2);
+  transition: background 0.16s;
+  flex-shrink: 0;
+}
+.pro-toggle input:checked ~ .track {
+  background: var(--marine);
+}
+.pro-toggle .thumb {
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: #ffffff;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.15);
+  transition: left 0.16s;
+}
+.pro-toggle input:checked ~ .track .thumb {
+  left: 18px;
+}
+.pro-toggle .state {
+  color: var(--ink-2);
+}
+
+/* ligne de réglage — repris de .SettingsRow du prototype */
+.pro-srow {
+  display: grid;
+  grid-template-columns: 240px 1fr;
+  gap: 24px;
+  padding: 18px 0;
+  border-bottom: 1px solid var(--line);
+  align-items: start;
+}
+.pro-srow .lbl {
+  font-size: 13.5px;
+  font-weight: 500;
+  color: var(--ink);
+}
+.pro-srow .hint {
+  font-size: 12px;
+  color: var(--ink-3);
+  margin-top: 4px;
+  line-height: 1.5;
+}
+.pro-srow .fields {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+@media (max-width: 720px) {
+  .pro-srow {
+    grid-template-columns: 1fr;
+  }
+}
+
 /* formulaire client */
 .pro-cform {
   display: flex;

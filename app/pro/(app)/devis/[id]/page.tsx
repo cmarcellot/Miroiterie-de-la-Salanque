@@ -6,6 +6,7 @@ import { connectToDatabase } from "@/lib/mongodb";
 import Devis from "@/lib/models/Devis";
 import Facture, { FACTURE_STATUS_LABELS, isFactureLate, type FactureStatus } from "@/lib/models/Facture";
 import { getClientOptions } from "@/lib/clients-list";
+import { getSettings } from "@/lib/settings";
 import { updateDevis, setDevisStatus, deleteDevis } from "@/lib/actions/devis";
 import { createFactureFromDevis } from "@/lib/actions/factures";
 import { formatEUR } from "@/lib/pro-enums";
@@ -32,9 +33,10 @@ export default async function DevisDetailPage({
   const d: any = await Devis.findById(params.id).lean();
   if (!d) notFound();
 
-  const [clients, factures] = await Promise.all([
+  const [clients, factures, settings] = await Promise.all([
     getClientOptions(),
     Facture.find({ devisId: d._id }).sort({ seq: -1, year: -1 }).lean(),
+    getSettings(),
   ]);
 
   return (
@@ -82,6 +84,7 @@ export default async function DevisDetailPage({
         lockClient
         cancelHref="/pro/devis"
         submitLabel="Enregistrer les modifications"
+        defaultVatRate={settings.devis.defaultVatRate}
       />
 
       {factures.length > 0 && (

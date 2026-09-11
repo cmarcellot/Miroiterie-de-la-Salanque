@@ -5,6 +5,7 @@ import { ArrowLeft, Printer } from "lucide-react";
 import { connectToDatabase } from "@/lib/mongodb";
 import Facture, { isFactureLate } from "@/lib/models/Facture";
 import { getClientOptions } from "@/lib/clients-list";
+import { getSettings } from "@/lib/settings";
 import {
   updateFacture,
   setFactureStatus,
@@ -33,7 +34,10 @@ export default async function FactureDetailPage({
   const f: any = await Facture.findById(params.id).lean();
   if (!f) notFound();
 
-  const clients = await getClientOptions();
+  const [clients, settings] = await Promise.all([
+    getClientOptions(),
+    getSettings(),
+  ]);
   const late = isFactureLate(f);
 
   return (
@@ -86,6 +90,7 @@ export default async function FactureDetailPage({
         lockClient
         cancelHref="/pro/factures"
         submitLabel="Enregistrer les modifications"
+        defaultVatRate={settings.devis.defaultVatRate}
       />
 
       <div

@@ -8,6 +8,7 @@ const CompanySchema = new Schema(
     street: { type: String, default: "" },
     zip: { type: String, default: "" },
     city: { type: String, default: "" },
+    iban: { type: String, default: "" },
   },
   { _id: false }
 );
@@ -28,6 +29,9 @@ const DevisDefaultsSchema = new Schema(
   {
     validityDays: { type: Number, default: 90 },
     depositPct: { type: Number, default: 30 },
+    defaultVatRate: { type: Number, default: 20 },
+    deliveryWeeks: { type: Number, default: 4 },
+    warranty: { type: String, default: "10 ans (garantie décennale)" },
     notes: { type: String, default: "" },
   },
   { _id: false }
@@ -41,6 +45,16 @@ const FactureDefaultsSchema = new Schema(
   { _id: false }
 );
 
+const NotificationsSchema = new Schema(
+  {
+    emailNewLead: { type: Boolean, default: true },
+    emailQuoteSigned: { type: Boolean, default: true },
+    emailInvoiceLate: { type: Boolean, default: true },
+    smsReminder: { type: Boolean, default: false },
+  },
+  { _id: false }
+);
+
 const SettingsSchema = new Schema(
   {
     singleton: { type: String, default: "main", unique: true },
@@ -48,6 +62,7 @@ const SettingsSchema = new Schema(
     legal: { type: LegalSchema, default: () => ({}) },
     devis: { type: DevisDefaultsSchema, default: () => ({}) },
     factures: { type: FactureDefaultsSchema, default: () => ({}) },
+    notifications: { type: NotificationsSchema, default: () => ({}) },
   },
   { timestamps: true }
 );
