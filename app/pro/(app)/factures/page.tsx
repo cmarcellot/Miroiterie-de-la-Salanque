@@ -1,7 +1,11 @@
 import Link from "next/link";
 import { Plus } from "lucide-react";
 import { connectToDatabase } from "@/lib/mongodb";
-import Facture, { FACTURE_STATUS_LABELS, isFactureLate } from "@/lib/models/Facture";
+import Facture, {
+  FACTURE_STATUS_LABELS,
+  isFactureLate,
+  type FactureStatus,
+} from "@/lib/models/Facture";
 import { formatEUR, initialsOf } from "@/lib/pro-enums";
 import Kpis, { type Kpi } from "@/components/pro/Kpis";
 import FactureRow from "@/components/pro/FactureRow";
@@ -154,7 +158,9 @@ export default async function FacturesListPage({
                     }
                     late={late}
                     status={f.status}
-                    statusLabel={FACTURE_STATUS_LABELS[f.status] ?? f.status}
+                    statusLabel={
+                      FACTURE_STATUS_LABELS[f.status as FactureStatus] ?? f.status
+                    }
                     amountTTC={f.totalTTC || 0}
                   />
                 );

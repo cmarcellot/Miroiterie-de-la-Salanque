@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { Plus } from "lucide-react";
 import { connectToDatabase } from "@/lib/mongodb";
-import Devis, { DEVIS_STATUS_LABELS } from "@/lib/models/Devis";
+import Devis, { DEVIS_STATUS_LABELS, type DevisStatus } from "@/lib/models/Devis";
 import { initialsOf } from "@/lib/pro-enums";
 import DevisRow from "@/components/pro/DevisRow";
 
@@ -98,7 +98,9 @@ export default async function DevisListPage({
                   }
                   lineCount={(d.items || []).length}
                   status={d.status}
-                  statusLabel={DEVIS_STATUS_LABELS[d.status] ?? d.status}
+                  statusLabel={
+                    DEVIS_STATUS_LABELS[d.status as DevisStatus] ?? d.status
+                  }
                   amountTTC={d.totalTTC || 0}
                 />
               ))}
