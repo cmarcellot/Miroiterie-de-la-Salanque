@@ -958,6 +958,70 @@ select.pro-field {
   }
 }
 
+/* boîte de réception — vue liste/détail reprise de l'Inbox du prototype */
+.pro-inbox {
+  display: grid;
+  grid-template-columns: 360px 1fr;
+  gap: 14px;
+  align-items: start;
+}
+@media (max-width: 900px) {
+  .pro-inbox {
+    grid-template-columns: 1fr;
+  }
+}
+.pro-inbox-list {
+  max-height: calc(100vh - 260px);
+  min-height: 240px;
+  overflow-y: auto;
+}
+.pro-inbox-item {
+  display: block;
+  padding: 15px 18px;
+  border-bottom: 1px solid var(--line);
+  border-left: 3px solid transparent;
+}
+.pro-inbox-list .pro-inbox-item:last-child {
+  border-bottom: none;
+}
+.pro-inbox-item:hover {
+  background: var(--hover);
+}
+.pro-inbox-item.active {
+  background: var(--bg);
+  border-left-color: var(--marine);
+}
+.pro-inbox-item .top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 4px;
+}
+.pro-inbox-item .nm {
+  font-weight: 600;
+  font-size: 13.5px;
+  color: var(--ink);
+}
+.pro-inbox-item .dt {
+  font-size: 11px;
+  color: var(--ink-3);
+  white-space: nowrap;
+}
+.pro-inbox-item .sub {
+  font-size: 13px;
+  color: var(--ink-2);
+  margin-bottom: 8px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.pro-inbox-item .tags {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+}
+
 /* liste d'entités rattachées sur une fiche (repris de .client-block du proto) */
 .pro-rel h5 {
   font-family: var(--pro-sans);
