@@ -50,7 +50,7 @@ export default async function DashboardPage() {
       label: "Devis en attente",
       value: devisCount,
       hint: `${formatEUR(devisAmount)} en jeu`,
-      href: "/pro/devis?status=envoye",
+      href: "/pro/devis?tab=envoye",
       spark: "0,20 20,22 40,18 60,20 80,17 100,19",
     },
     {
@@ -65,7 +65,7 @@ export default async function DashboardPage() {
       value: revenue.thisMonth,
       display: formatEUR(revenue.thisMonth),
       hint: "factures payées ce mois",
-      href: "/pro/factures?status=payee",
+      href: "/pro/factures?tab=payee",
       accent: "var(--ok)",
     },
   ];
