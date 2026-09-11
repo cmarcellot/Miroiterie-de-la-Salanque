@@ -8,8 +8,8 @@
     sans-serif;
   --pro-mono: var(--font-geist-mono), "Geist Mono", ui-monospace, monospace;
 
-  --bg: #f5f7fa;
-  --bg-2: #eaeff6;
+  --bg: #eef1f5;
+  --bg-2: #e0e7ef;
   --glass: rgba(20, 40, 66, 0.035);
   --line: rgba(20, 40, 66, 0.12);
   --line-2: rgba(20, 40, 66, 0.24);
