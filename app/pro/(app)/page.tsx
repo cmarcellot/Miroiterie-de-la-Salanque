@@ -94,12 +94,7 @@ export default async function DashboardPage() {
           <h3>Évolution du CA</h3>
           <span className="pro-lab">6 derniers mois · encaissé</span>
         </div>
-        <BarChart
-          data={revenue.series}
-          height={190}
-          color="var(--ok)"
-          format={(v) => (v >= 1000 ? `${Math.round(v / 1000)}k€` : formatEUR(v))}
-        />
+        <BarChart data={revenue.series} height={190} color="var(--ok)" />
       </div>
 
       <div className="pro-card" style={{ marginTop: 14 }}>

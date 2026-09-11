@@ -1,20 +1,36 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { formatEUR } from "@/lib/pro-enums";
 
 export type BarDatum = { label: string; value: number; highlight?: boolean };
+
+/**
+ * Formatage de la valeur au-dessus de chaque barre. Une chaîne, pas une
+ * fonction : ce composant est un Client Component et reçoit ses props
+ * depuis des Server Components (pages) — une fonction ne traverserait pas
+ * la frontière serveur/client.
+ *   "eur"     -> montant compact ("1 234 k€" au-delà de 1000, sinon formatEUR)
+ *   "raw"     -> le nombre brut
+ */
+export type BarFormat = "eur" | "raw";
+
+function formatValue(v: number, mode: BarFormat) {
+  if (mode === "raw") return String(v);
+  return v >= 1000 ? `${Math.round(v / 1000)}k€` : formatEUR(v);
+}
 
 /** Graphe barres animé — repris du prototype (data/valeur -> hauteur, montée au montage). */
 export default function BarChart({
   data,
   height = 180,
   color = "var(--marine)",
-  format = (v: number) => String(v),
+  format = "eur",
 }: {
   data: BarDatum[];
   height?: number;
   color?: string;
-  format?: (v: number) => string;
+  format?: BarFormat;
 }) {
   const [grown, setGrown] = useState(false);
   useEffect(() => {
@@ -53,7 +69,7 @@ export default function BarChart({
                 className="pro-mono"
                 style={{ fontSize: 10, color: "var(--ink-3)", whiteSpace: "nowrap" }}
               >
-                {d.value > 0 ? format(d.value) : ""}
+                {d.value > 0 ? formatValue(d.value, format) : ""}
               </div>
               <div
                 style={{
