@@ -25,13 +25,14 @@ function toDateInput(d?: Date | string | null) {
 export default async function FactureDetailPage({
   params,
 }: {
-  params: { id: string };
+  params: Promise<{ id: string }>;
 }) {
-  if (!mongoose.isValidObjectId(params.id)) notFound();
+  const { id } = await params;
+  if (!mongoose.isValidObjectId(id)) notFound();
 
   await connectToDatabase();
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const f: any = await Facture.findById(params.id).lean();
+  const f: any = await Facture.findById(id).lean();
   if (!f) notFound();
 
   const [clients, settings] = await Promise.all([

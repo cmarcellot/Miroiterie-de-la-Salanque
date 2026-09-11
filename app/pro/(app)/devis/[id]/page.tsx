@@ -24,13 +24,14 @@ function toDateInput(d?: Date | string | null) {
 export default async function DevisDetailPage({
   params,
 }: {
-  params: { id: string };
+  params: Promise<{ id: string }>;
 }) {
-  if (!mongoose.isValidObjectId(params.id)) notFound();
+  const { id } = await params;
+  if (!mongoose.isValidObjectId(id)) notFound();
 
   await connectToDatabase();
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const d: any = await Devis.findById(params.id).lean();
+  const d: any = await Devis.findById(id).lean();
   if (!d) notFound();
 
   const [clients, factures, settings] = await Promise.all([

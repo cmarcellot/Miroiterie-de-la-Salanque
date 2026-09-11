@@ -11,10 +11,11 @@ export const dynamic = "force-dynamic";
 export default async function DemandesPage({
   searchParams,
 }: {
-  searchParams: { status?: string };
+  searchParams: Promise<{ status?: string }>;
 }) {
-  const status = MESSAGE_STATUSES.includes(searchParams.status as MessageStatus)
-    ? (searchParams.status as MessageStatus)
+  const { status: statusParam } = await searchParams;
+  const status = MESSAGE_STATUSES.includes(statusParam as MessageStatus)
+    ? (statusParam as MessageStatus)
     : undefined;
 
   await connectToDatabase();

@@ -22,8 +22,9 @@ const TABS = [
 export default async function FacturesListPage({
   searchParams,
 }: {
-  searchParams: { tab?: string };
+  searchParams: Promise<{ tab?: string }>;
 }) {
+  const { tab: tabParam } = await searchParams;
   await connectToDatabase();
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const factures = (await Facture.find({})
@@ -42,9 +43,7 @@ export default async function FacturesListPage({
   const montantEnAttente = sum(enAttente);
   const montantEnRetard = sum(enRetard);
 
-  const tab = TABS.some((t) => t.id === searchParams.tab)
-    ? searchParams.tab
-    : "all";
+  const tab = TABS.some((t) => t.id === tabParam) ? tabParam : "all";
   const visible =
     tab === "payee"
       ? payees

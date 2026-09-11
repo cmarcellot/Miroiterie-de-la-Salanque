@@ -13,13 +13,14 @@ export const dynamic = "force-dynamic";
 export default async function FacturePrintPage({
   params,
 }: {
-  params: { id: string };
+  params: Promise<{ id: string }>;
 }) {
-  if (!mongoose.isValidObjectId(params.id)) notFound();
+  const { id } = await params;
+  if (!mongoose.isValidObjectId(id)) notFound();
 
   await connectToDatabase();
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const f: any = await Facture.findById(params.id).lean();
+  const f: any = await Facture.findById(id).lean();
   if (!f) notFound();
 
   const settings = await getSettings();
@@ -27,7 +28,7 @@ export default async function FacturePrintPage({
   return (
     <div className="print-wrap">
       <div className="no-print" style={{ display: "flex", gap: 10, marginBottom: 18 }}>
-        <Link href={`/pro/factures/${params.id}`} className="pro-btn ghost">
+        <Link href={`/pro/factures/${id}`} className="pro-btn ghost">
           <ArrowLeft className="h-4 w-4" /> Retour
         </Link>
         <PrintButton />

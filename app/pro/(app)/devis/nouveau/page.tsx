@@ -10,9 +10,10 @@ export const dynamic = "force-dynamic";
 export default async function NewDevisPage({
   searchParams,
 }: {
-  searchParams: { client?: string };
+  searchParams: Promise<{ client?: string }>;
 }) {
-  const [clients, settings] = await Promise.all([
+  const [{ client }, clients, settings] = await Promise.all([
+    searchParams,
     getClientOptions(),
     getSettings(),
   ]);
@@ -54,7 +55,7 @@ export default async function NewDevisPage({
           action={createDevis}
           clients={clients}
           values={{
-            clientId: searchParams.client,
+            clientId: client,
             date: today,
             validUntil,
             depositPct: settings.devis.depositPct,

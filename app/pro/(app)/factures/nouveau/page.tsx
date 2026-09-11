@@ -10,9 +10,10 @@ export const dynamic = "force-dynamic";
 export default async function NewFacturePage({
   searchParams,
 }: {
-  searchParams: { client?: string };
+  searchParams: Promise<{ client?: string }>;
 }) {
-  const [clients, settings] = await Promise.all([
+  const [{ client }, clients, settings] = await Promise.all([
+    searchParams,
     getClientOptions(),
     getSettings(),
   ]);
@@ -54,7 +55,7 @@ export default async function NewFacturePage({
           action={createFacture}
           clients={clients}
           values={{
-            clientId: searchParams.client,
+            clientId: client,
             date: today,
             dueDate,
             notes: settings.factures.notes,

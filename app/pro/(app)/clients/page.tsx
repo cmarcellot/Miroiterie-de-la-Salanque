@@ -12,9 +12,9 @@ export const dynamic = "force-dynamic";
 export default async function ClientsPage({
   searchParams,
 }: {
-  searchParams: { q?: string };
+  searchParams: Promise<{ q?: string }>;
 }) {
-  const q = (searchParams.q ?? "").trim();
+  const q = ((await searchParams).q ?? "").trim();
 
   await connectToDatabase();
   const filter = q

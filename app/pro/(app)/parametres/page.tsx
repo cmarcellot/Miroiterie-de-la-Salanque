@@ -27,9 +27,13 @@ async function getStats() {
 export default async function ParametresPage({
   searchParams,
 }: {
-  searchParams: { tab?: string };
+  searchParams: Promise<{ tab?: string }>;
 }) {
-  const [settings, stats] = await Promise.all([getSettings(), getStats()]);
+  const [{ tab }, settings, stats] = await Promise.all([
+    searchParams,
+    getSettings(),
+    getStats(),
+  ]);
 
   return (
     <div>
@@ -46,7 +50,7 @@ export default async function ParametresPage({
       <SettingsTabs
         settings={settings}
         stats={stats}
-        initialTab={searchParams.tab}
+        initialTab={tab}
         companyAction={updateCompanySettings}
         billingAction={updateBillingSettings}
         notificationsAction={updateNotificationSettings}

@@ -20,8 +20,9 @@ const TABS = [
 export default async function DevisListPage({
   searchParams,
 }: {
-  searchParams: { tab?: string };
+  searchParams: Promise<{ tab?: string }>;
 }) {
+  const { tab: tabParam } = await searchParams;
   await connectToDatabase();
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const devis = (await Devis.find({})
@@ -34,9 +35,7 @@ export default async function DevisListPage({
     if (t.id !== "all") counts[t.id] = devis.filter((d) => d.status === t.id).length;
   }
 
-  const tab = TABS.some((t) => t.id === searchParams.tab)
-    ? (searchParams.tab as string)
-    : "all";
+  const tab = TABS.some((t) => t.id === tabParam) ? (tabParam as string) : "all";
   const visible = tab === "all" ? devis : devis.filter((d) => d.status === tab);
 
   const sum = (list: any[]) =>

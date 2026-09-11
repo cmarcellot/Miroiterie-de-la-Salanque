@@ -15,13 +15,14 @@ export const dynamic = "force-dynamic";
 export default async function DemandeDetailPage({
   params,
 }: {
-  params: { id: string };
+  params: Promise<{ id: string }>;
 }) {
-  if (!mongoose.isValidObjectId(params.id)) notFound();
+  const { id } = await params;
+  if (!mongoose.isValidObjectId(id)) notFound();
 
   await connectToDatabase();
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const m: any = await Message.findById(params.id).lean();
+  const m: any = await Message.findById(id).lean();
   if (!m) notFound();
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any

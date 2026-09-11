@@ -13,9 +13,9 @@ export const dynamic = "force-dynamic";
 export default async function NewClientPage({
   searchParams,
 }: {
-  searchParams: { fromMessage?: string };
+  searchParams: Promise<{ fromMessage?: string }>;
 }) {
-  const fromMessage = searchParams.fromMessage;
+  const { fromMessage } = await searchParams;
   let values: ClientValues = {};
 
   if (fromMessage && mongoose.isValidObjectId(fromMessage)) {

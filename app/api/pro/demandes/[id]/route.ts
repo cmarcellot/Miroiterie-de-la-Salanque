@@ -10,13 +10,14 @@ export const dynamic = "force-dynamic";
 
 export async function PATCH(
   req: Request,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
+  const { id } = await params;
   const session = await getServerSession(authOptions);
   if (!session) {
     return NextResponse.json({ error: "Non autorisé." }, { status: 401 });
   }
-  if (!mongoose.isValidObjectId(params.id)) {
+  if (!mongoose.isValidObjectId(id)) {
     return NextResponse.json({ error: "Identifiant invalide." }, { status: 400 });
   }
 
@@ -43,7 +44,7 @@ export async function PATCH(
   }
 
   await connectToDatabase();
-  const doc = await Message.findByIdAndUpdate(params.id, update, { new: true });
+  const doc = await Message.findByIdAndUpdate(id, update, { new: true });
   if (!doc) {
     return NextResponse.json({ error: "Introuvable." }, { status: 404 });
   }
