@@ -474,6 +474,11 @@
   margin-top: 8px;
   color: var(--marine);
 }
+.pro-kpi .v small {
+  font-size: 16px;
+  color: var(--ink-3);
+  margin-left: 4px;
+}
 .pro-kpi .d {
   font-family: var(--pro-mono);
   font-size: 10px;

@@ -14,6 +14,8 @@ export type Kpi = {
   display?: string;
   /** Couleur de la valeur elle-même (ex. rouge quand il y a du retard) — indépendant de `accent` (sparkline). */
   valueColor?: string;
+  /** Petit suffixe après la valeur (ex. "%"), comme <small> dans le prototype. Compatible avec le compteur animé. */
+  suffix?: string;
 };
 
 function useCountUp(target: number, run: boolean) {
@@ -42,6 +44,7 @@ function KpiCard({ kpi, run }: { kpi: Kpi; run: boolean }) {
       <div className="pro-lab">{kpi.label}</div>
       <div className="v" style={kpi.valueColor ? { color: kpi.valueColor } : undefined}>
         {kpi.display ?? n.toLocaleString("fr-FR")}
+        {kpi.suffix && <small>{kpi.suffix}</small>}
       </div>
       {kpi.hint && (
         <div className="d" style={kpi.valueColor ? { color: kpi.valueColor } : undefined}>

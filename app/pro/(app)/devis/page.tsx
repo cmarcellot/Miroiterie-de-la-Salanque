@@ -2,7 +2,8 @@ import Link from "next/link";
 import { Plus } from "lucide-react";
 import { connectToDatabase } from "@/lib/mongodb";
 import Devis, { DEVIS_STATUS_LABELS, type DevisStatus } from "@/lib/models/Devis";
-import { initialsOf } from "@/lib/pro-enums";
+import { formatEUR, initialsOf } from "@/lib/pro-enums";
+import Kpis, { type Kpi } from "@/components/pro/Kpis";
 import DevisRow from "@/components/pro/DevisRow";
 
 export const dynamic = "force-dynamic";
@@ -38,6 +39,45 @@ export default async function DevisListPage({
     : "all";
   const visible = tab === "all" ? devis : devis.filter((d) => d.status === tab);
 
+  const sum = (list: any[]) =>
+    list.reduce((s, d) => s + (d.totalTTC || 0), 0);
+  const envoyes = devis.filter((d) => d.status === "envoye");
+  const acceptes = devis.filter((d) => d.status === "accepte");
+  const refuses = devis.filter((d) => d.status === "refuse");
+  const montantEnvoye = sum(envoyes);
+  const montantAccepte = sum(acceptes);
+  const totalDecides = acceptes.length + refuses.length;
+  const tauxSignature = totalDecides
+    ? Math.round((acceptes.length / totalDecides) * 100)
+    : 0;
+
+  const kpis: Kpi[] = [
+    {
+      label: "En attente de réponse",
+      value: montantEnvoye,
+      display: formatEUR(montantEnvoye),
+      hint: `${envoyes.length} devis envoyé${envoyes.length > 1 ? "s" : ""}`,
+    },
+    {
+      label: "Acceptés",
+      value: montantAccepte,
+      display: formatEUR(montantAccepte),
+      hint: `${acceptes.length} devis accepté${acceptes.length > 1 ? "s" : ""}`,
+      accent: "var(--ok)",
+    },
+    {
+      label: "Taux de signature",
+      value: tauxSignature,
+      suffix: "%",
+      hint: "sur les devis tranchés",
+    },
+    {
+      label: "Total émis",
+      value: devis.length,
+      hint: "devis dans le système",
+    },
+  ];
+
   return (
     <div>
       <div className="pro-phead">
@@ -53,7 +93,9 @@ export default async function DevisListPage({
         </Link>
       </div>
 
-      <div className="pro-tblwrap" style={{ overflowX: "auto" }}>
+      <Kpis items={kpis} />
+
+      <div className="pro-tblwrap" style={{ marginTop: 14, overflowX: "auto" }}>
         <div className="pro-tblhead">
           <div className="pro-tbltabs">
             {TABS.map((t) => (
