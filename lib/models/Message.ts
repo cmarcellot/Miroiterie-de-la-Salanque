@@ -24,6 +24,10 @@ const MessageSchema = new Schema(
   { timestamps: true }
 );
 
+// Requêtes fréquentes : liste triée par date (avec ou sans filtre de statut).
+MessageSchema.index({ createdAt: -1 });
+MessageSchema.index({ status: 1, createdAt: -1 });
+
 export type MessageDoc = InferSchemaType<typeof MessageSchema>;
 
 export const Message = models.Message || model("Message", MessageSchema);

@@ -31,6 +31,13 @@ const FactureSchema = new Schema(
   { timestamps: true }
 );
 
+// Requêtes fréquentes : liste triée par n°, factures d'un client/devis,
+// compteur "en retard" (statut + échéance) affiché sur chaque page /pro.
+FactureSchema.index({ seq: -1, year: -1 });
+FactureSchema.index({ clientId: 1 });
+FactureSchema.index({ devisId: 1 });
+FactureSchema.index({ status: 1, dueDate: 1 });
+
 export type FactureDoc = InferSchemaType<typeof FactureSchema>;
 
 export const Facture = models.Facture || model("Facture", FactureSchema);

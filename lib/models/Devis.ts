@@ -28,6 +28,11 @@ const DevisSchema = new Schema(
   { timestamps: true }
 );
 
+// Requêtes fréquentes : liste triée par n°, devis d'un client, filtre par statut.
+DevisSchema.index({ seq: -1, year: -1 });
+DevisSchema.index({ clientId: 1 });
+DevisSchema.index({ status: 1 });
+
 export type DevisDoc = InferSchemaType<typeof DevisSchema>;
 
 export const Devis = models.Devis || model("Devis", DevisSchema);
