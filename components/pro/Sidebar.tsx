@@ -142,7 +142,11 @@ export default function Sidebar({
           <button
             type="button"
             className="pro-nav"
-            onClick={() => signOut({ callbackUrl: "/pro/login" })}
+            onClick={() => {
+              if (confirm("Voulez-vous vraiment vous déconnecter ?")) {
+                signOut({ callbackUrl: "/pro/login" });
+              }
+            }}
           >
             <span className="ico">
               <LogOut className="h-4 w-4" strokeWidth={1.75} />
