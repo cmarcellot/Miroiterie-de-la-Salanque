@@ -87,21 +87,22 @@ export default function PrestationForm({
 
       <div className="pro-row2">
         <div>
-          <label className="pro-lbl">Unité</label>
-          <input
+          <label className="pro-lbl">Unité *</label>
+          <select
             name="unit"
-            defaultValue={values.unit}
+            required
+            defaultValue={values.unit ?? ""}
             className={field}
-            placeholder="unité, m², ml, h, forfait…"
-            list="prestation-units"
-          />
-          <datalist id="prestation-units">
-            <option value="unité" />
-            <option value="m²" />
-            <option value="ml" />
-            <option value="h" />
-            <option value="forfait" />
-          </datalist>
+          >
+            <option value="" disabled>
+              Choisir…
+            </option>
+            <option value="unité">unité</option>
+            <option value="m²">m²</option>
+            <option value="ml">ml</option>
+            <option value="h">h</option>
+            <option value="forfait">forfait</option>
+          </select>
         </div>
         <div>
           <label className="pro-lbl">Prix unitaire HT</label>
