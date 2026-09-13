@@ -90,9 +90,9 @@ export default function PrestationForm({
           <label className="pro-lbl">Unité</label>
           <input
             name="unit"
-            defaultValue={values.unit ?? "unité"}
+            defaultValue={values.unit}
             className={field}
-            placeholder="u, m², ml, h, forfait…"
+            placeholder="unité, m², ml, h, forfait…"
             list="prestation-units"
           />
           <datalist id="prestation-units">
