@@ -11,6 +11,10 @@ import Facture, {
   isFactureLate,
   type FactureStatus,
 } from "@/lib/models/Facture";
+import Chantier, {
+  CHANTIER_STATUS_LABELS,
+  type ChantierStatus,
+} from "@/lib/models/Chantier";
 import {
   clientDisplayName,
   formatEUR,
@@ -39,10 +43,11 @@ export default async function ClientDetailPage({
   if (!c) notFound();
   const displayName = clientDisplayName(c);
 
-  const [demandes, devis, factures] = await Promise.all([
+  const [demandes, devis, factures, chantiers] = await Promise.all([
     Message.find({ clientId: c._id }).sort({ createdAt: -1 }).lean(),
     Devis.find({ clientId: c._id }).sort({ seq: -1, year: -1 }).lean(),
     Facture.find({ clientId: c._id }).sort({ seq: -1, year: -1 }).lean(),
+    Chantier.find({ clientId: c._id }).sort({ seq: -1, year: -1 }).lean(),
   ]);
 
   const signes = devis.filter((d: any) => d.status === "accepte");
@@ -279,6 +284,57 @@ export default async function ClientDetailPage({
 
       <div className="pro-card" style={{ marginTop: 14, overflowX: "auto" }}>
         <div className="pro-chead">
+          <h3>Chantiers · {chantiers.length}</h3>
+          <Link
+            href={`/pro/chantiers/nouveau?client=${c._id}`}
+            className="pro-lab"
+            style={{ color: "var(--ink-2)" }}
+          >
+            + Nouveau chantier
+          </Link>
+        </div>
+        {chantiers.length === 0 ? (
+          <p style={{ padding: 24, color: "var(--ink-3)", fontSize: 13 }}>
+            Aucun chantier pour ce client.
+          </p>
+        ) : (
+          <table className="pro-table">
+            <thead>
+              <tr>
+                <th>Numéro</th>
+                <th>Titre</th>
+                <th>Date prévue</th>
+                <th>Statut</th>
+              </tr>
+            </thead>
+            <tbody>
+              {chantiers.map((ch: any) => (
+                <tr key={String(ch._id)}>
+                  <td className="num">
+                    <Link href={`/pro/chantiers/${ch._id}`}>{ch.number}</Link>
+                  </td>
+                  <td style={{ color: "var(--ink-3)" }}>{ch.title}</td>
+                  <td style={{ color: "var(--ink-3)" }}>
+                    {ch.plannedDate
+                      ? new Date(ch.plannedDate).toLocaleDateString("fr-FR")
+                      : "—"}
+                  </td>
+                  <td>
+                    <span className={`pro-st chantier-${ch.status}`}>
+                      <i />
+                      {CHANTIER_STATUS_LABELS[ch.status as ChantierStatus] ??
+                        ch.status}
+                    </span>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        )}
+      </div>
+
+      <div className="pro-card" style={{ marginTop: 14, overflowX: "auto" }}>
+        <div className="pro-chead">
           <h3>Factures · {factures.length}</h3>
         </div>
         {factures.length === 0 ? (
@@ -380,8 +436,8 @@ export default async function ClientDetailPage({
       <div className="pro-card" style={{ marginTop: 14, padding: "16px 20px" }}>
         <div className="pro-lab">Zone de danger</div>
         <p style={{ margin: "10px 0 12px", fontSize: 13, color: "var(--ink-3)" }}>
-          La suppression est définitive. Devis et demandes rattachés seront
-          déliés mais conservés.
+          La suppression est définitive. Devis, factures, chantiers et
+          demandes rattachés seront déliés mais conservés.
         </p>
         <DeleteButton
           action={deleteClient.bind(null, String(c._id))}

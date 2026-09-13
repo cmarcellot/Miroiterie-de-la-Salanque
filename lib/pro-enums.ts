@@ -96,6 +96,32 @@ export function isFactureLate(f: {
   return new Date(f.dueDate).getTime() < Date.now();
 }
 
+/* ---------- Chantiers ---------- */
+
+export const CHANTIER_STATUSES = [
+  "a_planifier",
+  "planifie",
+  "en_cours",
+  "termine",
+  "annule",
+] as const;
+export type ChantierStatus = (typeof CHANTIER_STATUSES)[number];
+
+export const CHANTIER_STATUS_LABELS: Record<ChantierStatus, string> = {
+  a_planifier: "À planifier",
+  planifie: "Planifié",
+  en_cours: "En cours",
+  termine: "Terminé",
+  annule: "Annulé",
+};
+
+/** Statut suivant dans le déroulé normal d'un chantier (null = déjà à son terme). */
+export function nextChantierStatus(status: string): ChantierStatus | null {
+  const order: ChantierStatus[] = ["a_planifier", "planifie", "en_cours", "termine"];
+  const i = order.indexOf(status as ChantierStatus);
+  return i >= 0 && i < order.length - 1 ? order[i + 1] : null;
+}
+
 export const VAT_RATES = [20, 10, 5.5, 0] as const;
 
 export type LineItem = {

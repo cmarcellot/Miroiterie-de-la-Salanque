@@ -9,6 +9,7 @@ import { connectToDatabase } from "@/lib/mongodb";
 import Devis from "@/lib/models/Devis";
 import Client from "@/lib/models/Client";
 import Facture from "@/lib/models/Facture";
+import Chantier from "@/lib/models/Chantier";
 import {
   DEVIS_STATUSES,
   clientDisplayName,
@@ -136,6 +137,7 @@ export async function deleteDevis(id: string) {
   await connectToDatabase();
   await Devis.findByIdAndDelete(id);
   await Facture.updateMany({ devisId: id }, { devisId: null });
+  await Chantier.updateMany({ devisId: id }, { devisId: null });
   revalidatePath("/pro/devis");
   redirect("/pro/devis");
 }

@@ -1259,6 +1259,44 @@ select.pro-field {
 .pro-st.facture-retard i {
   background: var(--danger);
 }
+.pro-st.chantier-a_planifier {
+  color: var(--ink-3);
+}
+.pro-st.chantier-a_planifier i {
+  background: var(--ink-3);
+}
+.pro-st.chantier-planifie {
+  color: var(--acier);
+  border-color: rgba(47, 107, 163, 0.4);
+  background: rgba(47, 107, 163, 0.08);
+}
+.pro-st.chantier-planifie i {
+  background: var(--acier);
+}
+.pro-st.chantier-en_cours {
+  color: var(--warn);
+  border-color: rgba(185, 121, 31, 0.4);
+  background: rgba(185, 121, 31, 0.08);
+}
+.pro-st.chantier-en_cours i {
+  background: var(--warn);
+}
+.pro-st.chantier-termine {
+  color: var(--ok);
+  border-color: rgba(45, 106, 79, 0.4);
+  background: rgba(45, 106, 79, 0.08);
+}
+.pro-st.chantier-termine i {
+  background: var(--ok);
+}
+.pro-st.chantier-annule {
+  color: var(--danger);
+  border-color: rgba(209, 86, 96, 0.4);
+  background: rgba(209, 86, 96, 0.08);
+}
+.pro-st.chantier-annule i {
+  background: var(--danger);
+}
 
 /* ---------- document imprimable ---------- */
 .print-sheet {

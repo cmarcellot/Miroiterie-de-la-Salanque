@@ -1,14 +1,16 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import mongoose from "mongoose";
-import { ArrowLeft, Printer, ReceiptText } from "lucide-react";
+import { ArrowLeft, Printer, ReceiptText, HardHat } from "lucide-react";
 import { connectToDatabase } from "@/lib/mongodb";
 import Devis from "@/lib/models/Devis";
 import Facture, { FACTURE_STATUS_LABELS, isFactureLate, type FactureStatus } from "@/lib/models/Facture";
+import Chantier, { CHANTIER_STATUS_LABELS, type ChantierStatus } from "@/lib/models/Chantier";
 import { getClientOptions } from "@/lib/clients-list";
 import { getSettings } from "@/lib/settings";
 import { updateDevis, setDevisStatus, deleteDevis } from "@/lib/actions/devis";
 import { createFactureFromDevis } from "@/lib/actions/factures";
+import { createChantierFromDevis } from "@/lib/actions/chantiers";
 import { formatEUR } from "@/lib/pro-enums";
 import DevisForm from "@/components/pro/DevisForm";
 import DevisStatusBar from "@/components/pro/DevisStatusBar";
@@ -34,9 +36,10 @@ export default async function DevisDetailPage({
   const d: any = await Devis.findById(id).lean();
   if (!d) notFound();
 
-  const [clients, factures, settings] = await Promise.all([
+  const [clients, factures, chantiers, settings] = await Promise.all([
     getClientOptions(),
     Facture.find({ devisId: d._id }).sort({ seq: -1, year: -1 }).lean(),
+    Chantier.find({ devisId: d._id }).sort({ seq: -1, year: -1 }).lean(),
     getSettings(),
   ]);
 
@@ -63,6 +66,11 @@ export default async function DevisDetailPage({
           >
             <Printer className="h-4 w-4" /> PDF
           </Link>
+          <form action={createChantierFromDevis.bind(null, String(d._id))}>
+            <button type="submit" className="pro-btn ghost">
+              <HardHat className="h-4 w-4" /> Créer un chantier
+            </button>
+          </form>
           <form action={createFactureFromDevis.bind(null, String(d._id))}>
             <button type="submit" className="pro-btn solid">
               <ReceiptText className="h-4 w-4" /> Créer une facture
@@ -87,6 +95,22 @@ export default async function DevisDetailPage({
         submitLabel="Enregistrer les modifications"
         defaultVatRate={settings.devis.defaultVatRate}
       />
+
+      {chantiers.length > 0 && (
+        <div className="pro-card pro-rel" style={{ marginTop: 14, padding: "16px 20px" }}>
+          <h5>Chantier{chantiers.length > 1 ? "s" : ""} créé{chantiers.length > 1 ? "s" : ""}</h5>
+          {chantiers.map((c: any) => (
+            <Link key={String(c._id)} href={`/pro/chantiers/${c._id}`} className="pro-rel-item">
+              <span className="nm">{c.number}</span>
+              <span className={`pro-st chantier-${c.status}`}>
+                <i />
+                {CHANTIER_STATUS_LABELS[c.status as ChantierStatus] ?? c.status}
+              </span>
+              <span className="mt">{c.title}</span>
+            </Link>
+          ))}
+        </div>
+      )}
 
       {factures.length > 0 && (
         <div className="pro-card pro-rel" style={{ marginTop: 14, padding: "16px 20px" }}>

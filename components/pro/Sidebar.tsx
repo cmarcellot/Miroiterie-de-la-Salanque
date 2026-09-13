@@ -42,7 +42,7 @@ const sections: { title: string; items: Item[] }[] = [
     title: "Production",
     items: [
       { href: "/pro/factures", label: "Factures", icon: ReceiptText },
-      { href: "/pro/chantiers", label: "Chantiers", icon: HardHat, soon: true },
+      { href: "/pro/chantiers", label: "Chantiers", icon: HardHat },
     ],
   },
 ];
@@ -52,11 +52,13 @@ export default function Sidebar({
   clients,
   devisEnAttente,
   facturesEnRetard,
+  chantiersAPlanifier,
 }: {
   pending: number;
   clients: number;
   devisEnAttente: number;
   facturesEnRetard: number;
+  chantiersAPlanifier: number;
 }) {
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
@@ -66,6 +68,7 @@ export default function Sidebar({
     if (href === "/pro/clients") return clients;
     if (href === "/pro/devis") return devisEnAttente;
     if (href === "/pro/factures") return facturesEnRetard;
+    if (href === "/pro/chantiers") return chantiersAPlanifier;
     return 0;
   };
 

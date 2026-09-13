@@ -10,6 +10,7 @@ import Client, { CLIENT_TYPES, type ClientType } from "@/lib/models/Client";
 import Message from "@/lib/models/Message";
 import Devis from "@/lib/models/Devis";
 import Facture from "@/lib/models/Facture";
+import Chantier from "@/lib/models/Chantier";
 
 async function requireSession() {
   const session = await getServerSession(authOptions);
@@ -93,6 +94,7 @@ export async function deleteClient(id: string) {
   await Message.updateMany({ clientId: id }, { clientId: null });
   await Devis.updateMany({ clientId: id }, { clientId: null });
   await Facture.updateMany({ clientId: id }, { clientId: null });
+  await Chantier.updateMany({ clientId: id }, { clientId: null });
 
   revalidatePath("/pro/clients");
   redirect("/pro/clients");

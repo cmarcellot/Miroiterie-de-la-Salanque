@@ -7,6 +7,7 @@ import Message from "@/lib/models/Message";
 import Client from "@/lib/models/Client";
 import Devis from "@/lib/models/Devis";
 import Facture from "@/lib/models/Facture";
+import Chantier from "@/lib/models/Chantier";
 import Sidebar from "@/components/pro/Sidebar";
 import Topbar from "@/components/pro/Topbar";
 import "../pro.css";
@@ -19,7 +20,7 @@ export const metadata: Metadata = {
 async function getCounts() {
   try {
     await connectToDatabase();
-    const [pending, clients, devisEnAttente, facturesEnRetard] =
+    const [pending, clients, devisEnAttente, facturesEnRetard, chantiersAPlanifier] =
       await Promise.all([
         Message.countDocuments({ status: "nouveau" }),
         Client.countDocuments({}),
@@ -28,10 +29,17 @@ async function getCounts() {
           status: "emise",
           dueDate: { $lt: new Date() },
         }),
+        Chantier.countDocuments({ status: "a_planifier" }),
       ]);
-    return { pending, clients, devisEnAttente, facturesEnRetard };
+    return { pending, clients, devisEnAttente, facturesEnRetard, chantiersAPlanifier };
   } catch {
-    return { pending: 0, clients: 0, devisEnAttente: 0, facturesEnRetard: 0 };
+    return {
+      pending: 0,
+      clients: 0,
+      devisEnAttente: 0,
+      facturesEnRetard: 0,
+      chantiersAPlanifier: 0,
+    };
   }
 }
 
@@ -44,7 +52,8 @@ export default async function ProLayout({
     getServerSession(authOptions),
     getCounts(),
   ]);
-  const { pending, clients, devisEnAttente, facturesEnRetard } = counts;
+  const { pending, clients, devisEnAttente, facturesEnRetard, chantiersAPlanifier } =
+    counts;
 
   return (
     <div
@@ -62,6 +71,7 @@ export default async function ProLayout({
           clients={clients}
           devisEnAttente={devisEnAttente}
           facturesEnRetard={facturesEnRetard}
+          chantiersAPlanifier={chantiersAPlanifier}
         />
         <div className="pro-main">
           <Topbar
