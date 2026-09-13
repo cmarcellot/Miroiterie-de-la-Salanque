@@ -2,11 +2,10 @@
 
 import { Suspense, useState } from "react";
 import { signIn } from "next-auth/react";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useSearchParams } from "next/navigation";
 import Image from "next/image";
 
 function Form() {
-  const router = useRouter();
   const params = useSearchParams();
   const callbackUrl = params.get("callbackUrl") || "/pro";
   const [loading, setLoading] = useState(false);
@@ -22,13 +21,16 @@ function Form() {
       password: data.get("password"),
       redirect: false,
     });
-    setLoading(false);
     if (res?.error) {
+      setLoading(false);
       setError("Identifiants incorrects.");
       return;
     }
-    router.push(callbackUrl);
-    router.refresh();
+    // Navigation complète (pas router.push) : le cookie de session tout
+    // juste posé par signIn() doit être présent dès la première requête
+    // vue par le middleware, sinon il rebondit sur /pro/login et il faut
+    // cliquer une seconde fois.
+    window.location.href = callbackUrl;
   }
 
   return (
