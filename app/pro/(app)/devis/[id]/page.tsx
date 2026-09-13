@@ -7,6 +7,7 @@ import Devis from "@/lib/models/Devis";
 import Facture, { FACTURE_STATUS_LABELS, isFactureLate, type FactureStatus } from "@/lib/models/Facture";
 import Chantier, { CHANTIER_STATUS_LABELS, type ChantierStatus } from "@/lib/models/Chantier";
 import { getClientOptions } from "@/lib/clients-list";
+import { getCatalogOptions } from "@/lib/prestations-list";
 import { getSettings } from "@/lib/settings";
 import { updateDevis, setDevisStatus, deleteDevis } from "@/lib/actions/devis";
 import { createFactureFromDevis } from "@/lib/actions/factures";
@@ -36,8 +37,9 @@ export default async function DevisDetailPage({
   const d: any = await Devis.findById(id).lean();
   if (!d) notFound();
 
-  const [clients, factures, chantiers, settings] = await Promise.all([
+  const [clients, catalog, factures, chantiers, settings] = await Promise.all([
     getClientOptions(),
+    getCatalogOptions(),
     Facture.find({ devisId: d._id }).sort({ seq: -1, year: -1 }).lean(),
     Chantier.find({ devisId: d._id }).sort({ seq: -1, year: -1 }).lean(),
     getSettings(),
@@ -82,6 +84,7 @@ export default async function DevisDetailPage({
       <DevisForm
         action={updateDevis.bind(null, String(d._id))}
         clients={clients}
+        catalog={catalog}
         values={{
           clientId: String(d.clientId),
           date: toDateInput(d.date),

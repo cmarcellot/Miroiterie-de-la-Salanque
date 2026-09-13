@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
 import { getClientOptions } from "@/lib/clients-list";
+import { getCatalogOptions } from "@/lib/prestations-list";
 import { getSettings } from "@/lib/settings";
 import { createFacture } from "@/lib/actions/factures";
 import FactureForm from "@/components/pro/FactureForm";
@@ -12,9 +13,10 @@ export default async function NewFacturePage({
 }: {
   searchParams: Promise<{ client?: string }>;
 }) {
-  const [{ client }, clients, settings] = await Promise.all([
+  const [{ client }, clients, catalog, settings] = await Promise.all([
     searchParams,
     getClientOptions(),
+    getCatalogOptions(),
     getSettings(),
   ]);
   const today = new Date().toISOString().slice(0, 10);
@@ -54,6 +56,7 @@ export default async function NewFacturePage({
         <FactureForm
           action={createFacture}
           clients={clients}
+          catalog={catalog}
           values={{
             clientId: client,
             date: today,

@@ -5,6 +5,7 @@ import { ArrowLeft, Printer } from "lucide-react";
 import { connectToDatabase } from "@/lib/mongodb";
 import Facture, { isFactureLate } from "@/lib/models/Facture";
 import { getClientOptions } from "@/lib/clients-list";
+import { getCatalogOptions } from "@/lib/prestations-list";
 import { getSettings } from "@/lib/settings";
 import {
   updateFacture,
@@ -35,8 +36,9 @@ export default async function FactureDetailPage({
   const f: any = await Facture.findById(id).lean();
   if (!f) notFound();
 
-  const [clients, settings] = await Promise.all([
+  const [clients, catalog, settings] = await Promise.all([
     getClientOptions(),
+    getCatalogOptions(),
     getSettings(),
   ]);
   const late = isFactureLate(f);
@@ -81,6 +83,7 @@ export default async function FactureDetailPage({
       <FactureForm
         action={updateFacture.bind(null, String(f._id))}
         clients={clients}
+        catalog={catalog}
         values={{
           clientId: String(f.clientId ?? ""),
           date: toDateInput(f.date),

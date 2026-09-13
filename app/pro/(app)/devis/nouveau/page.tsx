@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
 import { getClientOptions } from "@/lib/clients-list";
+import { getCatalogOptions } from "@/lib/prestations-list";
 import { getSettings } from "@/lib/settings";
 import { createDevis } from "@/lib/actions/devis";
 import DevisForm from "@/components/pro/DevisForm";
@@ -12,9 +13,10 @@ export default async function NewDevisPage({
 }: {
   searchParams: Promise<{ client?: string }>;
 }) {
-  const [{ client }, clients, settings] = await Promise.all([
+  const [{ client }, clients, catalog, settings] = await Promise.all([
     searchParams,
     getClientOptions(),
+    getCatalogOptions(),
     getSettings(),
   ]);
   const today = new Date().toISOString().slice(0, 10);
@@ -54,6 +56,7 @@ export default async function NewDevisPage({
         <DevisForm
           action={createDevis}
           clients={clients}
+          catalog={catalog}
           values={{
             clientId: client,
             date: today,

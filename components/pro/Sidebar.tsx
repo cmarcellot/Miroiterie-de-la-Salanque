@@ -12,6 +12,7 @@ import {
   Users,
   ReceiptText,
   HardHat,
+  Package,
   Settings,
   LogOut,
   Menu,
@@ -43,6 +44,12 @@ const sections: { title: string; items: Item[] }[] = [
     items: [
       { href: "/pro/factures", label: "Factures", icon: ReceiptText },
       { href: "/pro/chantiers", label: "Chantiers", icon: HardHat },
+    ],
+  },
+  {
+    title: "Catalogue",
+    items: [
+      { href: "/pro/prestations", label: "Produits & prestations", icon: Package },
     ],
   },
 ];

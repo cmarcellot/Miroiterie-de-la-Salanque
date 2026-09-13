@@ -122,6 +122,16 @@ export function nextChantierStatus(status: string): ChantierStatus | null {
   return i >= 0 && i < order.length - 1 ? order[i + 1] : null;
 }
 
+/* ---------- Produits & prestations (catalogue) ---------- */
+
+export const PRESTATION_TYPES = ["prestation", "produit"] as const;
+export type PrestationType = (typeof PRESTATION_TYPES)[number];
+
+export const PRESTATION_TYPE_LABELS: Record<PrestationType, string> = {
+  prestation: "Prestation",
+  produit: "Produit",
+};
+
 export const VAT_RATES = [20, 10, 5.5, 0] as const;
 
 export type LineItem = {

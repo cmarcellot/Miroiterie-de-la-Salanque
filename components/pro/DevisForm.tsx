@@ -4,6 +4,8 @@ import { useMemo, useState, type CSSProperties } from "react";
 import Link from "next/link";
 import { VAT_RATES, computeTotals, formatEUR, type LineItem } from "@/lib/pro-enums";
 
+type CatalogItem = { id: string; name: string; unitPrice: number; vatRate: number };
+
 type Values = {
   clientId?: string;
   date?: string; // yyyy-mm-dd
@@ -23,6 +25,7 @@ const emptyItem = (vatRate = 20): LineItem => ({
 export default function DevisForm({
   action,
   clients,
+  catalog = [],
   values = {},
   lockClient = false,
   cancelHref,
@@ -31,6 +34,7 @@ export default function DevisForm({
 }: {
   action: (formData: FormData) => Promise<void>;
   clients: { id: string; name: string }[];
+  catalog?: CatalogItem[];
   values?: Values;
   lockClient?: boolean;
   cancelHref: string;
@@ -48,6 +52,15 @@ export default function DevisForm({
     setItems((prev) =>
       prev.map((it, idx) => (idx === i ? { ...it, ...patch } : it))
     );
+  }
+
+  function pickLabel(i: number, label: string) {
+    const match = catalog.find((c) => c.name === label);
+    if (match) {
+      update(i, { label: match.name, unitPrice: match.unitPrice, vatRate: match.vatRate });
+    } else {
+      update(i, { label });
+    }
   }
 
   const field = "pro-field";
@@ -148,9 +161,10 @@ export default function DevisForm({
                   <td style={{ ...cell, paddingRight: 8 }}>
                     <input
                       value={it.label}
-                      onChange={(e) => update(i, { label: e.target.value })}
+                      onChange={(e) => pickLabel(i, e.target.value)}
                       placeholder="Fourniture ou prestation"
                       className={field}
+                      list={catalog.length ? "pro-catalog" : undefined}
                     />
                   </td>
                   <td style={{ ...cell, paddingRight: 8 }}>
@@ -216,6 +230,13 @@ export default function DevisForm({
             </tbody>
           </table>
         </div>
+        {catalog.length > 0 && (
+          <datalist id="pro-catalog">
+            {catalog.map((c) => (
+              <option key={c.id} value={c.name} />
+            ))}
+          </datalist>
+        )}
         <button
           type="button"
           onClick={() => setItems((p) => [...p, emptyItem(defaultVatRate)])}
