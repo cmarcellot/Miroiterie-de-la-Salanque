@@ -132,43 +132,45 @@ export default function FactureDocument({
         </tbody>
       </table>
 
-      <div className="dd-totals">
-        <div>
-          <span>Total HT</span>
-          <span>{formatEUR(f.totalHT ?? ht)}</span>
+      <div className="dd-bottom">
+        <div className="dd-totals">
+          <div>
+            <span>Total HT</span>
+            <span>{formatEUR(f.totalHT ?? ht)}</span>
+          </div>
+          {Array.from(vatMap.entries())
+            .filter(([rate]) => rate > 0)
+            .map(([rate, amount]) => (
+              <div key={rate}>
+                <span>TVA {rate} %</span>
+                <span>{formatEUR(amount)}</span>
+              </div>
+            ))}
+          <div className="dd-grand">
+            <span>Total TTC à payer</span>
+            <span>{formatEUR(ttc)}</span>
+          </div>
         </div>
-        {Array.from(vatMap.entries())
-          .filter(([rate]) => rate > 0)
-          .map(([rate, amount]) => (
-            <div key={rate}>
-              <span>TVA {rate} %</span>
-              <span>{formatEUR(amount)}</span>
-            </div>
-          ))}
-        <div className="dd-grand">
-          <span>Total TTC à payer</span>
-          <span>{formatEUR(ttc)}</span>
-        </div>
-      </div>
 
-      {f.notes && <div className="dd-notes">{f.notes}</div>}
+        {f.notes && <div className="dd-notes">{f.notes}</div>}
 
-      {company.iban && (
-        <div className="dd-notes">
-          Coordonnées bancaires : règlement par virement à l&apos;ordre de{" "}
-          {company.name}. IBAN {company.iban}.
-        </div>
-      )}
-
-      <footer className="dd-foot">
-        {legal.forme && <>{legal.forme} — </>}
-        {legal.rcs && <>{legal.rcs} — </>}
-        {legal.ape && <>APE {legal.ape} — </>}
-        {legal.assuranceDecennale && (
-          <>Assurance décennale : {legal.assuranceDecennale}. </>
+        {company.iban && (
+          <div className="dd-notes">
+            Coordonnées bancaires : règlement par virement à l&apos;ordre de{" "}
+            {company.name}. IBAN {company.iban}.
+          </div>
         )}
-        Facture à régler avant la date d&apos;échéance indiquée ci-dessus.
-      </footer>
+
+        <footer className="dd-foot">
+          {legal.forme && <>{legal.forme} — </>}
+          {legal.rcs && <>{legal.rcs} — </>}
+          {legal.ape && <>APE {legal.ape} — </>}
+          {legal.assuranceDecennale && (
+            <>Assurance décennale : {legal.assuranceDecennale}. </>
+          )}
+          Facture à régler avant la date d&apos;échéance indiquée ci-dessus.
+        </footer>
+      </div>
     </div>
   );
 }

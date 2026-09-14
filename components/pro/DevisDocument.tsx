@@ -126,42 +126,44 @@ export default function DevisDocument({
         </tbody>
       </table>
 
-      <div className="dd-totals">
-        <div>
-          <span>Total HT</span>
-          <span>{formatEUR(d.totalHT ?? ht)}</span>
-        </div>
-        {Array.from(vatMap.entries())
-          .filter(([rate]) => rate > 0)
-          .map(([rate, amount]) => (
-            <div key={rate}>
-              <span>TVA {rate} %</span>
-              <span>{formatEUR(amount)}</span>
-            </div>
-          ))}
-        <div className="dd-grand">
-          <span>Total TTC</span>
-          <span>{formatEUR(ttc)}</span>
-        </div>
-        {d.depositPct > 0 && (
-          <div className="dd-deposit">
-            <span>Acompte à la commande ({d.depositPct} %)</span>
-            <span>{formatEUR(deposit)}</span>
+      <div className="dd-bottom">
+        <div className="dd-totals">
+          <div>
+            <span>Total HT</span>
+            <span>{formatEUR(d.totalHT ?? ht)}</span>
           </div>
-        )}
+          {Array.from(vatMap.entries())
+            .filter(([rate]) => rate > 0)
+            .map(([rate, amount]) => (
+              <div key={rate}>
+                <span>TVA {rate} %</span>
+                <span>{formatEUR(amount)}</span>
+              </div>
+            ))}
+          <div className="dd-grand">
+            <span>Total TTC</span>
+            <span>{formatEUR(ttc)}</span>
+          </div>
+          {d.depositPct > 0 && (
+            <div className="dd-deposit">
+              <span>Acompte à la commande ({d.depositPct} %)</span>
+              <span>{formatEUR(deposit)}</span>
+            </div>
+          )}
+        </div>
+
+        {d.notes && <div className="dd-notes">{d.notes}</div>}
+
+        <footer className="dd-foot">
+          {legal.forme && <>{legal.forme} — </>}
+          {legal.rcs && <>{legal.rcs} — </>}
+          {legal.ape && <>APE {legal.ape} — </>}
+          {legal.assuranceDecennale && (
+            <>Assurance décennale : {legal.assuranceDecennale}. </>
+          )}
+          Bon pour accord (date et signature) :
+        </footer>
       </div>
-
-      {d.notes && <div className="dd-notes">{d.notes}</div>}
-
-      <footer className="dd-foot">
-        {legal.forme && <>{legal.forme} — </>}
-        {legal.rcs && <>{legal.rcs} — </>}
-        {legal.ape && <>APE {legal.ape} — </>}
-        {legal.assuranceDecennale && (
-          <>Assurance décennale : {legal.assuranceDecennale}. </>
-        )}
-        Bon pour accord (date et signature) :
-      </footer>
     </div>
   );
 }

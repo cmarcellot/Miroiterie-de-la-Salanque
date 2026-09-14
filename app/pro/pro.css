@@ -1303,11 +1303,14 @@ select.pro-field {
   background: #fff;
   color: #1a2330;
   max-width: 800px;
+  min-height: 1123px; /* aperçu écran ≈ hauteur d'une page A4 (297mm à 96dpi) */
+  box-sizing: border-box;
   margin: 0 auto;
   border: 1px solid var(--line);
   border-radius: 8px;
   padding: 40px 44px;
   box-shadow: 0 24px 60px rgba(20, 40, 66, 0.1);
+  display: flex;
 }
 /* .devis-doc / .dd-* : mise en page du document imprimable, partagée par
    DevisDocument ET FactureDocument (seul le contenu — "Devis"/"Facture" — change). */
@@ -1316,6 +1319,15 @@ select.pro-field {
   font-size: 12px;
   line-height: 1.5;
   color: #1a2330;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  width: 100%;
+}
+/* Regroupe totaux + notes + pied de page : occupe tout l'espace restant en
+   bas de la page, même quand le devis/la facture n'a que peu de lignes. */
+.devis-doc .dd-bottom {
+  margin-top: auto;
 }
 .devis-doc .dd-head {
   display: flex;
@@ -1442,6 +1454,11 @@ select.pro-field {
   line-height: 1.7;
 }
 
+@page {
+  size: A4;
+  margin: 15mm;
+}
+
 @media print {
   body {
     background: #fff !important;
@@ -1462,6 +1479,7 @@ select.pro-field {
   }
   .print-sheet {
     max-width: none;
+    min-height: calc(297mm - 30mm);
     margin: 0;
     border: none;
     border-radius: 0;
