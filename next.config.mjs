@@ -1,6 +1,10 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
+  // @react-pdf/renderer embarque son propre moteur de rendu React (pour
+  // générer les PDF côté serveur) : le laisser hors du bundle webpack des
+  // Server Actions évite tout conflit avec l'instance React de l'app.
+  serverExternalPackages: ["@react-pdf/renderer"],
   async redirects() {
     return [
       {

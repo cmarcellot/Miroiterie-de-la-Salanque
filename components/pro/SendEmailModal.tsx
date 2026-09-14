@@ -7,6 +7,17 @@ import { formatEUR } from "@/lib/pro-enums";
 
 type SendEmailResult = { ok: true } | { ok: false; error: string };
 
+/** Garantit une chaîne affichable, même si une valeur inattendue remonte. */
+function toErrorText(v: unknown): string {
+  if (typeof v === "string") return v;
+  if (v instanceof Error) return v.message;
+  try {
+    return JSON.stringify(v);
+  } catch {
+    return "Erreur lors de l'envoi.";
+  }
+}
+
 export default function SendEmailModal({
   action,
   kind,
@@ -118,18 +129,20 @@ ${companyPhone}`;
                     setError("");
                     try {
                       const result = await action(fd);
-                      if (result.ok) {
+                      if (result?.ok) {
                         setSent(true);
                         router.refresh();
                       } else {
-                        setError(result.error);
+                        setError(
+                          toErrorText(
+                            result && "error" in result
+                              ? result.error
+                              : result
+                          )
+                        );
                       }
                     } catch (err) {
-                      setError(
-                        err instanceof Error
-                          ? err.message
-                          : "Erreur lors de l'envoi."
-                      );
+                      setError(toErrorText(err));
                     } finally {
                       setPending(false);
                     }
