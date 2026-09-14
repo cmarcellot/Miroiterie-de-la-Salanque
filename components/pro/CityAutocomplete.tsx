@@ -52,8 +52,16 @@ export default function CityAutocomplete({
       fetch(url, { signal: ctrl.signal })
         .then((r) => (r.ok ? r.json() : []))
         .then((data: Commune[]) => {
-          setResults(Array.isArray(data) ? data : []);
-          setOpen(true);
+          const list = Array.isArray(data) ? data : [];
+          setResults(list);
+          if (isZip && list.length === 1) {
+            // Un seul résultat pour ce code postal : on remplit la ville
+            // directement, pas besoin de faire cliquer l'utilisateur.
+            setCity(list[0].nom);
+            setOpen(false);
+          } else {
+            setOpen(true);
+          }
         })
         .catch(() => {});
     }, 220);

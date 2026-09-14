@@ -389,9 +389,17 @@ function ZipCityFields({
     const t = setTimeout(() => {
       fetch(url, { signal: ctrl.signal })
         .then((r) => (r.ok ? r.json() : []))
-        .then((list: Commune[]) => {
-          setResults(Array.isArray(list) ? list : []);
-          setOpen(true);
+        .then((data: Commune[]) => {
+          const list = Array.isArray(data) ? data : [];
+          setResults(list);
+          if (isZip && list.length === 1) {
+            // Un seul résultat pour ce code postal : on remplit la ville
+            // directement, pas besoin de faire cliquer l'utilisateur.
+            onChange(zip, list[0].nom);
+            setOpen(false);
+          } else {
+            setOpen(true);
+          }
         })
         .catch(() => {});
     }, 220);
