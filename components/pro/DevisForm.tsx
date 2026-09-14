@@ -54,12 +54,10 @@ export default function DevisForm({
     );
   }
 
-  function pickLabel(i: number, label: string) {
-    const match = catalog.find((c) => c.name === label);
+  function pickCatalog(i: number, id: string) {
+    const match = catalog.find((c) => c.id === id);
     if (match) {
       update(i, { label: match.name, unitPrice: match.unitPrice, vatRate: match.vatRate });
-    } else {
-      update(i, { label });
     }
   }
 
@@ -159,12 +157,26 @@ export default function DevisForm({
               {items.map((it, i) => (
                 <tr key={i}>
                   <td style={{ ...cell, paddingRight: 8 }}>
+                    {catalog.length > 0 && (
+                      <select
+                        value=""
+                        onChange={(e) => pickCatalog(i, e.target.value)}
+                        className={field}
+                        style={{ marginBottom: 6, fontSize: 12, color: "var(--ink-3)" }}
+                      >
+                        <option value="">Choisir dans le catalogue…</option>
+                        {catalog.map((c) => (
+                          <option key={c.id} value={c.id}>
+                            {c.name}
+                          </option>
+                        ))}
+                      </select>
+                    )}
                     <input
                       value={it.label}
-                      onChange={(e) => pickLabel(i, e.target.value)}
+                      onChange={(e) => update(i, { label: e.target.value })}
                       placeholder="Fourniture ou prestation"
                       className={field}
-                      list={catalog.length ? "pro-catalog" : undefined}
                     />
                   </td>
                   <td style={{ ...cell, paddingRight: 8 }}>
@@ -230,13 +242,6 @@ export default function DevisForm({
             </tbody>
           </table>
         </div>
-        {catalog.length > 0 && (
-          <datalist id="pro-catalog">
-            {catalog.map((c) => (
-              <option key={c.id} value={c.name} />
-            ))}
-          </datalist>
-        )}
         <button
           type="button"
           onClick={() => setItems((p) => [...p, emptyItem(defaultVatRate)])}
