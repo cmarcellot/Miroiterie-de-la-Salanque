@@ -12,9 +12,11 @@ import {
   setFactureStatus,
   deleteFacture,
 } from "@/lib/actions/factures";
+import { sendFactureEmail } from "@/lib/actions/mail";
 import FactureForm from "@/components/pro/FactureForm";
 import FactureStatusSelect from "@/components/pro/FactureStatusSelect";
 import DeleteButton from "@/components/pro/DeleteButton";
+import SendEmailModal from "@/components/pro/SendEmailModal";
 
 export const dynamic = "force-dynamic";
 
@@ -64,6 +66,13 @@ export default async function FactureDetailPage({
               <Link href={`/pro/devis/${f.devisId}`}>voir le devis</Link>
             </div>
           )}
+          {f.emailSentAt && (
+            <div className="sub">
+              Envoyée par email le{" "}
+              {new Date(f.emailSentAt).toLocaleDateString("fr-FR")} à{" "}
+              {f.emailSentTo}
+            </div>
+          )}
         </div>
         <div style={{ display: "flex", gap: 10, alignItems: "center" }}>
           <FactureStatusSelect
@@ -77,6 +86,20 @@ export default async function FactureDetailPage({
           >
             <Printer className="h-4 w-4" /> PDF
           </Link>
+          <SendEmailModal
+            action={sendFactureEmail.bind(null, String(f._id))}
+            kind="facture"
+            to={f.client?.email || ""}
+            number={f.number}
+            companyName={settings.company.name}
+            companyPhone={settings.company.phone}
+            amountTTC={f.totalTTC || 0}
+            dateInfo={
+              f.dueDate
+                ? `à régler avant le ${new Date(f.dueDate).toLocaleDateString("fr-FR")}`
+                : undefined
+            }
+          />
         </div>
       </div>
 

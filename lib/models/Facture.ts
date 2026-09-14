@@ -27,6 +27,8 @@ const FactureSchema = new Schema(
     totalTVA: { type: Number, default: 0 },
     totalTTC: { type: Number, default: 0 },
     notes: { type: String, default: "", maxlength: 4000 },
+    emailSentAt: { type: Date, default: null },
+    emailSentTo: { type: String, default: "" },
   },
   { timestamps: true }
 );

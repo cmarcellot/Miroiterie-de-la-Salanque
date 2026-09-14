@@ -24,6 +24,8 @@ const DevisSchema = new Schema(
     totalTTC: { type: Number, default: 0 },
     depositPct: { type: Number, default: 30 },
     notes: { type: String, default: "", maxlength: 4000 },
+    emailSentAt: { type: Date, default: null },
+    emailSentTo: { type: String, default: "" },
   },
   { timestamps: true }
 );

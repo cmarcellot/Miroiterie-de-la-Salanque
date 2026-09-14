@@ -12,10 +12,12 @@ import { getSettings } from "@/lib/settings";
 import { updateDevis, setDevisStatus, deleteDevis } from "@/lib/actions/devis";
 import { createFactureFromDevis } from "@/lib/actions/factures";
 import { createChantierFromDevis } from "@/lib/actions/chantiers";
+import { sendDevisEmail } from "@/lib/actions/mail";
 import { formatEUR } from "@/lib/pro-enums";
 import DevisForm from "@/components/pro/DevisForm";
 import DevisStatusBar from "@/components/pro/DevisStatusBar";
 import DeleteButton from "@/components/pro/DeleteButton";
+import SendEmailModal from "@/components/pro/SendEmailModal";
 
 export const dynamic = "force-dynamic";
 
@@ -55,6 +57,13 @@ export default async function DevisDetailPage({
         <div>
           <div className="pro-lab">Devis · {d.client?.name}</div>
           <h1>{d.number}</h1>
+          {d.emailSentAt && (
+            <div className="sub">
+              Envoyé par email le{" "}
+              {new Date(d.emailSentAt).toLocaleDateString("fr-FR")} à{" "}
+              {d.emailSentTo}
+            </div>
+          )}
         </div>
         <div style={{ display: "flex", gap: 10, alignItems: "center" }}>
           <DevisStatusBar
@@ -68,6 +77,20 @@ export default async function DevisDetailPage({
           >
             <Printer className="h-4 w-4" /> PDF
           </Link>
+          <SendEmailModal
+            action={sendDevisEmail.bind(null, String(d._id))}
+            kind="devis"
+            to={d.client?.email || ""}
+            number={d.number}
+            companyName={settings.company.name}
+            companyPhone={settings.company.phone}
+            amountTTC={d.totalTTC || 0}
+            dateInfo={
+              d.validUntil
+                ? `valable jusqu'au ${new Date(d.validUntil).toLocaleDateString("fr-FR")}`
+                : undefined
+            }
+          />
           <form action={createChantierFromDevis.bind(null, String(d._id))}>
             <button type="submit" className="pro-btn ghost">
               <HardHat className="h-4 w-4" /> Créer un chantier
