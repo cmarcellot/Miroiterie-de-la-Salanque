@@ -5,6 +5,8 @@ import { useRouter } from "next/navigation";
 import { Mail, X, Send } from "lucide-react";
 import { formatEUR } from "@/lib/pro-enums";
 
+type SendEmailResult = { ok: true } | { ok: false; error: string };
+
 export default function SendEmailModal({
   action,
   kind,
@@ -15,7 +17,7 @@ export default function SendEmailModal({
   amountTTC,
   dateInfo,
 }: {
-  action: (formData: FormData) => Promise<void>;
+  action: (formData: FormData) => Promise<SendEmailResult>;
   kind: "devis" | "facture";
   to: string;
   number: string;
@@ -115,9 +117,13 @@ ${companyPhone}`;
                     setPending(true);
                     setError("");
                     try {
-                      await action(fd);
-                      setSent(true);
-                      router.refresh();
+                      const result = await action(fd);
+                      if (result.ok) {
+                        setSent(true);
+                        router.refresh();
+                      } else {
+                        setError(result.error);
+                      }
                     } catch (err) {
                       setError(
                         err instanceof Error
