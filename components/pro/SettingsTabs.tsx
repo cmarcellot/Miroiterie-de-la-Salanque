@@ -137,8 +137,8 @@ function Panel({
     <form
       className="pro-card"
       style={{ padding: "20px 22px" }}
+      onSubmit={() => setPending(true)}
       action={async (fd) => {
-        setPending(true);
         try {
           await action(fd);
         } finally {

@@ -65,9 +65,9 @@ export default function FactureForm({
 
   return (
     <form
+      onSubmit={() => setPending(true)}
       action={async (fd) => {
         fd.set("items", JSON.stringify(items));
-        setPending(true);
         try {
           await action(fd);
         } finally {

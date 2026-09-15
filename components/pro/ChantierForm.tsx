@@ -33,8 +33,8 @@ export default function ChantierForm({
 
   return (
     <form
+      onSubmit={() => setPending(true)}
       action={async (fd) => {
-        setPending(true);
         try {
           await action(fd);
         } finally {

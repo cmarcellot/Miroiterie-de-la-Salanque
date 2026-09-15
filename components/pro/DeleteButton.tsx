@@ -16,7 +16,6 @@ export default function DeleteButton({
   return (
     <form
       action={async () => {
-        setPending(true);
         try {
           await action();
         } finally {
@@ -25,6 +24,7 @@ export default function DeleteButton({
       }}
       onSubmit={(e) => {
         if (!confirm(confirmText)) e.preventDefault();
+        else setPending(true);
       }}
     >
       <button

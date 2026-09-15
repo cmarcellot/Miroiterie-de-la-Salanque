@@ -46,8 +46,8 @@ export default function ClientForm({
 
   return (
     <form
+      onSubmit={() => setPending(true)}
       action={async (fd) => {
-        setPending(true);
         try {
           await action(fd);
           onDone?.();
