@@ -2,6 +2,7 @@ import Link from "next/link";
 import { Plus } from "lucide-react";
 import { connectToDatabase } from "@/lib/mongodb";
 import Devis, { DEVIS_STATUS_LABELS, type DevisStatus } from "@/lib/models/Devis";
+import { getSettings } from "@/lib/settings";
 import { formatEUR, initialsOf } from "@/lib/pro-enums";
 import Kpis, { type Kpi } from "@/components/pro/Kpis";
 import DevisRow from "@/components/pro/DevisRow";
@@ -24,11 +25,12 @@ export default async function DevisListPage({
 }) {
   const { tab: tabParam } = await searchParams;
   await connectToDatabase();
+  const [devisRaw, settings] = await Promise.all([
+    Devis.find({}).sort({ seq: -1, year: -1 }).limit(300).lean(),
+    getSettings(),
+  ]);
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const devis = (await Devis.find({})
-    .sort({ seq: -1, year: -1 })
-    .limit(300)
-    .lean()) as any[];
+  const devis = devisRaw as any[];
 
   const counts: Record<string, number> = { all: devis.length };
   for (const t of TABS) {
@@ -143,6 +145,14 @@ export default async function DevisListPage({
                     DEVIS_STATUS_LABELS[d.status as DevisStatus] ?? d.status
                   }
                   amountTTC={d.totalTTC || 0}
+                  clientEmail={d.client?.email || ""}
+                  validUntilLabel={
+                    d.validUntil
+                      ? `valable jusqu'au ${new Date(d.validUntil).toLocaleDateString("fr-FR")}`
+                      : undefined
+                  }
+                  companyName={settings.company.name}
+                  companyPhone={settings.company.phone}
                 />
               ))}
             </tbody>

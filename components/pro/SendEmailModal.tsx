@@ -27,6 +27,7 @@ export default function SendEmailModal({
   companyPhone,
   amountTTC,
   dateInfo,
+  iconOnly,
 }: {
   action: (formData: FormData) => Promise<SendEmailResult>;
   kind: "devis" | "facture";
@@ -37,6 +38,8 @@ export default function SendEmailModal({
   amountTTC: number;
   /** ex. "valable jusqu'au 12/06/2026" ou "à régler avant le 12/06/2026" */
   dateInfo?: string;
+  /** Rendu compact (icône seule), pour une action de ligne de tableau. */
+  iconOnly?: boolean;
 }) {
   const router = useRouter();
   const [open, setOpen] = useState(false);
@@ -74,17 +77,32 @@ ${companyPhone}`;
 
   return (
     <>
-      <button
-        type="button"
-        className="pro-btn ghost"
-        onClick={() => {
-          setOpen(true);
-          setSent(false);
-          setError("");
-        }}
-      >
-        <Mail className="h-4 w-4" /> Envoyer par email
-      </button>
+      {iconOnly ? (
+        <button
+          type="button"
+          className="ra ra-ok"
+          title="Envoyer par email"
+          onClick={() => {
+            setOpen(true);
+            setSent(false);
+            setError("");
+          }}
+        >
+          <Mail className="h-3.5 w-3.5" />
+        </button>
+      ) : (
+        <button
+          type="button"
+          className="pro-btn ghost"
+          onClick={() => {
+            setOpen(true);
+            setSent(false);
+            setError("");
+          }}
+        >
+          <Mail className="h-4 w-4" /> Envoyer par email
+        </button>
+      )}
 
       {open && (
         <div

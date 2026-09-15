@@ -3,9 +3,11 @@
 import { useTransition } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { Send, Check, ExternalLink, X } from "lucide-react";
+import { Check, ExternalLink, X } from "lucide-react";
 import { setDevisStatus, deleteDevis } from "@/lib/actions/devis";
+import { sendDevisEmail } from "@/lib/actions/mail";
 import { formatEUR } from "@/lib/pro-enums";
+import SendEmailModal from "@/components/pro/SendEmailModal";
 
 export default function DevisRow({
   id,
@@ -17,6 +19,10 @@ export default function DevisRow({
   status,
   statusLabel,
   amountTTC,
+  clientEmail,
+  validUntilLabel,
+  companyName,
+  companyPhone,
 }: {
   id: string;
   number: string;
@@ -27,6 +33,10 @@ export default function DevisRow({
   status: string;
   statusLabel: string;
   amountTTC: number;
+  clientEmail: string;
+  validUntilLabel?: string;
+  companyName: string;
+  companyPhone: string;
 }) {
   const router = useRouter();
   const [pending, startTransition] = useTransition();
@@ -63,15 +73,17 @@ export default function DevisRow({
       <td onClick={(e) => e.stopPropagation()}>
         <div className="pro-rowactions">
           {status === "brouillon" && (
-            <button
-              type="button"
-              className="ra ra-ok"
-              title="Envoyer au client"
-              disabled={pending}
-              onClick={() => setStatus("envoye")}
-            >
-              <Send className="h-3.5 w-3.5" />
-            </button>
+            <SendEmailModal
+              iconOnly
+              action={sendDevisEmail.bind(null, id)}
+              kind="devis"
+              to={clientEmail}
+              number={number}
+              companyName={companyName}
+              companyPhone={companyPhone}
+              amountTTC={amountTTC}
+              dateInfo={validUntilLabel}
+            />
           )}
           {status === "envoye" && (
             <button
