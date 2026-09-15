@@ -26,6 +26,16 @@ const MARGIN = 40;
 const PAGE_W = 595.28;
 const CONTENT_W = PAGE_W - MARGIN * 2;
 
+/**
+ * Intl.NumberFormat("fr-FR") sépare les milliers avec une espace fine
+ * insécable (U+202F) que l'encodage standard (WinAnsi) des polices PDF
+ * de base ne connaît pas — elle s'affichait comme un caractère erroné
+ * ("/"). On la remplace par une espace normale, compatible partout.
+ */
+function pdfAmount(n: number): string {
+  return formatEUR(n).replace(/[  ]/g, " ");
+}
+
 function readLogo(): Buffer | undefined {
   try {
     return fs.readFileSync(path.join(process.cwd(), "public/logo/mds-bleu.png"));
@@ -183,9 +193,9 @@ function drawDocument(doc: any, data: DocData) {
     doc.font("Helvetica").fontSize(9).fillColor(INK);
     doc.text(it.label || "", xLabel, y, { width: colLabelW });
     doc.text(String(it.qty ?? 0), xQty, y, { width: colQtyW, align: "right" });
-    doc.text(formatEUR(it.unitPrice), xPrice, y, { width: colPriceW, align: "right" });
+    doc.text(pdfAmount(it.unitPrice), xPrice, y, { width: colPriceW, align: "right" });
     doc.text(`${it.vatRate ?? 0} %`, xVat, y, { width: colVatW, align: "right" });
-    doc.text(formatEUR((it.qty || 0) * (it.unitPrice || 0)), xTotal, y, {
+    doc.text(pdfAmount((it.qty || 0) * (it.unitPrice || 0)), xTotal, y, {
       width: colTotalW,
       align: "right",
     });
@@ -201,21 +211,30 @@ function drawDocument(doc: any, data: DocData) {
 
   // ---------- bloc du bas (totaux / notes / pied de page), ancré en bas
   // de page quand il reste de la place, comme le PDF imprimable ----------
+  // Les constantes d'espacement ci-dessous sont réutilisées à l'identique
+  // dans le dessin plus bas : toute estimation qui diverge du dessin réel
+  // fait déborder le pied de page tout seul sur une deuxième page.
   const totalsLineH = 14;
   const grandLineH = 26;
+  const gapAfterTotals = 10;
+  const gapAfterNote = 10;
+  const gapBeforeFooter = 10;
+  const safetyMargin = 16; // marge de sécurité contre les écarts d'arrondi pdfkit
+
   const totalsRowsCount = 1 + data.vatBreakdown.length + (data.extraTotalLine ? 1 : 0);
-  const totalsBlockH = totalsLineH * totalsRowsCount + grandLineH;
+  const totalsBlockH = totalsLineH * totalsRowsCount + grandLineH + gapAfterTotals;
 
   doc.font("Helvetica").fontSize(8.5);
   const notesHeights = data.notesBlocks.map(
     (note) => doc.heightOfString(note, { width: CONTENT_W - 20 }) + 20
   );
-  const notesBlockH = notesHeights.reduce((s, h) => s + h + 10, 0);
+  const notesBlockH = notesHeights.reduce((s, h) => s + h + gapAfterNote, 0);
 
   doc.font("Helvetica").fontSize(7.5);
-  const footerH = doc.heightOfString(data.footerText, { width: CONTENT_W }) + 18;
+  const footerH =
+    doc.heightOfString(data.footerText, { width: CONTENT_W, lineGap: 3 }) + gapBeforeFooter;
 
-  const bottomBlockH = totalsBlockH + notesBlockH + footerH;
+  const bottomBlockH = totalsBlockH + notesBlockH + footerH + safetyMargin;
   const targetY = pageBottom() - bottomBlockH;
   if (targetY > y) y = targetY;
 
@@ -225,7 +244,7 @@ function drawDocument(doc: any, data: DocData) {
 
   function totalRow(label: string, amount: number, rowY: number) {
     doc.text(label, totalsX, rowY, { width: totalsW - totalsAmountW });
-    doc.text(formatEUR(amount), totalsX + totalsW - totalsAmountW, rowY, {
+    doc.text(pdfAmount(amount), totalsX + totalsW - totalsAmountW, rowY, {
       width: totalsAmountW,
       align: "right",
     });
@@ -255,7 +274,7 @@ function drawDocument(doc: any, data: DocData) {
     totalRow(data.extraTotalLine.label, data.extraTotalLine.amount, y);
     y += totalsLineH;
   }
-  y += 10;
+  y += gapAfterTotals;
 
   for (let i = 0; i < data.notesBlocks.length; i++) {
     const h = notesHeights[i];
@@ -265,11 +284,11 @@ function drawDocument(doc: any, data: DocData) {
       width: CONTENT_W - 20,
       lineGap: 2,
     });
-    y += h + 10;
+    y += h + gapAfterNote;
   }
 
   doc.moveTo(MARGIN, y).lineTo(MARGIN + CONTENT_W, y).lineWidth(1).strokeColor(LINE).stroke();
-  y += 10;
+  y += gapBeforeFooter;
   doc.font("Helvetica").fontSize(7.5).fillColor(FAINT);
   doc.text(data.footerText, MARGIN, y, { width: CONTENT_W, lineGap: 3 });
 }
