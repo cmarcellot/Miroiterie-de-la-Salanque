@@ -47,10 +47,20 @@ export default function SendEmailModal({
   const [error, setError] = useState("");
   const [sent, setSent] = useState(false);
 
+  // Ne rafraîchit la page qu'à la fermeture (pas juste après l'envoi) :
+  // un rafraîchissement immédiat peut changer le statut affiché par la
+  // ligne qui a ouvert ce modal (ex. brouillon -> envoyé dans la liste
+  // des devis) et donc démonter ce composant en plein milieu de la
+  // confirmation "Email envoyé".
+  function closeModal() {
+    setOpen(false);
+    if (sent) router.refresh();
+  }
+
   useEffect(() => {
     if (!open) return;
     const onKey = (e: KeyboardEvent) => {
-      if (e.key === "Escape" && !pending) setOpen(false);
+      if (e.key === "Escape" && !pending) closeModal();
     };
     document.addEventListener("keydown", onKey);
     document.body.style.overflow = "hidden";
@@ -58,7 +68,8 @@ export default function SendEmailModal({
       document.removeEventListener("keydown", onKey);
       document.body.style.overflow = "";
     };
-  }, [open, pending]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [open, pending, sent]);
 
   const defaultSubject = `Votre ${kind === "devis" ? "devis" : "facture"} ${number} — ${companyName}`;
   const defaultBody = useMemo(() => {
@@ -108,7 +119,7 @@ ${companyPhone}`;
         <div
           className="pro-modal-overlay"
           onMouseDown={(e) => {
-            if (e.target === e.currentTarget && !pending) setOpen(false);
+            if (e.target === e.currentTarget && !pending) closeModal();
           }}
         >
           <div
@@ -119,7 +130,7 @@ ${companyPhone}`;
           >
             <button
               type="button"
-              onClick={() => setOpen(false)}
+              onClick={closeModal}
               aria-label="Fermer"
               className="pro-modal-close"
               disabled={pending}
@@ -151,9 +162,20 @@ ${companyPhone}`;
 
             <div className="pro-modal-body">
               {sent ? (
-                <p style={{ fontSize: 13.5, color: "var(--ok)" }}>
-                  Email envoyé à {to}.
-                </p>
+                <div>
+                  <p style={{ fontSize: 13.5, color: "var(--ok)" }}>
+                    Email envoyé à {to}.
+                  </p>
+                  <div className="pro-cform-foot" style={{ marginTop: 16 }}>
+                    <button
+                      type="button"
+                      className="pro-btn solid"
+                      onClick={closeModal}
+                    >
+                      Fermer
+                    </button>
+                  </div>
+                </div>
               ) : (
                 <form
                   onSubmit={() => {
@@ -169,7 +191,6 @@ ${companyPhone}`;
                       const result = await action(fd);
                       if (result?.ok) {
                         setSent(true);
-                        router.refresh();
                       } else {
                         setError(
                           toErrorText(
@@ -228,7 +249,7 @@ ${companyPhone}`;
                     <button
                       type="button"
                       className="pro-btn ghost"
-                      onClick={() => setOpen(false)}
+                      onClick={closeModal}
                       disabled={pending}
                     >
                       Annuler
