@@ -87,10 +87,11 @@ function drawDocument(doc: any, data: DocData) {
 
   // ---------- en-tête : émetteur (gauche) / titre + méta (droite) ----------
   const hasLogo = !!data.logo;
+  const logoSize = 72;
   if (hasLogo) {
-    doc.image(data.logo, MARGIN, y, { width: 50, height: 50 });
+    doc.image(data.logo, MARGIN, y, { width: logoSize, height: logoSize });
   }
-  const textX = hasLogo ? MARGIN + 62 : MARGIN;
+  const textX = hasLogo ? MARGIN + logoSize + 14 : MARGIN;
   const leftW = 260;
 
   doc.font("Helvetica-Bold").fontSize(13).fillColor(NAVY);
@@ -107,7 +108,7 @@ function drawDocument(doc: any, data: DocData) {
     .join("\n");
   doc.font("Helvetica").fontSize(8.5).fillColor(MUTED);
   doc.text(coLines, textX, doc.y + 4, { width: leftW, lineGap: 2 });
-  const leftBottomY = doc.y;
+  const leftBottomY = Math.max(doc.y, hasLogo ? MARGIN + logoSize : 0);
 
   const rightW = 200;
   const rightX = MARGIN + CONTENT_W - rightW;
