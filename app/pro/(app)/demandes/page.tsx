@@ -16,13 +16,21 @@ export default async function DemandesPage({
     : undefined;
 
   await connectToDatabase();
-  const [messages, nouveauCount] = await Promise.all([
+  const [messages, countsAgg] = await Promise.all([
     Message.find(status ? { status } : {})
       .sort({ createdAt: -1 })
       .limit(200)
       .lean(),
-    Message.countDocuments({ status: "nouveau" }),
+    Message.aggregate([{ $group: { _id: "$status", n: { $sum: 1 } } }]),
   ]);
+
+  const counts: Record<string, number> = { all: 0 };
+  for (const s of MESSAGE_STATUSES) counts[s] = 0;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  for (const row of countsAgg as any[]) {
+    counts[row._id] = row.n;
+    counts.all += row.n;
+  }
 
   return (
     <div>
@@ -31,13 +39,13 @@ export default async function DemandesPage({
           <div className="pro-lab">Boîte de réception</div>
           <h1>Demandes</h1>
           <div className="sub">
-            Formulaires reçus depuis le site · {nouveauCount} nouvelle
-            {nouveauCount > 1 ? "s" : ""}.
+            Formulaires reçus depuis le site · {counts.nouveau ?? 0} nouvelle
+            {(counts.nouveau ?? 0) > 1 ? "s" : ""}.
           </div>
         </div>
       </div>
 
-      <DemandeFilters status={status} />
+      <DemandeFilters status={status} counts={counts} />
 
       <div className="pro-inbox">
         <DemandeList messages={messages} status={status} />

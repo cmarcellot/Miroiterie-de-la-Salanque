@@ -35,14 +35,22 @@ export default async function DemandeDetailPage({
 
   await connectToDatabase();
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const [m, messages]: [any, any[]] = await Promise.all([
+  const [m, messages, countsAgg]: [any, any[], any[]] = await Promise.all([
     Message.findById(id).lean(),
     Message.find(status ? { status } : {})
       .sort({ createdAt: -1 })
       .limit(200)
       .lean(),
+    Message.aggregate([{ $group: { _id: "$status", n: { $sum: 1 } } }]),
   ]);
   if (!m) notFound();
+
+  const counts: Record<string, number> = { all: 0 };
+  for (const s of MESSAGE_STATUSES) counts[s] = 0;
+  for (const row of countsAgg) {
+    counts[row._id] = row.n;
+    counts.all += row.n;
+  }
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const client: any = m.clientId
@@ -60,7 +68,7 @@ export default async function DemandeDetailPage({
         </div>
       </div>
 
-      <DemandeFilters status={status} />
+      <DemandeFilters status={status} counts={counts} />
 
       <div className="pro-inbox">
         <DemandeList messages={messages} activeId={id} status={status} />

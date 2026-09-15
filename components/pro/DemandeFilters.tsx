@@ -2,38 +2,34 @@ import Link from "next/link";
 import { MESSAGE_STATUSES, MESSAGE_STATUS_LABELS } from "@/lib/pro-enums";
 
 /** Filtres de statut — mènent toujours à la liste (une nouvelle sélection n'a plus de sens sous un autre filtre). */
-export default function DemandeFilters({ status }: { status?: string }) {
-  return (
-    <div style={{ display: "flex", flexWrap: "wrap", gap: 8, marginBottom: 14 }}>
-      <FilterLink label="Toutes" href="/pro/demandes" active={!status} />
-      {MESSAGE_STATUSES.map((s) => (
-        <FilterLink
-          key={s}
-          label={MESSAGE_STATUS_LABELS[s]}
-          href={`/pro/demandes?status=${s}`}
-          active={status === s}
-        />
-      ))}
-    </div>
-  );
-}
-
-function FilterLink({
-  label,
-  href,
-  active,
+export default function DemandeFilters({
+  status,
+  counts,
 }: {
-  label: string;
-  href: string;
-  active: boolean;
+  status?: string;
+  counts: Record<string, number>;
 }) {
   return (
-    <Link
-      href={href}
-      className={`pro-st${active ? " traite" : ""}`}
-      style={{ textDecoration: "none" }}
-    >
-      {label}
-    </Link>
+    <div className="pro-tblwrap" style={{ marginBottom: 14 }}>
+      <div className="pro-tblhead">
+        <div className="pro-tbltabs">
+          <Link
+            href="/pro/demandes"
+            className={`pro-tbltab${!status ? " active" : ""}`}
+          >
+            Toutes · {counts.all ?? 0}
+          </Link>
+          {MESSAGE_STATUSES.map((s) => (
+            <Link
+              key={s}
+              href={`/pro/demandes?status=${s}`}
+              className={`pro-tbltab${status === s ? " active" : ""}`}
+            >
+              {MESSAGE_STATUS_LABELS[s]} · {counts[s] ?? 0}
+            </Link>
+          ))}
+        </div>
+      </div>
+    </div>
   );
 }
