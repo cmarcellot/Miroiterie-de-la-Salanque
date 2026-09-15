@@ -1,24 +1,45 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import {
   Search,
+  X,
   Users,
   FileText,
   ReceiptText,
   HardHat,
   Inbox,
+  Box,
   type LucideIcon,
 } from "lucide-react";
 import type { SearchResult } from "@/app/api/pro/search/route";
 
-const TYPE_META: Record<SearchResult["type"], { icon: LucideIcon; label: string }> = {
-  client: { icon: Users, label: "Client" },
-  devis: { icon: FileText, label: "Devis" },
-  facture: { icon: ReceiptText, label: "Facture" },
-  chantier: { icon: HardHat, label: "Chantier" },
-  demande: { icon: Inbox, label: "Demande" },
+const TYPE_ICON: Record<SearchResult["type"], LucideIcon> = {
+  client: Users,
+  devis: FileText,
+  facture: ReceiptText,
+  chantier: HardHat,
+  demande: Inbox,
+  prestation: Box,
+};
+
+const GROUP_ORDER: SearchResult["type"][] = [
+  "client",
+  "devis",
+  "facture",
+  "chantier",
+  "demande",
+  "prestation",
+];
+
+const GROUP_LABELS: Record<SearchResult["type"], string> = {
+  client: "Clients",
+  devis: "Devis",
+  facture: "Factures",
+  chantier: "Chantiers",
+  demande: "Demandes site",
+  prestation: "Catalogue",
 };
 
 export default function GlobalSearch() {
@@ -27,8 +48,8 @@ export default function GlobalSearch() {
   const [results, setResults] = useState<SearchResult[]>([]);
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [active, setActive] = useState(0);
   const boxRef = useRef<HTMLDivElement>(null);
+  const inputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     const onDoc = (e: MouseEvent) => {
@@ -38,6 +59,18 @@ export default function GlobalSearch() {
     };
     document.addEventListener("mousedown", onDoc);
     return () => document.removeEventListener("mousedown", onDoc);
+  }, []);
+
+  // Cmd/Ctrl+K pour donner le focus à la recherche, où qu'on soit dans l'espace pro.
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === "k") {
+        e.preventDefault();
+        inputRef.current?.focus();
+      }
+    };
+    document.addEventListener("keydown", onKey);
+    return () => document.removeEventListener("keydown", onKey);
   }, []);
 
   useEffect(() => {
@@ -56,8 +89,6 @@ export default function GlobalSearch() {
         .then((r) => (r.ok ? r.json() : { results: [] }))
         .then((data: { results: SearchResult[] }) => {
           setResults(Array.isArray(data.results) ? data.results : []);
-          setActive(0);
-          setOpen(true);
         })
         .catch(() => {})
         .finally(() => setLoading(false));
@@ -68,67 +99,100 @@ export default function GlobalSearch() {
     };
   }, [q]);
 
+  const groups = useMemo(() => {
+    return GROUP_ORDER.map((type) => ({
+      type,
+      items: results.filter((r) => r.type === type),
+    })).filter((g) => g.items.length > 0);
+  }, [results]);
+
   function go(r: SearchResult) {
     router.push(r.href);
     setOpen(false);
     setQ("");
   }
 
+  const trimmed = q.trim();
+
   return (
     <div ref={boxRef} style={{ position: "relative", flex: 1, maxWidth: 420 }}>
       <div className="pro-search">
         <Search />
         <input
+          ref={inputRef}
           value={q}
           onChange={(e) => setQ(e.target.value)}
-          onFocus={() => q.trim().length >= 2 && setOpen(true)}
+          onFocus={() => trimmed.length >= 2 && setOpen(true)}
           onKeyDown={(e) => {
-            if (!open || results.length === 0) return;
-            if (e.key === "ArrowDown") {
-              e.preventDefault();
-              setActive((i) => (i + 1) % results.length);
-            } else if (e.key === "ArrowUp") {
-              e.preventDefault();
-              setActive((i) => (i - 1 + results.length) % results.length);
-            } else if (e.key === "Enter") {
-              e.preventDefault();
-              go(results[active]);
-            } else if (e.key === "Escape") {
-              setOpen(false);
-            }
+            if (e.key === "Escape") setOpen(false);
           }}
-          placeholder="Rechercher un client, un devis, une demande…"
+          placeholder="Rechercher un client, un devis, une adresse…"
           autoComplete="off"
         />
+        {q ? (
+          <button
+            type="button"
+            onClick={() => {
+              setQ("");
+              setOpen(false);
+              inputRef.current?.focus();
+            }}
+            aria-label="Effacer"
+            style={{
+              background: "transparent",
+              border: "none",
+              padding: 0,
+              color: "var(--ink-3)",
+              display: "flex",
+              cursor: "pointer",
+            }}
+          >
+            <X className="h-3.5 w-3.5" />
+          </button>
+        ) : (
+          <span className="pro-mono" style={{ fontSize: 11, color: "var(--ink-3)" }}>
+            ⌘K
+          </span>
+        )}
       </div>
 
-      {open && q.trim().length >= 2 && (
+      {open && trimmed.length >= 2 && (
         <div className="pro-search-panel">
           {loading ? (
             <div className="pro-search-empty">Recherche…</div>
-          ) : results.length === 0 ? (
-            <div className="pro-search-empty">Aucun résultat.</div>
+          ) : groups.length === 0 ? (
+            <div className="pro-search-empty">
+              <Search className="h-5 w-5" style={{ opacity: 0.4, marginBottom: 8 }} />
+              <div>
+                Aucun résultat pour «&nbsp;<strong>{trimmed}</strong>&nbsp;».
+              </div>
+            </div>
           ) : (
-            results.map((r, i) => {
-              const meta = TYPE_META[r.type];
-              const Icon = meta.icon;
+            groups.map((group) => {
+              const Icon = TYPE_ICON[group.type];
               return (
-                <button
-                  key={`${r.type}-${r.href}`}
-                  type="button"
-                  className={`pro-search-item${i === active ? " active" : ""}`}
-                  onMouseEnter={() => setActive(i)}
-                  onClick={() => go(r)}
-                >
-                  <span className="ico">
-                    <Icon className="h-3.5 w-3.5" />
-                  </span>
-                  <span className="tx">
-                    <span className="nm">{r.label}</span>
-                    {r.sublabel && <span className="sb">{r.sublabel}</span>}
-                  </span>
-                  <span className="tp">{meta.label}</span>
-                </button>
+                <div key={group.type} className="pro-search-group">
+                  <div className="pro-search-head">
+                    {GROUP_LABELS[group.type]} · {group.items.length}
+                  </div>
+                  {group.items.map((r, i) => (
+                    <button
+                      key={`${group.type}-${i}-${r.href}`}
+                      type="button"
+                      className="pro-search-item"
+                      onClick={() => go(r)}
+                    >
+                      <span className="ico">
+                        <Icon className="h-3.5 w-3.5" />
+                      </span>
+                      <span className="tx">
+                        <span className="nm">{r.title}</span>
+                        <span className="sb">{r.subtitle}</span>
+                      </span>
+                      {r.meta && <span className="mt">{r.meta}</span>}
+                    </button>
+                  ))}
+                </div>
               );
             })
           )}

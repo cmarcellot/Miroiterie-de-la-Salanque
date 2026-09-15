@@ -288,7 +288,7 @@
 .pro-search input::placeholder {
   color: var(--ink-3);
 }
-/* résultats de la recherche globale (topbar) */
+/* résultats de la recherche globale (topbar) — reprise de .search-dropdown du proto */
 .pro-search-panel {
   position: absolute;
   left: 0;
@@ -299,20 +299,33 @@
   border: 1px solid var(--line);
   border-radius: 12px;
   box-shadow: 0 16px 40px rgba(14, 31, 51, 0.14);
-  max-height: 360px;
+  max-height: 420px;
   overflow-y: auto;
-  padding: 6px;
 }
 .pro-search-empty {
-  padding: 14px 12px;
-  font-size: 13px;
-  color: var(--ink-3);
+  padding: 32px 24px;
   text-align: center;
+  color: var(--ink-3);
+  font-size: 13px;
+}
+.pro-search-group {
+  padding: 6px;
+}
+.pro-search-group + .pro-search-group {
+  border-top: 1px solid var(--line);
+}
+.pro-search-head {
+  font-size: 10px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+  font-weight: 500;
+  padding: 6px 10px 4px;
 }
 .pro-search-item {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 12px;
   width: 100%;
   padding: 8px 10px;
   border: none;
@@ -320,15 +333,14 @@
   border-radius: 8px;
   text-align: left;
 }
-.pro-search-item:hover,
-.pro-search-item.active {
+.pro-search-item:hover {
   background: var(--bg);
 }
 .pro-search-item .ico {
   width: 26px;
   height: 26px;
-  border-radius: 50%;
-  background: var(--bg-2);
+  border-radius: 6px;
+  background: var(--bg);
   color: var(--ink-2);
   display: grid;
   place-items: center;
@@ -341,7 +353,7 @@
   flex-direction: column;
 }
 .pro-search-item .nm {
-  font-size: 13.5px;
+  font-size: 13px;
   font-weight: 500;
   color: var(--ink);
   white-space: nowrap;
@@ -351,16 +363,17 @@
 .pro-search-item .sb {
   font-size: 11.5px;
   color: var(--ink-3);
+  margin-top: 1px;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
 }
-.pro-search-item .tp {
+.pro-search-item .mt {
   flex-shrink: 0;
-  font-size: 10px;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-  color: var(--ink-3);
+  font-size: 11px;
+  color: var(--ink-2);
+  font-family: var(--pro-mono);
+  white-space: nowrap;
 }
 .pro-pill {
   display: inline-flex;
