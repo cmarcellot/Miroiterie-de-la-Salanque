@@ -127,8 +127,7 @@ ${companyPhone}`;
                 {kind === "devis"
                   ? "Le devis sera joint"
                   : "La facture sera jointe"}{" "}
-                en PDF. Relisez le message et modifiez-le si besoin avant
-                l&apos;envoi.
+                en PDF.
               </p>
             </div>
 
