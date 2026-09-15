@@ -1,10 +1,10 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
-  // @react-pdf/renderer embarque son propre moteur de rendu React (pour
-  // générer les PDF côté serveur) : le laisser hors du bundle webpack des
-  // Server Actions évite tout conflit avec l'instance React de l'app.
-  serverExternalPackages: ["@react-pdf/renderer"],
+  // pdfkit charge ses polices standard (.afm) via des chemins relatifs à
+  // son propre dossier ; le laisser hors du bundle webpack (require natif)
+  // évite que ces fichiers ne soient introuvables au runtime.
+  serverExternalPackages: ["pdfkit"],
   async redirects() {
     return [
       {
