@@ -136,9 +136,15 @@ ${companyPhone}`;
                 </p>
               ) : (
                 <form
-                  action={async (fd) => {
+                  onSubmit={() => {
+                    // Ne fire qu'une fois la validation HTML5 passée ; met
+                    // à jour l'état AVANT que React ne diffère le rendu le
+                    // temps de l'action (sinon rien ne s'affiche pendant
+                    // l'attente du serveur).
                     setPending(true);
                     setError("");
+                  }}
+                  action={async (fd) => {
                     try {
                       const result = await action(fd);
                       if (result?.ok) {
