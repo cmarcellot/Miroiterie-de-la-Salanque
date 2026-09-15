@@ -124,8 +124,11 @@ ${companyPhone}`;
             <div className="pro-modal-head">
               <h2>Envoyer par email</h2>
               <p>
-                Le {kind === "devis" ? "devis" : "la facture"} sera joint en
-                PDF. Relisez le message et modifiez-le si besoin avant l&apos;envoi.
+                {kind === "devis"
+                  ? "Le devis sera joint"
+                  : "La facture sera jointe"}{" "}
+                en PDF. Relisez le message et modifiez-le si besoin avant
+                l&apos;envoi.
               </p>
             </div>
 
