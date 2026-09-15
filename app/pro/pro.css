@@ -1365,7 +1365,9 @@ select.pro-field {
   gap: 14px;
 }
 .devis-doc .dd-logo {
-  height: 80px;
+  /* 72pt côté pdfkit (email) = 72 * 96/72 = 96px en CSS, pour une taille
+     physique identique une fois imprimé/exporté en PDF. */
+  height: 96px;
   width: auto;
 }
 .devis-doc .dd-co {
