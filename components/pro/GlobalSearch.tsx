@@ -121,7 +121,10 @@ export default function GlobalSearch() {
         <input
           ref={inputRef}
           value={q}
-          onChange={(e) => setQ(e.target.value)}
+          onChange={(e) => {
+            setQ(e.target.value);
+            setOpen(true);
+          }}
           onFocus={() => trimmed.length >= 2 && setOpen(true)}
           onKeyDown={(e) => {
             if (e.key === "Escape") setOpen(false);
