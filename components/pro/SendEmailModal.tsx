@@ -2,7 +2,7 @@
 
 import { useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
-import { Mail, X, Send } from "lucide-react";
+import { Mail, X, Send, Loader2 } from "lucide-react";
 import { formatEUR } from "@/lib/pro-enums";
 
 type SendEmailResult = { ok: true } | { ok: false; error: string };
@@ -109,6 +109,18 @@ ${companyPhone}`;
               <X className="h-4 w-4" />
             </button>
 
+            {pending && (
+              <div className="pro-loading-overlay">
+                <Loader2
+                  className="h-7 w-7 pro-spin"
+                  style={{ color: "var(--marine)" }}
+                />
+                <p style={{ fontSize: 13, color: "var(--ink-2)", margin: 0 }}>
+                  Génération du PDF et envoi de l&apos;email en cours…
+                </p>
+              </div>
+            )}
+
             <div className="pro-modal-head">
               <h2>Envoyer par email</h2>
               <p>
@@ -201,7 +213,11 @@ ${companyPhone}`;
                       className="pro-btn solid"
                       style={{ opacity: pending ? 0.6 : 1 }}
                     >
-                      <Send className="h-4 w-4" />
+                      {pending ? (
+                        <Loader2 className="h-4 w-4 pro-spin" />
+                      ) : (
+                        <Send className="h-4 w-4" />
+                      )}
                       {pending ? "Envoi…" : "Envoyer"}
                     </button>
                   </div>
