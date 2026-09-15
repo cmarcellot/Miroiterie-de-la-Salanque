@@ -72,19 +72,18 @@ export default function DevisRow({
       </td>
       <td onClick={(e) => e.stopPropagation()}>
         <div className="pro-rowactions">
-          {status === "brouillon" && (
-            <SendEmailModal
-              iconOnly
-              action={sendDevisEmail.bind(null, id)}
-              kind="devis"
-              to={clientEmail}
-              number={number}
-              companyName={companyName}
-              companyPhone={companyPhone}
-              amountTTC={amountTTC}
-              dateInfo={validUntilLabel}
-            />
-          )}
+          <SendEmailModal
+            iconOnly
+            hideTrigger={status !== "brouillon"}
+            action={sendDevisEmail.bind(null, id)}
+            kind="devis"
+            to={clientEmail}
+            number={number}
+            companyName={companyName}
+            companyPhone={companyPhone}
+            amountTTC={amountTTC}
+            dateInfo={validUntilLabel}
+          />
           {status === "envoye" && (
             <button
               type="button"

@@ -28,6 +28,7 @@ export default function SendEmailModal({
   amountTTC,
   dateInfo,
   iconOnly,
+  hideTrigger,
 }: {
   action: (formData: FormData) => Promise<SendEmailResult>;
   kind: "devis" | "facture";
@@ -40,6 +41,14 @@ export default function SendEmailModal({
   dateInfo?: string;
   /** Rendu compact (icône seule), pour une action de ligne de tableau. */
   iconOnly?: boolean;
+  /**
+   * Masque le bouton déclencheur sans démonter le composant — utile
+   * quand le statut qui conditionne son affichage (ex. "brouillon")
+   * change juste après l'envoi : le composant reste monté, donc son
+   * état interne (fenêtre ouverte, confirmation affichée) survit au
+   * changement de statut au lieu d'être coupé net.
+   */
+  hideTrigger?: boolean;
 }) {
   const router = useRouter();
   const [open, setOpen] = useState(false);
@@ -88,7 +97,7 @@ ${companyPhone}`;
 
   return (
     <>
-      {iconOnly ? (
+      {hideTrigger ? null : iconOnly ? (
         <button
           type="button"
           className="ra ra-ok"
