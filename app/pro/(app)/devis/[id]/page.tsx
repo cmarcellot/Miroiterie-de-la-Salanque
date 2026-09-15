@@ -18,6 +18,7 @@ import DevisForm from "@/components/pro/DevisForm";
 import DevisStatusBar from "@/components/pro/DevisStatusBar";
 import DeleteButton from "@/components/pro/DeleteButton";
 import SendEmailModal from "@/components/pro/SendEmailModal";
+import Toast from "@/components/pro/Toast";
 
 export const dynamic = "force-dynamic";
 
@@ -49,6 +50,9 @@ export default async function DevisDetailPage({
 
   return (
     <div>
+      <Toast param="created" message="Devis créé." />
+      <Toast param="updated" message="Devis mis à jour." />
+
       <Link href="/pro/devis" className="pro-btn ghost">
         <ArrowLeft className="h-4 w-4" /> Retour
       </Link>

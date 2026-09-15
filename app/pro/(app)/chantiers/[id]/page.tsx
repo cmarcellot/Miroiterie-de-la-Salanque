@@ -13,6 +13,7 @@ import {
 import ChantierForm from "@/components/pro/ChantierForm";
 import ChantierStatusSelect from "@/components/pro/ChantierStatusSelect";
 import DeleteButton from "@/components/pro/DeleteButton";
+import Toast from "@/components/pro/Toast";
 
 export const dynamic = "force-dynamic";
 
@@ -38,6 +39,9 @@ export default async function ChantierDetailPage({
 
   return (
     <div>
+      <Toast param="created" message="Chantier créé." />
+      <Toast param="updated" message="Chantier mis à jour." />
+
       <Link href="/pro/chantiers" className="pro-btn ghost">
         <ArrowLeft className="h-4 w-4" /> Retour
       </Link>

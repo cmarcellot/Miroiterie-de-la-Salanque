@@ -82,7 +82,7 @@ export async function createChantier(formData: FormData) {
   });
 
   revalidatePath("/pro/chantiers");
-  redirect(`/pro/chantiers/${doc._id}`);
+  redirect(`/pro/chantiers/${doc._id}?created=${Date.now()}`);
 }
 
 /** Crée un chantier reprenant le client et l'adresse d'un devis (typiquement accepté). */
@@ -116,7 +116,7 @@ export async function createChantierFromDevis(devisId: string) {
 
   revalidatePath("/pro/chantiers");
   revalidatePath(`/pro/devis/${devisId}`);
-  redirect(`/pro/chantiers/${doc._id}`);
+  redirect(`/pro/chantiers/${doc._id}?created=${Date.now()}`);
 }
 
 export async function updateChantier(id: string, formData: FormData) {
@@ -130,7 +130,7 @@ export async function updateChantier(id: string, formData: FormData) {
 
   revalidatePath("/pro/chantiers");
   revalidatePath(`/pro/chantiers/${id}`);
-  redirect(`/pro/chantiers/${id}`);
+  redirect(`/pro/chantiers/${id}?updated=${Date.now()}`);
 }
 
 export async function setChantierStatus(id: string, status: string) {

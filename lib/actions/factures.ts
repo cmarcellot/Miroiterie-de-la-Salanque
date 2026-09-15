@@ -101,7 +101,7 @@ export async function createFacture(formData: FormData) {
   });
 
   revalidatePath("/pro/factures");
-  redirect(`/pro/factures/${doc._id}`);
+  redirect(`/pro/factures/${doc._id}?created=${Date.now()}`);
 }
 
 /** Génère une facture reprenant les lignes et le client d'un devis. */
@@ -141,7 +141,7 @@ export async function createFactureFromDevis(devisId: string) {
 
   revalidatePath("/pro/factures");
   revalidatePath(`/pro/devis/${devisId}`);
-  redirect(`/pro/factures/${doc._id}`);
+  redirect(`/pro/factures/${doc._id}?created=${Date.now()}`);
 }
 
 export async function updateFacture(id: string, formData: FormData) {
@@ -154,7 +154,7 @@ export async function updateFacture(id: string, formData: FormData) {
 
   revalidatePath("/pro/factures");
   revalidatePath(`/pro/factures/${id}`);
-  redirect(`/pro/factures/${id}`);
+  redirect(`/pro/factures/${id}?updated=${Date.now()}`);
 }
 
 export async function setFactureStatus(id: string, status: string) {

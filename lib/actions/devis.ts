@@ -102,7 +102,7 @@ export async function createDevis(formData: FormData) {
   });
 
   revalidatePath("/pro/devis");
-  redirect(`/pro/devis/${doc._id}`);
+  redirect(`/pro/devis/${doc._id}?created=${Date.now()}`);
 }
 
 export async function updateDevis(id: string, formData: FormData) {
@@ -115,7 +115,7 @@ export async function updateDevis(id: string, formData: FormData) {
 
   revalidatePath("/pro/devis");
   revalidatePath(`/pro/devis/${id}`);
-  redirect(`/pro/devis/${id}`);
+  redirect(`/pro/devis/${id}?updated=${Date.now()}`);
 }
 
 export async function setDevisStatus(id: string, status: string) {

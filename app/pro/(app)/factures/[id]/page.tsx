@@ -17,6 +17,7 @@ import FactureForm from "@/components/pro/FactureForm";
 import FactureStatusSelect from "@/components/pro/FactureStatusSelect";
 import DeleteButton from "@/components/pro/DeleteButton";
 import SendEmailModal from "@/components/pro/SendEmailModal";
+import Toast from "@/components/pro/Toast";
 
 export const dynamic = "force-dynamic";
 
@@ -47,6 +48,9 @@ export default async function FactureDetailPage({
 
   return (
     <div>
+      <Toast param="created" message="Facture créée." />
+      <Toast param="updated" message="Facture mise à jour." />
+
       <Link href="/pro/factures" className="pro-btn ghost">
         <ArrowLeft className="h-4 w-4" /> Retour
       </Link>
