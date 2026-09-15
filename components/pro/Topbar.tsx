@@ -1,4 +1,5 @@
-import { Bell, Search } from "lucide-react";
+import { Bell } from "lucide-react";
+import GlobalSearch from "@/components/pro/GlobalSearch";
 
 export default function Topbar({
   email,
@@ -21,10 +22,7 @@ export default function Topbar({
 
   return (
     <div className="pro-top">
-      <div className="pro-search">
-        <Search />
-        <input placeholder="Rechercher une demande, un contact…" disabled />
-      </div>
+      <GlobalSearch />
       <div style={{ flex: 1 }} />
 
       {pending > 0 && (
