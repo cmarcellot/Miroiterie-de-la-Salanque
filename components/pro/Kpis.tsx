@@ -14,6 +14,8 @@ export type Kpi = {
   display?: string;
   /** Couleur de la valeur elle-même (ex. rouge quand il y a du retard) — indépendant de `accent` (sparkline). */
   valueColor?: string;
+  /** Couleur du hint seul, si différente de `valueColor` (ex. valeur en navy mais hint en rouge). */
+  hintColor?: string;
   /** Petit suffixe après la valeur (ex. "%"), comme <small> dans le prototype. Compatible avec le compteur animé. */
   suffix?: string;
 };
@@ -47,7 +49,14 @@ function KpiCard({ kpi, run }: { kpi: Kpi; run: boolean }) {
         {kpi.suffix && <small>{kpi.suffix}</small>}
       </div>
       {kpi.hint && (
-        <div className="d" style={kpi.valueColor ? { color: kpi.valueColor } : undefined}>
+        <div
+          className="d"
+          style={
+            kpi.hintColor ?? kpi.valueColor
+              ? { color: kpi.hintColor ?? kpi.valueColor }
+              : undefined
+          }
+        >
           {kpi.hint}
         </div>
       )}
