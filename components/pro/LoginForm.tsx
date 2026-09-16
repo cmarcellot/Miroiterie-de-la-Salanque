@@ -2,14 +2,18 @@
 
 import { Suspense, useState } from "react";
 import { signIn } from "next-auth/react";
-import { useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
+import Link from "next/link";
 import Image from "next/image";
+import { X } from "lucide-react";
 
 function Form() {
+  const router = useRouter();
   const params = useSearchParams();
   const callbackUrl = params.get("callbackUrl") || "/pro";
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const [shake, setShake] = useState(false);
 
   async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -17,13 +21,14 @@ function Form() {
     setError("");
     const data = new FormData(e.currentTarget);
     const res = await signIn("credentials", {
-      email: data.get("email"),
       password: data.get("password"),
       redirect: false,
     });
     if (res?.error) {
       setLoading(false);
-      setError("Identifiants incorrects.");
+      setError("Mot de passe incorrect.");
+      setShake(true);
+      setTimeout(() => setShake(false), 400);
       return;
     }
     // Navigation complète (pas router.push) : le cookie de session tout
@@ -35,69 +40,75 @@ function Form() {
 
   return (
     <div
-      style={{
-        position: "relative",
-        zIndex: 2,
-        minHeight: "100vh",
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-        padding: 16,
+      className="pro-modal-overlay"
+      onMouseDown={(e) => {
+        if (e.target === e.currentTarget) router.push("/");
       }}
     >
-      <div
-        className="pro-card"
-        style={{ width: "100%", maxWidth: 380, padding: 32 }}
+      <form
+        onSubmit={onSubmit}
+        className={`pro-modal${shake ? " pro-shake" : ""}`}
+        style={{ maxWidth: 400 }}
       >
-        <Image
-          src="/logo/mds-bleu-transparent.png"
-          alt="Miroiterie de la Salanque"
-          width={200}
-          height={200}
-          style={{ height: 72, width: "auto", margin: "0 auto" }}
-        />
-        <div
-          className="pro-lab"
-          style={{ textAlign: "center", marginTop: 16 }}
-        >
-          Miroiterie de la Salanque
-        </div>
-        <h1
-          style={{ textAlign: "center", fontSize: 22, marginTop: 4 }}
-        >
-          Espace pro
-        </h1>
+        <Link href="/" aria-label="Fermer" className="pro-modal-close">
+          <X className="h-4 w-4" />
+        </Link>
 
-        <form onSubmit={onSubmit} style={{ marginTop: 24, display: "grid", gap: 12 }}>
-          <input
-            type="email"
-            name="email"
-            required
-            autoComplete="username"
-            placeholder="Email"
-            className="pro-field"
+        <div style={{ textAlign: "center" }}>
+          <Image
+            src="/logo/mds-bleu-transparent.png"
+            alt="Miroiterie de la Salanque"
+            width={200}
+            height={200}
+            style={{ height: 56, width: "auto", margin: "0 auto" }}
           />
+        </div>
+
+        <div className="pro-modal-head" style={{ textAlign: "center" }}>
+          <div className="pro-lab">Espace pro</div>
+          <h2>Accès réservé.</h2>
+          <p>
+            Entrez votre mot de passe pour accéder à votre tableau de bord,
+            vos devis et vos factures.
+          </p>
+        </div>
+
+        <div>
+          <label className="pro-lbl" htmlFor="password">
+            Mot de passe
+          </label>
           <input
+            id="password"
             type="password"
             name="password"
             required
+            autoFocus
             autoComplete="current-password"
-            placeholder="Mot de passe"
+            placeholder="••••••••••"
             className="pro-field"
+            style={{ marginTop: 8 }}
+            onChange={() => setError("")}
           />
           {error && (
-            <p style={{ fontSize: 13, color: "var(--danger)" }}>{error}</p>
+            <p style={{ fontSize: 13, color: "var(--danger)", marginTop: 8 }}>
+              {error}
+            </p>
           )}
           <button
             type="submit"
             disabled={loading}
             className="pro-btn solid"
-            style={{ justifyContent: "center", opacity: loading ? 0.6 : 1 }}
+            style={{
+              justifyContent: "center",
+              width: "100%",
+              marginTop: 16,
+              opacity: loading ? 0.6 : 1,
+            }}
           >
             {loading ? "Connexion…" : "Se connecter"}
           </button>
-        </form>
-      </div>
+        </div>
+      </form>
     </div>
   );
 }

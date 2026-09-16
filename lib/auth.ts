@@ -9,14 +9,13 @@ export const authOptions: NextAuthOptions = {
   pages: { signIn: "/pro/login" },
   providers: [
     Credentials({
-      name: "Email",
+      name: "Mot de passe",
       credentials: {
-        email: { label: "Email", type: "email" },
         password: { label: "Mot de passe", type: "password" },
       },
+      // Compte gérant unique : pas d'email à saisir, un seul mot de passe suffit.
       async authorize(credentials) {
-        if (!credentials?.email || !credentials.password) return null;
-        const email = String(credentials.email).toLowerCase().trim();
+        if (!credentials?.password) return null;
         const password = String(credentials.password);
 
         try {
@@ -27,20 +26,14 @@ export const authOptions: NextAuthOptions = {
         }
 
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        let user: any = await User.findOne({ email });
+        let user: any = await User.findOne({});
 
         // Amorçage du compte gérant unique depuis les variables d'environnement,
         // au premier login, si aucun utilisateur n'existe encore.
         if (!user) {
           const seedEmail = process.env.ADMIN_EMAIL?.toLowerCase().trim();
           const seedPassword = process.env.ADMIN_PASSWORD;
-          const count = await User.countDocuments();
-          console.log(
-            `[auth] user introuvable pour "${email}". seedEmail="${seedEmail}" match=${
-              email === seedEmail
-            } users=${count}`
-          );
-          if (seedEmail && seedPassword && email === seedEmail && count === 0) {
+          if (seedEmail && seedPassword) {
             user = await User.create({
               email: seedEmail,
               name: "Administrateur",
@@ -52,11 +45,10 @@ export const authOptions: NextAuthOptions = {
         }
 
         if (!user) {
-          console.log("[auth] échec: aucun utilisateur");
+          console.log("[auth] échec: aucun compte gérant configuré");
           return null;
         }
         const ok = await bcrypt.compare(password, user.passwordHash);
-        console.log(`[auth] comparaison mot de passe pour ${user.email}: ${ok}`);
         if (!ok) return null;
 
         return {

@@ -1300,6 +1300,24 @@ select.pro-field {
     transform: none;
   }
 }
+/* secousse sur mot de passe incorrect (fenêtre de connexion) */
+.pro-modal.pro-shake {
+  animation: pro-shake 360ms;
+}
+@keyframes pro-shake {
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+  20%,
+  60% {
+    transform: translateX(-8px);
+  }
+  40%,
+  80% {
+    transform: translateX(8px);
+  }
+}
 .pro-modal-head {
   margin-bottom: 20px;
   padding-right: 36px;
