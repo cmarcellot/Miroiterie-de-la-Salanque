@@ -1,6 +1,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import { site } from "@/lib/site";
+import EspaceProLink from "@/components/EspaceProLink";
 
 const navLinks = [
   { label: "Accueil", href: "/" },
@@ -55,9 +56,7 @@ export default function Footer() {
               </Link>
             </li>
             <li>
-              <Link href="/pro" className="hover:text-white">
-                Espace pro
-              </Link>
+              <EspaceProLink className="hover:text-white" />
             </li>
           </ul>
         </div>

@@ -1,0 +1,180 @@
+/* Fenêtre de connexion (LoginModalCard) — chargée aussi bien sur la vitrine
+   publique (déclenchée depuis "Espace pro" au footer, par-dessus la page
+   en cours) que sur /pro/login (accès direct/lien profond). Entièrement
+   autonome : ni les tokens ni les polices next/font de .pro-root ne sont
+   garantis disponibles là où ce fichier est chargé. */
+
+.pro-login-overlay {
+  --marine: #1d3f6b;
+  --ink: #132033;
+  --ink-2: #4d5f76;
+  --ink-3: #5f7183;
+  --line: rgba(20, 40, 66, 0.12);
+  --bg: #eef1f5;
+  --danger: #d15660;
+  font-family: var(--pro-sans, -apple-system, BlinkMacSystemFont, "Helvetica Neue", Arial, sans-serif);
+
+  position: fixed;
+  inset: 0;
+  background: rgba(6, 14, 26, 0.55);
+  backdrop-filter: blur(6px);
+  z-index: 1000;
+  display: grid;
+  place-items: center;
+  padding: 24px;
+  animation: pro-login-fade-in 0.2s ease;
+}
+@keyframes pro-login-fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+.pro-login-card {
+  background: #fff;
+  border-radius: 20px;
+  width: 100%;
+  max-width: 420px;
+  padding: 40px;
+  box-shadow:
+    0 24px 60px rgba(14, 31, 51, 0.16),
+    0 2px 8px rgba(14, 31, 51, 0.05);
+  position: relative;
+  animation: pro-login-in 0.24s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+@keyframes pro-login-in {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+.pro-login-card.pro-shake {
+  animation: pro-login-shake 360ms;
+}
+@keyframes pro-login-shake {
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+  20%,
+  60% {
+    transform: translateX(-8px);
+  }
+  40%,
+  80% {
+    transform: translateX(8px);
+  }
+}
+.pro-login-close {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background: transparent;
+  border: 1px solid var(--line);
+  color: var(--ink-3);
+  display: grid;
+  place-items: center;
+  transition:
+    border-color 0.15s,
+    color 0.15s;
+}
+.pro-login-close:hover {
+  border-color: var(--ink);
+  color: var(--ink);
+}
+.pro-login-lab {
+  font-family: var(--pro-mono, ui-monospace, monospace);
+  font-size: 11px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+  margin-bottom: 14px;
+}
+.pro-login-card h2 {
+  font-family: var(--pro-display, Georgia, serif);
+  font-weight: 500;
+  font-size: 32px;
+  letter-spacing: -0.015em;
+  line-height: 1.05;
+  color: var(--ink);
+  margin: 0 0 10px;
+}
+.pro-login-card h2 em {
+  font-style: italic;
+  color: var(--marine);
+}
+.pro-login-sub {
+  font-size: 13.5px;
+  color: var(--ink-2);
+  line-height: 1.55;
+  margin: 0 0 26px;
+}
+.pro-login-card label {
+  display: block;
+  font-family: var(--pro-mono, ui-monospace, monospace);
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+  margin-bottom: 8px;
+}
+.pro-login-card input {
+  width: 100%;
+  border: 1px solid var(--line);
+  background: var(--bg);
+  padding: 14px 16px;
+  border-radius: 10px;
+  outline: none;
+  font-family: var(--pro-sans, -apple-system, BlinkMacSystemFont, "Helvetica Neue", Arial, sans-serif);
+  font-size: 15px;
+  letter-spacing: 0.02em;
+  transition: border-color 140ms;
+  box-sizing: border-box;
+}
+.pro-login-card input:focus {
+  border-color: var(--ink);
+}
+.pro-login-err {
+  margin-top: 10px;
+  font-size: 12.5px;
+  color: var(--danger);
+}
+.pro-login-submit {
+  width: 100%;
+  margin-top: 22px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  padding: 12px 16px;
+  border: none;
+  border-radius: 999px;
+  background: var(--ink);
+  color: var(--bg);
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.pro-login-submit:hover:not(:disabled) {
+  background: var(--marine);
+}
+.pro-login-submit:disabled {
+  cursor: default;
+}
+@media (prefers-reduced-motion: reduce) {
+  .pro-login-overlay,
+  .pro-login-card {
+    animation: none;
+  }
+}
