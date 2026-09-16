@@ -8,6 +8,7 @@ import Client from "@/lib/models/Client";
 import Devis from "@/lib/models/Devis";
 import Facture from "@/lib/models/Facture";
 import Chantier from "@/lib/models/Chantier";
+import { getNotifications } from "@/lib/notifications";
 import Sidebar from "@/components/pro/Sidebar";
 import Topbar from "@/components/pro/Topbar";
 import "../pro.css";
@@ -48,9 +49,10 @@ export default async function ProLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const [session, counts] = await Promise.all([
+  const [session, counts, notifications] = await Promise.all([
     getServerSession(authOptions),
     getCounts(),
+    getNotifications().catch(() => []),
   ]);
   const { pending, clients, devisEnAttente, facturesEnRetard, chantiersAPlanifier } =
     counts;
@@ -78,6 +80,7 @@ export default async function ProLayout({
             email={session?.user?.email}
             name={session?.user?.name}
             pending={pending}
+            notifications={notifications}
           />
           <div className="pro-page">{children}</div>
         </div>

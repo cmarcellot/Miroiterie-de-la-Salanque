@@ -1,14 +1,17 @@
-import { Bell } from "lucide-react";
 import GlobalSearch from "@/components/pro/GlobalSearch";
+import Notifications from "@/components/pro/Notifications";
+import type { NotificationItem } from "@/lib/notifications";
 
 export default function Topbar({
   email,
   name,
   pending,
+  notifications,
 }: {
   email?: string | null;
   name?: string | null;
   pending: number;
+  notifications: NotificationItem[];
 }) {
   const display = name || email || "Compte";
   const initials = display
@@ -32,13 +35,7 @@ export default function Topbar({
         </div>
       )}
 
-      <span
-        className="pro-pill"
-        style={{ width: 38, height: 38, padding: 0, justifyContent: "center" }}
-        aria-hidden
-      >
-        <Bell className="h-4 w-4" strokeWidth={1.7} />
-      </span>
+      <Notifications items={notifications} />
 
       <div className="pro-me">
         <div className="av">{initials || "·"}</div>
