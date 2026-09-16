@@ -12,6 +12,15 @@
   --line: rgba(20, 40, 66, 0.12);
   --bg: #eef1f5;
   --danger: #d15660;
+  /* Mêmes polices que l'espace pro (voir app/pro/pro.css) : les variables
+     --font-* sont fournies par proFontVars, posé sur cet élément par
+     LoginModalCard lui-même — ça fonctionne donc même hors de .pro-root,
+     sur la vitrine publique. */
+  --pro-sans: var(--font-space), "Space Grotesk", -apple-system,
+    BlinkMacSystemFont, "Helvetica Neue", Arial, sans-serif;
+  --pro-display: var(--font-syne), "Syne", var(--font-space), "Space Grotesk",
+    sans-serif;
+  --pro-mono: var(--font-geist-mono), "Geist Mono", ui-monospace, monospace;
   font-family: var(--pro-sans, -apple-system, BlinkMacSystemFont, "Helvetica Neue", Arial, sans-serif);
 
   position: fixed;

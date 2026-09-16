@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { signIn } from "next-auth/react";
 import { X, ArrowRight } from "lucide-react";
+import { proFontVars } from "@/app/pro/fonts";
 import "@/app/login-modal.css";
 
 /**
@@ -43,7 +44,7 @@ export default function LoginModalCard({
 
   return (
     <div
-      className="pro-login-overlay"
+      className={`pro-login-overlay ${proFontVars}`}
       onMouseDown={(e) => {
         if (e.target === e.currentTarget) onClose();
       }}
