@@ -17,6 +17,7 @@ import {
   LogOut,
   Menu,
   X,
+  BarChart3,
   type LucideIcon,
 } from "lucide-react";
 
@@ -34,6 +35,7 @@ const sections: { title: string; items: Item[] }[] = [
     title: "Activité",
     items: [
       { href: "/pro", label: "Tableau de bord", icon: LayoutGrid, exact: true },
+      { href: "/pro/statistiques", label: "Statistiques", icon: BarChart3, exact: true },
       { href: "/pro/demandes", label: "Demandes", icon: Inbox },
       { href: "/pro/devis", label: "Devis", icon: FileText },
       { href: "/pro/clients", label: "Clients", icon: Users },
