@@ -9,8 +9,10 @@ const UserSchema = new Schema(
       lowercase: true,
       trim: true,
     },
-    firstName: { type: String, default: "", trim: true },
-    lastName: { type: String, default: "", trim: true },
+    // Valeurs initiales du gérant unique de ce site ; modifiables ensuite
+    // dans Paramètres > Compte (voir lib/actions/settings.ts).
+    firstName: { type: String, default: "Joël", trim: true },
+    lastName: { type: String, default: "Marcellot", trim: true },
     role: { type: String, enum: ["admin", "employe"], default: "admin" },
     passwordHash: { type: String, required: true },
   },

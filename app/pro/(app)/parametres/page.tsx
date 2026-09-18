@@ -30,8 +30,10 @@ async function getStats() {
 
 async function getAccount(userId: string | undefined) {
   await connectToDatabase();
+  // Pas de .lean() : on veut que les défauts du schéma (prénom/nom initiaux)
+  // s'appliquent aussi ici, comme dans lib/auth.ts.
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const u: any = userId ? await User.findById(userId).lean() : null;
+  const u: any = userId ? await User.findById(userId) : null;
   return {
     firstName: u?.firstName || "",
     lastName: u?.lastName || "",
