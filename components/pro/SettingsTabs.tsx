@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, type ReactNode } from "react";
-import { User, FileText, Bell, Database } from "lucide-react";
+import { User, UserCog, FileText, Bell, Database } from "lucide-react";
 import type { AppSettings } from "@/lib/settings";
 import Toast from "@/components/pro/Toast";
 
@@ -12,8 +12,15 @@ export type SettingsStats = {
   demandes: number;
 };
 
+export type AccountInfo = {
+  firstName: string;
+  lastName: string;
+  email: string;
+};
+
 const TABS = [
   { id: "company", label: "Entreprise", icon: User },
+  { id: "account", label: "Compte", icon: UserCog },
   { id: "billing", label: "Devis & factures", icon: FileText },
   { id: "notifications", label: "Notifications", icon: Bell },
   { id: "data", label: "Données", icon: Database },
@@ -49,6 +56,7 @@ function Field({
   placeholder,
   type = "text",
   step,
+  disabled,
 }: {
   name: string;
   value: string | number;
@@ -56,6 +64,7 @@ function Field({
   placeholder?: string;
   type?: string;
   step?: string;
+  disabled?: boolean;
 }) {
   return (
     <input
@@ -65,6 +74,7 @@ function Field({
       value={value}
       onChange={(e) => onChange(e.target.value)}
       placeholder={placeholder}
+      disabled={disabled}
       className="pro-field"
     />
   );
@@ -206,6 +216,56 @@ function CompanyPanel({
           </Row>
           <Row label="Coordonnées bancaires" hint="Affichées en pied de facture pour faciliter les virements.">
             <Field name="company.iban" value={v.iban} onChange={set("iban")} placeholder="IBAN (FR76 ...)" />
+          </Row>
+
+          <SectionFoot dirty={dirty} pending={pending} onCancel={() => setV(initial)} />
+        </>
+      )}
+    </Panel>
+  );
+}
+
+/* ---------- onglet Compte ---------- */
+
+function AccountPanel({
+  account,
+  action,
+}: {
+  account: AccountInfo;
+  action: (formData: FormData) => Promise<void>;
+}) {
+  const initial = { firstName: account.firstName, lastName: account.lastName };
+  const [v, setV] = useState(initial);
+  const dirty = JSON.stringify(v) !== JSON.stringify(initial);
+  const set = (k: keyof typeof v) => (val: string) =>
+    setV((s) => ({ ...s, [k]: val }));
+
+  return (
+    <Panel
+      title="Votre compte"
+      description="Le prénom et le nom sont affichés dans l'espace pro (en-tête, notifications)."
+      action={action}
+    >
+      {({ pending }) => (
+        <>
+          <Row label="Identité">
+            <div style={{ display: "grid", gap: 10, gridTemplateColumns: "1fr 1fr" }}>
+              <Field
+                name="account.firstName"
+                value={v.firstName}
+                onChange={set("firstName")}
+                placeholder="Prénom"
+              />
+              <Field
+                name="account.lastName"
+                value={v.lastName}
+                onChange={set("lastName")}
+                placeholder="Nom"
+              />
+            </div>
+          </Row>
+          <Row label="Email de connexion" hint="Non modifiable ici.">
+            <Field name="_email" value={account.email} onChange={() => {}} type="email" disabled />
           </Row>
 
           <SectionFoot dirty={dirty} pending={pending} onCancel={() => setV(initial)} />
@@ -436,17 +496,21 @@ function DataPanel({ stats }: { stats: SettingsStats }) {
 export default function SettingsTabs({
   settings,
   stats,
+  account,
   initialTab,
   companyAction,
   billingAction,
   notificationsAction,
+  accountAction,
 }: {
   settings: AppSettings;
   stats: SettingsStats;
+  account: AccountInfo;
   initialTab?: string;
   companyAction: (formData: FormData) => Promise<void>;
   billingAction: (formData: FormData) => Promise<void>;
   notificationsAction: (formData: FormData) => Promise<void>;
+  accountAction: (formData: FormData) => Promise<void>;
 }) {
   const [tab, setTab] = useState<TabId>(
     TABS.some((t) => t.id === initialTab) ? (initialTab as TabId) : "company"
@@ -474,6 +538,7 @@ export default function SettingsTabs({
       </div>
 
       {tab === "company" && <CompanyPanel settings={settings} action={companyAction} />}
+      {tab === "account" && <AccountPanel account={account} action={accountAction} />}
       {tab === "billing" && <BillingPanel settings={settings} action={billingAction} />}
       {tab === "notifications" && (
         <NotificationsPanel settings={settings} action={notificationsAction} />

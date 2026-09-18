@@ -36,7 +36,6 @@ export const authOptions: NextAuthOptions = {
           if (seedEmail && seedPassword) {
             user = await User.create({
               email: seedEmail,
-              name: "Administrateur",
               role: "admin",
               passwordHash: await bcrypt.hash(seedPassword, 10),
             });
@@ -51,10 +50,16 @@ export const authOptions: NextAuthOptions = {
         const ok = await bcrypt.compare(password, user.passwordHash);
         if (!ok) return null;
 
+        // Prénom/nom modifiables dans Paramètres > Compte ; repli si non renseignés.
+        const fullName = [user.firstName, user.lastName]
+          .map((v: string) => (v || "").trim())
+          .filter(Boolean)
+          .join(" ");
+
         return {
           id: String(user._id),
           email: user.email as string,
-          name: (user.name as string) ?? "Administrateur",
+          name: fullName || "Administrateur",
           role: user.role as "admin" | "employe",
         };
       },

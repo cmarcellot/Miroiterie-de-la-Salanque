@@ -21,8 +21,9 @@ Site de la Miroiterie de la Salanque (menuiserie, serrurerie, vitrerie — Perpi
 - **Devis & Factures** — lignes avec TVA, statuts, PDF, envoi par email (PDF joint), génération de facture depuis un devis accepté.
 - **Chantiers** — suivi des chantiers liés à un devis/client (statuts, dates, adresse).
 - **Produits & Prestations** — catalogue réutilisable, auto-complétion dans les lignes de devis/factures.
+- **Statistiques** — CA encaissé, taux de signature, panier moyen, nouveaux clients (avec comparaison à la période précédente), répartitions devis/chantiers, top clients.
 - **Recherche globale** (⌘K) et **notifications** (demandes, factures en retard, devis en attente, etc.).
-- **Paramètres** — coordonnées de l'entreprise, mentions légales, valeurs par défaut des devis/factures.
+- **Paramètres** — coordonnées de l'entreprise, mentions légales, valeurs par défaut des devis/factures, identité du compte (prénom/nom affichés dans l'espace pro).
 
 La connexion (`/pro`) se fait par mot de passe seul, dans un modal — pas de compte multiple, un seul compte gérant.
 

@@ -1,13 +1,17 @@
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/lib/auth";
 import { getSettings } from "@/lib/settings";
 import { connectToDatabase } from "@/lib/mongodb";
 import Client from "@/lib/models/Client";
 import Devis from "@/lib/models/Devis";
 import Facture from "@/lib/models/Facture";
 import Message from "@/lib/models/Message";
+import User from "@/lib/models/User";
 import {
   updateCompanySettings,
   updateBillingSettings,
   updateNotificationSettings,
+  updateAccountSettings,
 } from "@/lib/actions/settings";
 import SettingsTabs from "@/components/pro/SettingsTabs";
 
@@ -24,15 +28,28 @@ async function getStats() {
   return { clients, devis, factures, demandes };
 }
 
+async function getAccount(userId: string | undefined) {
+  await connectToDatabase();
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const u: any = userId ? await User.findById(userId).lean() : null;
+  return {
+    firstName: u?.firstName || "",
+    lastName: u?.lastName || "",
+    email: u?.email || "",
+  };
+}
+
 export default async function ParametresPage({
   searchParams,
 }: {
   searchParams: Promise<{ tab?: string }>;
 }) {
-  const [{ tab }, settings, stats] = await Promise.all([
+  const session = await getServerSession(authOptions);
+  const [{ tab }, settings, stats, account] = await Promise.all([
     searchParams,
     getSettings(),
     getStats(),
+    getAccount(session?.user?.id),
   ]);
 
   return (
@@ -50,10 +67,12 @@ export default async function ParametresPage({
       <SettingsTabs
         settings={settings}
         stats={stats}
+        account={account}
         initialTab={tab}
         companyAction={updateCompanySettings}
         billingAction={updateBillingSettings}
         notificationsAction={updateNotificationSettings}
+        accountAction={updateAccountSettings}
       />
     </div>
   );

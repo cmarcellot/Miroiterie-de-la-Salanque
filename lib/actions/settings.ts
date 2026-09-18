@@ -6,10 +6,17 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { connectToDatabase } from "@/lib/mongodb";
 import Settings from "@/lib/models/Settings";
+import User from "@/lib/models/User";
 
 async function requireSession() {
   const session = await getServerSession(authOptions);
   if (!session) throw new Error("Non autorisé.");
+}
+
+async function requireUserId() {
+  const session = await getServerSession(authOptions);
+  if (!session?.user?.id) throw new Error("Non autorisé.");
+  return session.user.id;
 }
 
 async function saveAndRedirect(
@@ -102,4 +109,19 @@ export async function updateNotificationSettings(formData: FormData) {
     },
     "notifications"
   );
+}
+
+/** Onglet « Compte » : prénom/nom du gérant affichés dans l'espace pro. */
+export async function updateAccountSettings(formData: FormData) {
+  const userId = await requireUserId();
+  await connectToDatabase();
+  const s = (k: string) => String(formData.get(k) || "").trim();
+
+  await User.findByIdAndUpdate(userId, {
+    firstName: s("account.firstName"),
+    lastName: s("account.lastName"),
+  });
+
+  revalidatePath("/pro/parametres");
+  redirect(`/pro/parametres?tab=account&ok=${Date.now()}`);
 }
