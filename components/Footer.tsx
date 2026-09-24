@@ -55,9 +55,6 @@ export default function Footer() {
                 Politique de confidentialité
               </Link>
             </li>
-            <li>
-              <EspaceProLink className="hover:text-white" />
-            </li>
           </ul>
         </div>
 
@@ -91,8 +88,11 @@ export default function Footer() {
       </div>
 
       <div className="border-t border-white/10">
-        <div className="container-mds py-5 text-center text-xs text-slate-300">
-          © {new Date().getFullYear()} {site.name} — Tous droits réservés
+        <div className="container-mds flex flex-col items-center gap-3 py-5 text-xs text-slate-300 sm:flex-row sm:justify-between">
+          <span>
+            © {new Date().getFullYear()} {site.name} — Tous droits réservés
+          </span>
+          <EspaceProLink className="rounded-full border border-white/15 px-3 py-1.5 text-slate-300 transition hover:border-white/30 hover:text-white" />
         </div>
       </div>
     </footer>

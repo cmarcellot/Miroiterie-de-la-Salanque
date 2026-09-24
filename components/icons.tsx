@@ -11,6 +11,7 @@ import {
   Fence,
   Grid2x2,
   House,
+  Lock,
   MapPin,
   Ruler,
   UserCheck,
@@ -64,6 +65,7 @@ export const WrenchIcon = (p: LucideProps) => <Wrench {...l(p)} />;
 
 /* ---------- Divers ---------- */
 export const PinIcon = (p: LucideProps) => <MapPin {...l(p)} />;
+export const LockIcon = (p: LucideProps) => <Lock {...l(p)} />;
 export const CheckIcon = (p: LucideProps) => <CircleCheck {...l(p)} />;
 export const ArrowRight = (p: LucideProps) => <LArrowRight {...l(p)} />;
 export const FacebookIcon = (p: LucideProps) => <Facebook {...p} />;
