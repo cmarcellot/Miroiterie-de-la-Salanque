@@ -2,10 +2,11 @@
    Syne (titres / valeurs · --pro-display) · Space Grotesk (texte · --pro-sans) · Geist Mono (labels / montants · --pro-mono) */
 
 .pro-root {
-  --pro-sans: var(--font-space), "Space Grotesk", -apple-system,
-    BlinkMacSystemFont, "Helvetica Neue", Arial, sans-serif;
-  --pro-display: var(--font-syne), "Syne", var(--font-space), "Space Grotesk",
-    sans-serif;
+  /* Syne/Space Grotesk sont chargées via @fontsource (app/pro/fonts.ts) : le
+     nom de police est un littéral fixe, pas une variable next/font hashée. */
+  --pro-sans: "Space Grotesk", -apple-system, BlinkMacSystemFont,
+    "Helvetica Neue", Arial, sans-serif;
+  --pro-display: "Syne", "Space Grotesk", sans-serif;
   --pro-mono: var(--font-geist-mono), "Geist Mono", ui-monospace, monospace;
 
   --bg: #eef1f5;
