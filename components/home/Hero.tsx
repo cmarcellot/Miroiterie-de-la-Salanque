@@ -1,12 +1,21 @@
+import Image from "next/image";
 import Link from "next/link";
 import { ArrowRight } from "@/components/icons";
 
 export default function Hero() {
   return (
     <section className="relative overflow-hidden bg-navy text-white">
-      {/* Fond : remplacer par une <Image> plein cadre (villa + Canigou) quand la photo sera dispo */}
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_75%_20%,#1e4a86,transparent_55%),linear-gradient(120deg,#0e2547,#14315b)]" />
-      <div className="absolute inset-0 opacity-[0.08] [background-image:linear-gradient(#fff_1px,transparent_1px),linear-gradient(90deg,#fff_1px,transparent_1px)] [background-size:32px_32px]" />
+      <Image
+        src="/images/hero-villa-canigou.webp"
+        alt=""
+        aria-hidden
+        fill
+        priority
+        sizes="100vw"
+        className="object-cover"
+      />
+      {/* Assombrit la photo pour garder le texte blanc lisible, plus sombre côté texte. */}
+      <div className="absolute inset-0 bg-gradient-to-r from-navy-dark/90 via-navy-dark/70 to-navy-dark/30" />
       <svg
         viewBox="0 0 1200 200"
         className="absolute bottom-0 left-0 w-full text-white/5"
