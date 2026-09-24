@@ -14,8 +14,9 @@ export default function Hero() {
         sizes="100vw"
         className="object-cover"
       />
-      {/* Assombrit la photo pour garder le texte blanc lisible, plus sombre côté texte. */}
-      <div className="absolute inset-0 bg-gradient-to-r from-navy-dark/90 via-navy-dark/70 to-navy-dark/30" />
+      {/* Assombrit uniquement la zone du texte (gauche) ; la photo reste
+          visible sans filtre sur le reste de l'image. */}
+      <div className="absolute inset-0 bg-gradient-to-r from-navy-dark/90 via-navy-dark/40 to-transparent" />
       <svg
         viewBox="0 0 1200 200"
         className="absolute bottom-0 left-0 w-full text-white/5"
