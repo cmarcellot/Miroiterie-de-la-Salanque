@@ -48,9 +48,8 @@ const FactureDefaultsSchema = new Schema(
 const NotificationsSchema = new Schema(
   {
     emailNewLead: { type: Boolean, default: true },
-    emailQuoteSigned: { type: Boolean, default: true },
     emailInvoiceLate: { type: Boolean, default: true },
-    smsReminder: { type: Boolean, default: false },
+    emailQuoteExpiring: { type: Boolean, default: true },
   },
   { _id: false }
 );

@@ -34,9 +34,8 @@ export type AppSettings = {
   };
   notifications: {
     emailNewLead: boolean;
-    emailQuoteSigned: boolean;
     emailInvoiceLate: boolean;
-    smsReminder: boolean;
+    emailQuoteExpiring: boolean;
   };
 };
 
@@ -82,9 +81,8 @@ export async function getSettings(): Promise<AppSettings> {
     },
     notifications: {
       emailNewLead: n.emailNewLead ?? true,
-      emailQuoteSigned: n.emailQuoteSigned ?? true,
       emailInvoiceLate: n.emailInvoiceLate ?? true,
-      smsReminder: n.smsReminder ?? false,
+      emailQuoteExpiring: n.emailQuoteExpiring ?? true,
     },
   };
 }
