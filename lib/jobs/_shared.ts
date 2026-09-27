@@ -24,3 +24,10 @@ export function plural(n: number, word: string): string {
 export function baseUrl(): string | undefined {
   return process.env.NEXTAUTH_URL?.replace(/\/+$/, "");
 }
+
+/** Jour ("AAAA-MM-JJ") et heure (0-23) actuels, heure de Paris. */
+export function parisNow(): { day: string; hour: number } {
+  // Le format suédois donne "AAAA-MM-JJ HH:MM:SS".
+  const s = new Date().toLocaleString("sv-SE", { timeZone: "Europe/Paris" });
+  return { day: s.slice(0, 10), hour: Number(s.slice(11, 13)) };
+}

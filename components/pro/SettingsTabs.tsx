@@ -383,7 +383,7 @@ const NOTIF_ITEMS = [
   {
     k: "emailInvoiceLate" as const,
     label: "Facture en retard",
-    hint: "Récapitulatif chaque matin des factures dont l'échéance est dépassée.",
+    hint: "Récapitulatif quotidien des factures dont l'échéance est dépassée.",
   },
   {
     k: "emailQuoteExpiring" as const,
@@ -429,6 +429,27 @@ function NotificationsPanel({
               </label>
             </Row>
           ))}
+
+          <Row
+            label="Heure d'envoi des rappels"
+            hint="Heure de Paris à laquelle partent chaque jour les rappels « Facture en retard » et « Devis sur le point d'expirer »."
+          >
+            <select
+              name="notifications.reminderHour"
+              className="pro-field"
+              style={{ maxWidth: 160 }}
+              value={v.reminderHour}
+              onChange={(e) =>
+                setV((s) => ({ ...s, reminderHour: Number(e.target.value) }))
+              }
+            >
+              {Array.from({ length: 24 }, (_, h) => (
+                <option key={h} value={h}>
+                  {`${h}h00`}
+                </option>
+              ))}
+            </select>
+          </Row>
 
           <SectionFoot dirty={dirty} pending={pending} onCancel={() => setV(initial)} />
         </>

@@ -36,6 +36,8 @@ export type AppSettings = {
     emailNewLead: boolean;
     emailInvoiceLate: boolean;
     emailQuoteExpiring: boolean;
+    /** Heure (0-23, heure de Paris) d'envoi des rappels quotidiens. */
+    reminderHour: number;
   };
 };
 
@@ -83,6 +85,14 @@ export async function getSettings(): Promise<AppSettings> {
       emailNewLead: n.emailNewLead ?? true,
       emailInvoiceLate: n.emailInvoiceLate ?? true,
       emailQuoteExpiring: n.emailQuoteExpiring ?? true,
+      reminderHour: toHour(n.reminderHour, 8),
     },
   };
+}
+
+/** Heure entière valide (0-23), sinon `fallback`. */
+export function toHour(v: unknown, fallback: number): number {
+  if (v === null || v === undefined || v === "") return fallback;
+  const h = Number(v);
+  return Number.isInteger(h) && h >= 0 && h <= 23 ? h : fallback;
 }

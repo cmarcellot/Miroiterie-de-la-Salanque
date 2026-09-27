@@ -6,6 +6,7 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { connectToDatabase } from "@/lib/mongodb";
 import Settings from "@/lib/models/Settings";
+import { toHour } from "@/lib/settings";
 import User from "@/lib/models/User";
 
 async function requireSession() {
@@ -104,6 +105,7 @@ export async function updateNotificationSettings(formData: FormData) {
         emailNewLead: b("notifications.emailNewLead"),
         emailInvoiceLate: b("notifications.emailInvoiceLate"),
         emailQuoteExpiring: b("notifications.emailQuoteExpiring"),
+        reminderHour: toHour(formData.get("notifications.reminderHour"), 8),
       },
     },
     "notifications"
