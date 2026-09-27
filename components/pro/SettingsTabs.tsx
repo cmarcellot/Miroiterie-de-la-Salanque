@@ -381,19 +381,14 @@ const NOTIF_ITEMS = [
     hint: "Alerte quand un formulaire de contact ou de devis est envoyé depuis la vitrine.",
   },
   {
-    k: "emailQuoteSigned" as const,
-    label: "Devis accepté",
-    hint: "Alerte dès qu'un devis bascule en statut « Accepté ».",
-  },
-  {
     k: "emailInvoiceLate" as const,
     label: "Facture en retard",
-    hint: "Rappel dès qu'une facture dépasse son échéance.",
+    hint: "Récapitulatif quotidien des factures dont l'échéance est dépassée.",
   },
   {
-    k: "smsReminder" as const,
-    label: "SMS de rappel client",
-    hint: "Rappel automatique avant un rendez-vous planifié (avec le module Chantiers).",
+    k: "emailQuoteExpiring" as const,
+    label: "Devis sur le point d'expirer",
+    hint: "Alerte quand un devis envoyé approche de sa date de validité (ou l'a dépassée) sans réponse du client.",
   },
 ];
 
@@ -411,7 +406,7 @@ function NotificationsPanel({
   return (
     <Panel
       title="Notifications"
-      description="Choisissez les alertes que vous souhaitez recevoir. L'envoi automatique (email / SMS) sera branché avec le module concerné — ces préférences sont enregistrées dès maintenant."
+      description="Choisissez les alertes envoyées par email à l'adresse de l'entreprise (onglet Entreprise)."
       action={action}
     >
       {({ pending }) => (
@@ -434,6 +429,27 @@ function NotificationsPanel({
               </label>
             </Row>
           ))}
+
+          <Row
+            label="Heure d'envoi des rappels"
+            hint="Heure de Paris à laquelle partent chaque jour les rappels « Facture en retard » et « Devis sur le point d'expirer »."
+          >
+            <select
+              name="notifications.reminderHour"
+              className="pro-field"
+              style={{ maxWidth: 160 }}
+              value={v.reminderHour}
+              onChange={(e) =>
+                setV((s) => ({ ...s, reminderHour: Number(e.target.value) }))
+              }
+            >
+              {Array.from({ length: 24 }, (_, h) => (
+                <option key={h} value={h}>
+                  {`${h}h00`}
+                </option>
+              ))}
+            </select>
+          </Row>
 
           <SectionFoot dirty={dirty} pending={pending} onCancel={() => setV(initial)} />
         </>

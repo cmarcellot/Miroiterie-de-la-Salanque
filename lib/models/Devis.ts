@@ -26,6 +26,8 @@ const DevisSchema = new Schema(
     notes: { type: String, default: "", maxlength: 4000 },
     emailSentAt: { type: Date, default: null },
     emailSentTo: { type: String, default: "" },
+    /** Rappel "devis sur le point d'expirer" déjà envoyé (lib/jobs/devis-expirants.ts). */
+    expiryReminderSentAt: { type: Date, default: null },
   },
   { timestamps: true }
 );

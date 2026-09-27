@@ -48,9 +48,10 @@ const FactureDefaultsSchema = new Schema(
 const NotificationsSchema = new Schema(
   {
     emailNewLead: { type: Boolean, default: true },
-    emailQuoteSigned: { type: Boolean, default: true },
     emailInvoiceLate: { type: Boolean, default: true },
-    smsReminder: { type: Boolean, default: false },
+    emailQuoteExpiring: { type: Boolean, default: true },
+    /** Heure (0-23, heure de Paris) d'envoi des rappels quotidiens. */
+    reminderHour: { type: Number, default: 8, min: 0, max: 23 },
   },
   { _id: false }
 );

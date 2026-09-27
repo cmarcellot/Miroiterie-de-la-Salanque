@@ -6,6 +6,7 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { connectToDatabase } from "@/lib/mongodb";
 import Settings from "@/lib/models/Settings";
+import { toHour } from "@/lib/settings";
 import User from "@/lib/models/User";
 
 async function requireSession() {
@@ -93,7 +94,7 @@ export async function updateBillingSettings(formData: FormData) {
   );
 }
 
-/** Onglet « Notifications » : préférences d'alerte (envoi automatique à brancher ultérieurement). */
+/** Onglet « Notifications » : alertes email envoyées à l'adresse de l'entreprise. */
 export async function updateNotificationSettings(formData: FormData) {
   await requireSession();
   const b = (k: string) => formData.get(k) === "on";
@@ -102,9 +103,9 @@ export async function updateNotificationSettings(formData: FormData) {
     {
       notifications: {
         emailNewLead: b("notifications.emailNewLead"),
-        emailQuoteSigned: b("notifications.emailQuoteSigned"),
         emailInvoiceLate: b("notifications.emailInvoiceLate"),
-        smsReminder: b("notifications.smsReminder"),
+        emailQuoteExpiring: b("notifications.emailQuoteExpiring"),
+        reminderHour: toHour(formData.get("notifications.reminderHour"), 8),
       },
     },
     "notifications"
