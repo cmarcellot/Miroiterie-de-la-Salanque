@@ -4,7 +4,6 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { connectToDatabase } from "@/lib/mongodb";
 import Message from "@/lib/models/Message";
-import Client from "@/lib/models/Client";
 import Devis from "@/lib/models/Devis";
 import Facture from "@/lib/models/Facture";
 import Chantier from "@/lib/models/Chantier";
@@ -21,10 +20,9 @@ export const metadata: Metadata = {
 async function getCounts() {
   try {
     await connectToDatabase();
-    const [pending, clients, devisEnAttente, facturesEnRetard, chantiersAPlanifier] =
+    const [pending, devisEnAttente, facturesEnRetard, chantiersAPlanifier] =
       await Promise.all([
         Message.countDocuments({ status: "nouveau" }),
-        Client.countDocuments({}),
         Devis.countDocuments({ status: { $in: ["brouillon", "envoye"] } }),
         Facture.countDocuments({
           status: "emise",
@@ -32,11 +30,10 @@ async function getCounts() {
         }),
         Chantier.countDocuments({ status: "a_planifier" }),
       ]);
-    return { pending, clients, devisEnAttente, facturesEnRetard, chantiersAPlanifier };
+    return { pending, devisEnAttente, facturesEnRetard, chantiersAPlanifier };
   } catch {
     return {
       pending: 0,
-      clients: 0,
       devisEnAttente: 0,
       facturesEnRetard: 0,
       chantiersAPlanifier: 0,
@@ -54,7 +51,7 @@ export default async function ProLayout({
     getCounts(),
     getNotifications(session?.user?.id).catch(() => []),
   ]);
-  const { pending, clients, devisEnAttente, facturesEnRetard, chantiersAPlanifier } =
+  const { pending, devisEnAttente, facturesEnRetard, chantiersAPlanifier } =
     counts;
 
   return (
@@ -70,7 +67,6 @@ export default async function ProLayout({
       <div className="pro-shell">
         <Sidebar
           pending={pending}
-          clients={clients}
           devisEnAttente={devisEnAttente}
           facturesEnRetard={facturesEnRetard}
           chantiersAPlanifier={chantiersAPlanifier}
