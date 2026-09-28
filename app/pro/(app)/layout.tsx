@@ -49,10 +49,10 @@ export default async function ProLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const [session, counts, notifications] = await Promise.all([
-    getServerSession(authOptions),
+  const session = await getServerSession(authOptions);
+  const [counts, notifications] = await Promise.all([
     getCounts(),
-    getNotifications().catch(() => []),
+    getNotifications(session?.user?.id).catch(() => []),
   ]);
   const { pending, clients, devisEnAttente, facturesEnRetard, chantiersAPlanifier } =
     counts;

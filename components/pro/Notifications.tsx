@@ -13,6 +13,7 @@ import {
   type LucideIcon,
 } from "lucide-react";
 import type { NotificationItem, NotificationType } from "@/lib/notifications";
+import { markAllNotificationsRead } from "@/lib/actions/notifications";
 
 const TYPE_META: Record<NotificationType, { icon: LucideIcon; color: string }> = {
   lead: { icon: Inbox, color: "var(--acier)" },
@@ -28,6 +29,7 @@ const PRIORITY_TYPES: NotificationType[] = ["lead", "late"];
 export default function Notifications({ items }: { items: NotificationItem[] }) {
   const router = useRouter();
   const [open, setOpen] = useState(false);
+  const [marking, setMarking] = useState(false);
   const boxRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -41,11 +43,21 @@ export default function Notifications({ items }: { items: NotificationItem[] }) 
   }, []);
 
   const count = items.length;
-  const priorityCount = items.filter((it) => PRIORITY_TYPES.includes(it.type)).length;
+  const unread = items.filter((it) => !it.read);
+  const priorityCount = unread.filter((it) => PRIORITY_TYPES.includes(it.type)).length;
 
   function go(item: NotificationItem) {
     router.push(item.href);
     setOpen(false);
+  }
+
+  async function markAllRead() {
+    setMarking(true);
+    try {
+      await markAllNotificationsRead(items.map((it) => it.id));
+    } finally {
+      setMarking(false);
+    }
   }
 
   return (
@@ -70,14 +82,29 @@ export default function Notifications({ items }: { items: NotificationItem[] }) 
       {open && (
         <div className="pro-notif-dropdown">
           <div className="pro-notif-head">
-            <div className="pro-lab" style={{ fontSize: 15, fontFamily: "var(--pro-display)" }}>
-              Notifications
+            <div>
+              <div className="pro-lab" style={{ fontSize: 15, fontFamily: "var(--pro-display)" }}>
+                Notifications
+              </div>
+              <div style={{ fontSize: 11.5, color: "var(--ink-3)", marginTop: 2 }}>
+                {count === 0
+                  ? "Tout est à jour."
+                  : unread.length === 0
+                    ? "Tout est lu."
+                    : `${unread.length} non lue${unread.length > 1 ? "s" : ""} sur ${count}.`}
+              </div>
             </div>
-            <div style={{ fontSize: 11.5, color: "var(--ink-3)", marginTop: 2 }}>
-              {count === 0
-                ? "Tout est à jour."
-                : `${count} élément${count > 1 ? "s" : ""} à voir.`}
-            </div>
+            {unread.length > 0 && (
+              <button
+                type="button"
+                className="pro-notif-markall"
+                onClick={markAllRead}
+                disabled={marking}
+              >
+                <CheckCheck className="h-3.5 w-3.5" />
+                {marking ? "En cours…" : "Tout marquer comme lu"}
+              </button>
+            )}
           </div>
           <div className="pro-notif-body">
             {count === 0 ? (
@@ -93,7 +120,7 @@ export default function Notifications({ items }: { items: NotificationItem[] }) 
                   <button
                     key={it.id}
                     type="button"
-                    className="pro-notif-item"
+                    className={`pro-notif-item${it.read ? " is-read" : ""}`}
                     onClick={() => go(it)}
                   >
                     <span

@@ -440,6 +440,30 @@
 .pro-notif-head {
   padding: 16px 20px;
   border-bottom: 1px solid var(--line);
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+}
+.pro-notif-markall {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  flex-shrink: 0;
+  margin-top: 2px;
+  padding: 0;
+  background: none;
+  border: none;
+  font-size: 11.5px;
+  color: var(--acier);
+  cursor: pointer;
+}
+.pro-notif-markall:hover:not(:disabled) {
+  text-decoration: underline;
+}
+.pro-notif-markall:disabled {
+  color: var(--ink-3);
+  cursor: default;
 }
 .pro-notif-body {
   overflow-y: auto;
@@ -467,6 +491,11 @@
 }
 .pro-notif-item:hover {
   background: var(--bg);
+}
+.pro-notif-item.is-read .ico,
+.pro-notif-item.is-read .tx,
+.pro-notif-item.is-read .tm {
+  opacity: 0.5;
 }
 .pro-notif-item .ico {
   width: 32px;
