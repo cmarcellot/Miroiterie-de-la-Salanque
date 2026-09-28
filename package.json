@@ -6,7 +6,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "seed:demo": "npx --yes tsx scripts/seed-demo.ts"
   },
   "dependencies": {
     "next": "15.5.25",
