@@ -29,22 +29,29 @@ function shortDate(d?: Date | string | null) {
  * Éléments qui méritent l'attention du gérant, affichés dans la cloche de
  * la topbar — même intention que le panneau "Notifications" du proto,
  * adaptée aux entités réelles de MDS (pas de "prospects" ni d'agenda ici).
- * Avec `userId`, `read` reflète les ids déjà lus par ce compte.
+ * Avec `userId`, `read` reflète les ids déjà lus par ce compte. Avec `all`,
+ * pas de limite de 5 par catégorie : toutes les situations encore réelles
+ * (sert à élaguer les ids lus, voir lib/actions/notifications.ts).
  */
-export async function getNotifications(userId?: string): Promise<NotificationItem[]> {
+export async function getNotifications(
+  userId?: string,
+  { all = false }: { all?: boolean } = {}
+): Promise<NotificationItem[]> {
   await connectToDatabase();
+  // .limit(0) = pas de limite pour Mongoose
+  const max = all ? 0 : 5;
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [leads, lateInvoices, pendingQuotes, acceptedQuotes, chantiersToPlan] =
     (await Promise.all([
-      Message.find({ status: "nouveau" }).sort({ createdAt: -1 }).limit(5).lean(),
+      Message.find({ status: "nouveau" }).sort({ createdAt: -1 }).limit(max).lean(),
       Facture.find({ status: "emise", dueDate: { $lt: new Date() } })
         .sort({ dueDate: 1 })
-        .limit(5)
+        .limit(max)
         .lean(),
-      Devis.find({ status: "envoye" }).sort({ date: -1 }).limit(5).lean(),
-      Devis.find({ status: "accepte" }).sort({ date: -1 }).limit(30).lean(),
-      Chantier.find({ status: "a_planifier" }).sort({ createdAt: -1 }).limit(5).lean(),
+      Devis.find({ status: "envoye" }).sort({ date: -1 }).limit(max).lean(),
+      Devis.find({ status: "accepte" }).sort({ date: -1 }).limit(all ? 0 : 30).lean(),
+      Chantier.find({ status: "a_planifier" }).sort({ createdAt: -1 }).limit(max).lean(),
     ])) as any[][];
 
   let signedWithoutInvoice: typeof acceptedQuotes = [];
@@ -57,7 +64,7 @@ export async function getNotifications(userId?: string): Promise<NotificationIte
     const invoicedIds = new Set(linked.map((f) => String(f.devisId)));
     signedWithoutInvoice = acceptedQuotes
       .filter((d) => !invoicedIds.has(String(d._id)))
-      .slice(0, 5);
+      .slice(0, all ? undefined : 5);
   }
 
   const items: Omit<NotificationItem, "read">[] = [

@@ -27,9 +27,10 @@ export async function markAllNotificationsRead(ids: string[]) {
   } | null;
   const wanted = new Set([...(user?.notificationsReadIds || []), ...ids]);
 
-  // On ne garde que les ids correspondant encore à une notification existante,
-  // pour que la liste ne grossisse pas indéfiniment.
-  const current = await getNotifications();
+  // On ne garde que les ids dont la situation est encore réelle (sans la
+  // limite de 5 par catégorie de la cloche) : un id n'est oublié qu'une fois
+  // la situation réglée, et la liste ne grossit pas indéfiniment.
+  const current = await getNotifications(undefined, { all: true });
   const notificationsReadIds = current.map((n) => n.id).filter((id) => wanted.has(id));
 
   await User.findByIdAndUpdate(userId, { notificationsReadIds });
