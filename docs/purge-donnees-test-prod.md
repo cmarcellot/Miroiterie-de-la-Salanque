@@ -6,6 +6,8 @@ Procédure à suivre **une seule fois**, juste avant la mise en service réelle 
 
 ⚠️ **Opération irréversible.** Ne pas sauter l'étape 1 (sauvegarde).
 
+✅ **Réalisée en production le 29/09/2026** (voir « Exécution en production » en fin de document). À ne pas refaire une fois de vraies factures émises.
+
 ---
 
 ## Ce qui part / ce qui reste
@@ -37,17 +39,18 @@ Les collections sont **vidées**, pas supprimées : leurs index (unicité des nu
 - Le site peut rester en ligne. Mais si le site public est déjà accessible, une **vraie demande** de client a pu arriver : l'étape 3 affiche la liste des demandes, la regarder avant de supprimer.
 - Prévoir 15 minutes.
 
-### Le nom de la base
+### Le nom de la base : `test`
 
-Toutes les commandes ci-dessous utilisent le nom de base **`entreprise`** (celui de l'exemple de `.env.example`).
-Pour vérifier le vrai nom : Dokploy → application du site → onglet **Environment** → variable `MONGODB_URI`. Le nom de la base est ce qui se trouve entre `27017/` et `?` :
+Toutes les commandes ci-dessous utilisent la base **`test`** : c'est celle de la production.
+
+Explication : le nom de la base est normalement la partie de `MONGODB_URI` (Dokploy → application du site → onglet **Environment**) située entre `27017/` et `?`. Or l'URI de production n'en contient pas :
 
 ```
-mongodb://user:motdepasse@entreprise-db:27017/entreprise?authSource=admin
-                                              ^^^^^^^^^^
+mongodb://mds:motdepasse@miroiterie-de-la-salanque-mdsdb-sf0n9b:27017/?authSource=admin&directConnection=true
+                                                                      ^ rien ici
 ```
 
-S'il est différent, remplacer `entreprise` par le bon nom **partout** dans les commandes ci-dessous.
+Sans nom de base, l'application (Mongoose) utilise la base par défaut de MongoDB, qui s'appelle `test`. (L'exemple de `.env.example`, avec `/entreprise`, ne correspond donc pas à la production.) Si un jour un nom est ajouté dans l'URI, remplacer `test` par ce nom **partout** dans les commandes ci-dessous, et vérifier avec la commande « Repérer la bonne base » plus bas.
 
 ### Ouvrir un terminal dans le conteneur MongoDB
 
@@ -61,6 +64,14 @@ echo "$MONGO_INITDB_ROOT_USERNAME"
 
 Cela doit afficher le nom d'utilisateur de la base (le même que dans `MONGODB_URI`). Si la ligne est vide : dans toutes les commandes ci-dessous, remplacer `-u "$MONGO_INITDB_ROOT_USERNAME" -p "$MONGO_INITDB_ROOT_PASSWORD"` par `-u NOM_UTILISATEUR -p` (le mot de passe sera alors demandé ; il figure dans `MONGODB_URI` ou dans les identifiants du service MongoDB dans Dokploy).
 
+### Repérer la bonne base (lecture seule)
+
+```sh
+mongosh -u "$MONGO_INITDB_ROOT_USERNAME" -p "$MONGO_INITDB_ROOT_PASSWORD" --authenticationDatabase admin --quiet --eval 'db.adminCommand({listDatabases:1}).databases.forEach(d => print(d.name + " : " + db.getSiblingDB(d.name).getCollectionNames().join(", ")))'
+```
+
+Affiche chaque base avec ses collections. La bonne base est celle qui contient `messages`, `clients`, `devis`, `factures`, `chantiers`, `prestations`, `settings` et `users` (en production : `test`). `admin`, `config` et `local` sont des bases internes de MongoDB, ne pas y toucher.
+
 ---
 
 ## Étape 1 — Sauvegarde complète (obligatoire)
@@ -72,10 +83,10 @@ mkdir -p /data/db/sauvegardes
 ```
 
 ```sh
-mongodump -u "$MONGO_INITDB_ROOT_USERNAME" -p "$MONGO_INITDB_ROOT_PASSWORD" --authenticationDatabase admin --db entreprise --gzip --archive=/data/db/sauvegardes/avant-purge.archive.gz
+mongodump -u "$MONGO_INITDB_ROOT_USERNAME" -p "$MONGO_INITDB_ROOT_PASSWORD" --authenticationDatabase admin --db test --gzip --archive=/data/db/sauvegardes/avant-purge.archive.gz
 ```
 
-Résultat attendu : une ligne `done dumping entreprise.xxx (N documents)` pour **chacune des 8 collections** (`messages`, `clients`, `devis`, `factures`, `chantiers`, `prestations`, `settings`, `users`).
+Résultat attendu : une ligne `done dumping test.xxx (N documents)` pour **chacune des 8 collections** (`messages`, `clients`, `devis`, `factures`, `chantiers`, `prestations`, `settings`, `users`).
 
 > Pourquoi `/data/db/sauvegardes` ? C'est le seul dossier du conteneur conservé sur le disque (volume Dokploy) même si le conteneur est recréé. MongoDB ignore ce sous-dossier (testé : redémarrage sans erreur).
 
@@ -88,10 +99,10 @@ ls -lh /data/db/sauvegardes/
 Le fichier `avant-purge.archive.gz` doit apparaître avec une taille non nulle (quelques dizaines de Ko au moins).
 
 ```sh
-mongorestore --gzip --archive=/data/db/sauvegardes/avant-purge.archive.gz --dryRun -v --nsInclude="entreprise.*" 2>&1 | grep "bson to restore"
+mongorestore --gzip --archive=/data/db/sauvegardes/avant-purge.archive.gz --dryRun -v --nsInclude="test.*" 2>&1 | grep "bson to restore"
 ```
 
-Cette commande **ne restaure rien** (`--dryRun`) : elle lit l'archive et doit afficher une ligne `found collection entreprise.xxx bson to restore…` pour chacune des 8 collections.
+Cette commande **ne restaure rien** (`--dryRun`) : elle lit l'archive et doit afficher une ligne `found collection test.xxx bson to restore…` pour chacune des 8 collections.
 
 ### Recommandé : garder une copie hors du serveur
 
@@ -107,7 +118,7 @@ La sauvegarde ci-dessus est sur le même serveur que la base. Pour plus de sécu
 Cette commande remet la base **exactement** dans l'état de la sauvegarde (y compris paramètres et compte) ; tout ce qui a été créé depuis est perdu :
 
 ```sh
-mongorestore -u "$MONGO_INITDB_ROOT_USERNAME" -p "$MONGO_INITDB_ROOT_PASSWORD" --authenticationDatabase admin --gzip --archive=/data/db/sauvegardes/avant-purge.archive.gz --drop --nsInclude="entreprise.*"
+mongorestore -u "$MONGO_INITDB_ROOT_USERNAME" -p "$MONGO_INITDB_ROOT_PASSWORD" --authenticationDatabase admin --gzip --archive=/data/db/sauvegardes/avant-purge.archive.gz --drop --nsInclude="test.*"
 ```
 
 Résultat attendu en dernière ligne : `N document(s) restored successfully. 0 document(s) failed to restore.`
@@ -119,16 +130,16 @@ Résultat attendu en dernière ligne : `N document(s) restored successfully. 0 d
 Toujours dans le terminal du conteneur MongoDB :
 
 ```sh
-mongosh -u "$MONGO_INITDB_ROOT_USERNAME" -p "$MONGO_INITDB_ROOT_PASSWORD" --authenticationDatabase admin entreprise
+mongosh -u "$MONGO_INITDB_ROOT_USERNAME" -p "$MONGO_INITDB_ROOT_PASSWORD" --authenticationDatabase admin test
 ```
 
-L'invite devient `entreprise>`. Vérifier :
+L'invite devient `test>`. Vérifier :
 
 ```js
 db.getName()
 ```
 
-→ doit afficher `entreprise`.
+→ doit afficher `test`.
 
 ```js
 show collections
@@ -174,7 +185,7 @@ Revérifier une dernière fois la base :
 db.getName()
 ```
 
-→ `entreprise`. Puis coller les commandes **une par une**, et vérifier après chacune que `deletedCount` correspond au chiffre noté à l'étape 3 :
+→ `test`. Puis coller les commandes **une par une**, et vérifier après chacune que `deletedCount` correspond au chiffre noté à l'étape 3 :
 
 ```js
 db.messages.deleteMany({})
@@ -285,3 +296,13 @@ Procédure rejouée sur la base de démo locale (`mds-demo`, MongoDB 8 dans Dock
 - Après : 0 partout sauf settings 1 et users 1 ; index conservés (ex. 6 sur `factures`).
 - Espace pro local : connexion OK, Paramètres intacts, onglet Données à 0 ; une facture créée ensuite a reçu le n° **`F-2026-001`**.
 - Restauration `mongorestore --drop` depuis l'archive : les 219 documents et les index sont revenus.
+
+## Exécution en production (29/09/2026)
+
+Réalisée par Camille depuis le terminal du conteneur MongoDB dans Dokploy, base `test` :
+
+- Sauvegarde : `/data/db/sauvegardes/avant-purge.archive.gz` (4,5 Ko), 8 collections.
+- Supprimé : messages 5, clients 7, devis 7, factures 3 (`F-2026-001` à `F-2026-003`), chantiers 1, prestations 4. Toutes les demandes ont été vérifiées une par une et confirmées comme des tests.
+- Conservé : settings 1, users 1 (`notificationsReadIds` remis à `[]`).
+- Après : 0 document pour 2026 en devis, factures et chantiers ; connexion, Paramètres et onglet Données vérifiés dans l'espace pro.
+- Prochaine facture : `F-2026-001`.
