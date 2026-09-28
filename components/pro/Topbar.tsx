@@ -1,3 +1,4 @@
+import Link from "next/link";
 import GlobalSearch from "@/components/pro/GlobalSearch";
 import Notifications from "@/components/pro/Notifications";
 import type { NotificationItem } from "@/lib/notifications";
@@ -29,10 +30,10 @@ export default function Topbar({
       <div style={{ flex: 1 }} />
 
       {pending > 0 && (
-        <div className="pro-pill">
+        <Link href="/pro/demandes?status=nouveau" className="pro-pill">
           <span className="dot" />
           {pending} demande{pending > 1 ? "s" : ""} en attente
-        </div>
+        </Link>
       )}
 
       <Notifications items={notifications} />
