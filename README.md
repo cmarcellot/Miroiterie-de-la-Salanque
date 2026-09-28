@@ -39,6 +39,39 @@ npm run dev
 
 > Pas d'ESLint configuré : `npm run build` type-vérifie via `tsc` mais ne lint pas. Vérifier les indexations de type `RECORD[x.status]` (caster en type d'énumération si besoin).
 
+### Données de démo en local
+
+Pour voir l'espace pro « en situation » (clients, demandes, devis, factures, chantiers, statistiques sur ~20 mois) sans jamais toucher à la base de production. Nécessite Docker.
+
+1. Lancer MongoDB dans Docker (les données survivent aux redémarrages) :
+
+   ```bash
+   docker compose -f docker-compose.dev.yml up -d
+   ```
+
+2. Créer `.env.local` à la racine (jamais committé) :
+
+   ```bash
+   MONGODB_URI=mongodb://localhost:27017/mds-demo
+   NEXTAUTH_SECRET=une-longue-chaine-aleatoire   # openssl rand -base64 32
+   NEXTAUTH_URL=http://localhost:3000
+   ADMIN_EMAIL=gerant@example.com
+   ADMIN_PASSWORD=demo-salanque
+   # Laisser les SMTP_* vides : aucun email (rappels, envois de devis) ne peut partir en local.
+   ```
+
+3. Installer, injecter les données, démarrer :
+
+   ```bash
+   npm install
+   npm run seed:demo
+   npm run dev
+   ```
+
+4. Ouvrir http://localhost:3000/pro et se connecter avec le mot de passe `ADMIN_PASSWORD` (le compte est créé au premier login).
+
+`npm run seed:demo` (`scripts/seed-demo.ts`) refuse de tourner si `MONGODB_URI` ne pointe pas vers `localhost` / `127.0.0.1`. Il vide puis réinjecte clients, demandes, devis, factures, chantiers, catalogue et paramètres (le compte de connexion est conservé) : on peut le relancer à volonté, les dates sont recalculées par rapport au jour même. Arrêter MongoDB : `docker compose -f docker-compose.dev.yml down` (ajouter `-v` pour effacer la base).
+
 ## Variables d'environnement
 
 Voir `.env.example` pour le détail. Résumé :

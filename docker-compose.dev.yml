@@ -1,0 +1,20 @@
+# MongoDB locale pour tester l'espace pro avec des données de démo
+# (voir README, "Données de démo en local"). Jamais utilisé en production.
+#
+#   docker compose -f docker-compose.dev.yml up -d     # démarrer
+#   docker compose -f docker-compose.dev.yml down      # arrêter (les données restent)
+#   docker compose -f docker-compose.dev.yml down -v   # arrêter et tout effacer
+name: mds-dev
+
+services:
+  mongo:
+    image: mongo:8
+    container_name: mds-mongo-dev
+    # Écoute uniquement sur la machine locale : base sans mot de passe.
+    ports:
+      - "127.0.0.1:27017:27017"
+    volumes:
+      - mds-mongo-data:/data/db
+
+volumes:
+  mds-mongo-data:
