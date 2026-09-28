@@ -32,20 +32,25 @@ type Item = {
 
 const sections: { title: string; items: Item[] }[] = [
   {
-    title: "Activité",
+    title: "Pilotage",
     items: [
       { href: "/pro", label: "Tableau de bord", icon: LayoutGrid, exact: true },
       { href: "/pro/statistiques", label: "Statistiques", icon: ChartColumn, exact: true },
-      { href: "/pro/demandes", label: "Demandes", icon: Inbox },
-      { href: "/pro/devis", label: "Devis", icon: FileText },
-      { href: "/pro/clients", label: "Clients", icon: Users },
     ],
   },
   {
-    title: "Production",
+    title: "Commercial",
     items: [
-      { href: "/pro/factures", label: "Factures", icon: ReceiptText },
+      { href: "/pro/demandes", label: "Demandes", icon: Inbox },
+      { href: "/pro/clients", label: "Clients", icon: Users },
+      { href: "/pro/devis", label: "Devis", icon: FileText },
+    ],
+  },
+  {
+    title: "Réalisation",
+    items: [
       { href: "/pro/chantiers", label: "Chantiers", icon: HardHat },
+      { href: "/pro/factures", label: "Factures", icon: ReceiptText },
     ],
   },
   {
@@ -58,13 +63,11 @@ const sections: { title: string; items: Item[] }[] = [
 
 export default function Sidebar({
   pending,
-  clients,
   devisEnAttente,
   facturesEnRetard,
   chantiersAPlanifier,
 }: {
   pending: number;
-  clients: number;
   devisEnAttente: number;
   facturesEnRetard: number;
   chantiersAPlanifier: number;
@@ -74,7 +77,6 @@ export default function Sidebar({
 
   const countFor = (href: string) => {
     if (href === "/pro/demandes") return pending;
-    if (href === "/pro/clients") return clients;
     if (href === "/pro/devis") return devisEnAttente;
     if (href === "/pro/factures") return facturesEnRetard;
     if (href === "/pro/chantiers") return chantiersAPlanifier;
