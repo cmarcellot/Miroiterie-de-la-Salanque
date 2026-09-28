@@ -28,12 +28,16 @@ const items = [
 export default function WhyUs() {
   return (
     <section className="relative overflow-hidden bg-navy py-16 text-white sm:py-20">
+      {/* unoptimized : sert le webp d'origine (déjà optimisé, 2000 px).
+          L'optimiseur Next le recompressait en q75 et, object-cover
+          agrandissant la photo au-delà de 100vw quand le bandeau est haut,
+          choisissait une variante trop petite : rendu flou. */}
       <Image
         src="/images/savoir-faire-canigou.webp"
         alt=""
         aria-hidden
         fill
-        sizes="100vw"
+        unoptimized
         className="object-cover"
       />
       {/* Voile uniforme (le texte occupe toute la largeur) : le plus léger
