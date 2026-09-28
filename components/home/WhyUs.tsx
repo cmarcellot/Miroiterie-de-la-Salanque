@@ -1,3 +1,4 @@
+import Image from "next/image";
 import { BadgeIcon, FranceIcon, RulerIcon, UserIcon } from "@/components/icons";
 
 const items = [
@@ -27,16 +28,17 @@ const items = [
 export default function WhyUs() {
   return (
     <section className="relative overflow-hidden bg-navy py-16 text-white sm:py-20">
-      {/* Fond montagne discret */}
-      <div className="absolute inset-0 bg-[linear-gradient(120deg,#0e2547,#14315b)]" />
-      <svg
-        viewBox="0 0 1200 260"
-        className="absolute inset-x-0 bottom-0 h-full w-full text-white/[0.06]"
-        preserveAspectRatio="none"
-        fill="currentColor"
-      >
-        <path d="M0 260 L160 90 L300 180 L440 60 L620 200 L800 90 L980 190 L1130 110 L1200 150 L1200 260 Z" />
-      </svg>
+      <Image
+        src="/images/savoir-faire-canigou.webp"
+        alt=""
+        aria-hidden
+        fill
+        sizes="100vw"
+        className="object-cover"
+      />
+      {/* Voile uniforme (le texte occupe toute la largeur) : le plus léger
+          possible tout en gardant le texte blanc lisible. */}
+      <div className="absolute inset-0 bg-navy-dark/50" />
 
       <div className="container-mds relative">
         <h2 className="section-title text-white">30 ans de savoir-faire</h2>
