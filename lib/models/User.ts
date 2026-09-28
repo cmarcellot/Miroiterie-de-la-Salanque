@@ -15,6 +15,9 @@ const UserSchema = new Schema(
     lastName: { type: String, default: "Marcellot", trim: true },
     role: { type: String, enum: ["admin", "employe"], default: "admin" },
     passwordHash: { type: String, required: true },
+    // Ids des notifications de la cloche déjà vues (« Tout marquer comme lu »,
+    // voir lib/actions/notifications.ts). Purement l'état « vu » de la cloche.
+    notificationsReadIds: { type: [String], default: [] },
   },
   { timestamps: true }
 );

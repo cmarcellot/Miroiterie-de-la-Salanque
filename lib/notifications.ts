@@ -3,6 +3,7 @@ import Message from "@/lib/models/Message";
 import Devis from "@/lib/models/Devis";
 import Facture from "@/lib/models/Facture";
 import Chantier from "@/lib/models/Chantier";
+import User from "@/lib/models/User";
 import { formatEUR } from "@/lib/pro-enums";
 
 export type NotificationType = "lead" | "late" | "pending" | "signed" | "chantier";
@@ -14,6 +15,8 @@ export type NotificationItem = {
   sub: string;
   time: string;
   href: string;
+  /** Déjà vue via « Tout marquer comme lu » (voir lib/actions/notifications.ts). */
+  read: boolean;
 };
 
 function shortDate(d?: Date | string | null) {
@@ -26,8 +29,9 @@ function shortDate(d?: Date | string | null) {
  * Éléments qui méritent l'attention du gérant, affichés dans la cloche de
  * la topbar — même intention que le panneau "Notifications" du proto,
  * adaptée aux entités réelles de MDS (pas de "prospects" ni d'agenda ici).
+ * Avec `userId`, `read` reflète les ids déjà lus par ce compte.
  */
-export async function getNotifications(): Promise<NotificationItem[]> {
+export async function getNotifications(userId?: string): Promise<NotificationItem[]> {
   await connectToDatabase();
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -56,7 +60,7 @@ export async function getNotifications(): Promise<NotificationItem[]> {
       .slice(0, 5);
   }
 
-  const items: NotificationItem[] = [
+  const items: Omit<NotificationItem, "read">[] = [
     ...leads.map((m) => ({
       id: `lead-${m._id}`,
       type: "lead" as const,
@@ -99,5 +103,12 @@ export async function getNotifications(): Promise<NotificationItem[]> {
     })),
   ];
 
-  return items;
+  const user = userId
+    ? ((await User.findById(userId, { notificationsReadIds: 1 }).lean()) as {
+        notificationsReadIds?: string[];
+      } | null)
+    : null;
+  const readIds = new Set(user?.notificationsReadIds || []);
+
+  return items.map((it) => ({ ...it, read: readIds.has(it.id) }));
 }
