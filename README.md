@@ -83,6 +83,7 @@ Voir `.env.example` pour le détail. Résumé :
 | `NEXTAUTH_URL` | URL publique du site, sans slash final |
 | `ADMIN_EMAIL` / `ADMIN_PASSWORD` | Amorçage du compte gérant unique au tout premier login |
 | `SMTP_HOST` / `SMTP_PORT` / `SMTP_USER` / `SMTP_PASS` / `SMTP_FROM` | Envoi des devis/factures par email (SMTP) |
+| `GOOGLE_PLACES_API_KEY` / `GOOGLE_PLACE_ID` | Avis Google sur l'accueil (Places API New, rafraîchis une fois par jour) ; sans elles, la section est masquée |
 
 ## Déploiement (Dokploy / Nixpacks)
 
