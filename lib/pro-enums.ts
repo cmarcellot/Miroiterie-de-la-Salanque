@@ -96,6 +96,23 @@ export function isFactureLate(f: {
   return new Date(f.dueDate).getTime() < Date.now();
 }
 
+/**
+ * Reste à payer d'une facture : total TTC moins l'acompte déjà versé,
+ * arrondi au centime. À utiliser partout où l'on parle d'un montant à
+ * encaisser (le CA encaissé, lui, reste compté sur le total TTC).
+ */
+export function amountDue(f: { totalTTC?: number | null; depositAmount?: number | null }): number {
+  const due = (Number(f.totalTTC) || 0) - (Number(f.depositAmount) || 0);
+  return Math.max(0, Math.round(due * 100) / 100);
+}
+
+/** Libellé de la ligne d'acompte sur les documents ("Acompte versé le JJ/MM/AAAA"). */
+export function depositLabel(paidAt?: string | Date | null): string {
+  return paidAt
+    ? `Acompte versé le ${new Date(paidAt).toLocaleDateString("fr-FR")}`
+    : "Acompte versé";
+}
+
 /* ---------- Chantiers ---------- */
 
 export const CHANTIER_STATUSES = [

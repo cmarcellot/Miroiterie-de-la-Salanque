@@ -5,6 +5,7 @@ import { ItemSchema, ClientSnapSchema } from "@/lib/models/_shared";
 export {
   FACTURE_STATUSES,
   FACTURE_STATUS_LABELS,
+  amountDue,
   isFactureLate,
   type FactureStatus,
 } from "@/lib/pro-enums";
@@ -26,6 +27,9 @@ const FactureSchema = new Schema(
     totalHT: { type: Number, default: 0 },
     totalTVA: { type: Number, default: 0 },
     totalTTC: { type: Number, default: 0 },
+    /** Acompte déjà versé par le client (TTC), déduit du net à payer. */
+    depositAmount: { type: Number, default: 0 },
+    depositPaidAt: { type: Date, default: null },
     notes: { type: String, default: "", maxlength: 4000 },
     emailSentAt: { type: Date, default: null },
     emailSentTo: { type: String, default: "" },

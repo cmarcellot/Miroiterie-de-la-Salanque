@@ -4,7 +4,7 @@ import Devis from "@/lib/models/Devis";
 import Facture from "@/lib/models/Facture";
 import Chantier from "@/lib/models/Chantier";
 import User from "@/lib/models/User";
-import { formatEUR } from "@/lib/pro-enums";
+import { amountDue, formatEUR } from "@/lib/pro-enums";
 
 export type NotificationType = "lead" | "late" | "pending" | "signed" | "chantier";
 
@@ -80,7 +80,7 @@ export async function getNotifications(
       id: `late-${f._id}`,
       type: "late" as const,
       title: "Facture en retard",
-      sub: `${f.client?.name || "—"} · ${formatEUR(f.totalTTC || 0)}`,
+      sub: `${f.client?.name || "—"} · ${formatEUR(amountDue(f))}`,
       time: `échéance ${shortDate(f.dueDate)}`,
       href: `/pro/factures/${f._id}`,
     })),
