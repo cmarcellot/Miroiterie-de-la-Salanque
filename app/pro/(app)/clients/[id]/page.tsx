@@ -20,6 +20,7 @@ import {
   formatEUR,
   formatPhone,
   initialsOf,
+  phoneHref,
 } from "@/lib/pro-enums";
 import { deleteClient } from "@/lib/actions/clients";
 import ClientModal from "@/components/pro/ClientModal";
@@ -168,7 +169,7 @@ export default async function ClientDetailPage({
           <div>
             <div className="pro-lbl">Téléphone</div>
             {c.phone ? (
-              <a href={`tel:${c.phone}`} style={{ fontSize: 14 }}>
+              <a href={phoneHref(c.phone)} style={{ fontSize: 14 }}>
                 {formatPhone(c.phone)}
               </a>
             ) : (

@@ -179,18 +179,80 @@ export function formatEUR(n: number) {
   }).format(Number(n) || 0);
 }
 
-/** Met en forme un numéro de téléphone français en paires (06 12 34 56 78). */
-export function formatPhone(raw: string): string {
+/* ---------- Mise en forme des fiches clients ---------- */
+
+const squash = (s: string) => (s || "").trim().replace(/\s+/g, " ");
+
+/** Prénom : majuscule initiale à chaque partie (jean-pierre → Jean-Pierre). */
+export function formatFirstName(raw: string): string {
+  return squash(raw)
+    .toLocaleLowerCase("fr-FR")
+    .replace(/(^|[\s-])(\p{L})/gu, (_, sep: string, c: string) =>
+      sep + c.toLocaleUpperCase("fr-FR")
+    );
+}
+
+/** Nom : tout en majuscules, accents conservés (Lefèvre → LEFÈVRE). */
+export function formatLastName(raw: string): string {
+  return squash(raw).toLocaleUpperCase("fr-FR");
+}
+
+/**
+ * Normalise un téléphone au format international compact (+33612345678).
+ * - Saisie nationale (0…) : considérée française.
+ * - +33 / 0033 → France, +32 / 0032 → Belgique (le "0" après l'indicatif est retiré).
+ * - Autre indicatif "+…" : conservé tel quel, séparateurs retirés.
+ * Renvoie "" pour une saisie vide, null si le numéro ne peut pas être interprété.
+ */
+export function normalizePhone(raw: string): string | null {
   const s = (raw || "").trim();
   if (!s) return "";
-  let digits = s.replace(/[^\d+]/g, "");
-  if (digits.startsWith("+33")) digits = "0" + digits.slice(3);
-  else if (digits.startsWith("0033")) digits = "0" + digits.slice(4);
-  digits = digits.replace(/\D/g, "");
-  if (digits.length === 10 && digits.startsWith("0")) {
-    return digits.replace(/(\d\d)(?=\d)/g, "$1 ").trim();
+  if (!/^[\d\s.\-/()+]+$/.test(s)) return null;
+
+  let n = s.replace(/\(\s*0\s*\)/g, "").replace(/[\s.\-/()]/g, "");
+  if (n.startsWith("00")) n = "+" + n.slice(2);
+  if (n.lastIndexOf("+") > 0) return null;
+
+  if (!n.startsWith("+")) {
+    return /^0[1-9]\d{8}$/.test(n) ? "+33" + n.slice(1) : null;
   }
-  return s;
+  if (n.startsWith("+33")) {
+    const rest = n.slice(3).replace(/^0/, "");
+    return /^[1-9]\d{8}$/.test(rest) ? "+33" + rest : null;
+  }
+  if (n.startsWith("+32")) {
+    const rest = n.slice(3).replace(/^0/, "");
+    return /^[1-9]\d{7,8}$/.test(rest) ? "+32" + rest : null;
+  }
+  return /^\+[1-9]\d{5,14}$/.test(n) ? n : null;
+}
+
+/**
+ * Affichage lisible d'un téléphone : +33 6 12 34 56 78, +32 470 12 34 56.
+ * Gère aussi les anciens numéros enregistrés au format 06 12 34 56 78.
+ */
+export function formatPhone(raw: string): string {
+  const n = normalizePhone(raw);
+  if (!n) return (raw || "").trim();
+  const pairs = (d: string) => d.replace(/(\d\d)(?=\d)/g, "$1 ");
+  if (n.startsWith("+33")) {
+    return `+33 ${n[3]} ${pairs(n.slice(4))}`;
+  }
+  if (n.startsWith("+32")) {
+    const d = n.slice(3);
+    // Mobile (4xx xx xx xx), sinon fixe : zone à 1 chiffre (2, 3, 4, 9) ou 2 chiffres.
+    if (d.length === 9) return `+32 ${d.slice(0, 3)} ${pairs(d.slice(3))}`;
+    if ("2349".includes(d[0])) {
+      return `+32 ${d[0]} ${d.slice(1, 4)} ${pairs(d.slice(4))}`;
+    }
+    return `+32 ${d.slice(0, 2)} ${pairs(d.slice(2))}`;
+  }
+  return n;
+}
+
+/** Valeur d'un lien tel: (format compact +33…). */
+export function phoneHref(raw: string): string {
+  return `tel:${normalizePhone(raw) || (raw || "").replace(/\s/g, "")}`;
 }
 
 /** Phrase des coordonnées bancaires (devis/factures), ou "" si aucun IBAN renseigné. */
