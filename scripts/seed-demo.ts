@@ -649,6 +649,9 @@ function build() {
       paidAt: plan.paid !== undefined ? at(plan.paid, int(9, 18), int(0, 59)) : null,
       items,
       ...totals,
+      // Acompte de 30 % versé à l'acceptation du devis, déduit du net à payer.
+      depositAmount: Math.round(totals.totalTTC * 0.3 * 100) / 100,
+      depositPaidAt: at(plan.accept, 10),
       notes: "",
       emailSentAt: at(plan.facture, 18),
       emailSentTo: email,

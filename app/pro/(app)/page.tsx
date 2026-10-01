@@ -3,7 +3,7 @@ import { connectToDatabase } from "@/lib/mongodb";
 import Message, { MESSAGE_STATUS_LABELS } from "@/lib/models/Message";
 import Devis from "@/lib/models/Devis";
 import Facture from "@/lib/models/Facture";
-import { formatEUR } from "@/lib/pro-enums";
+import { amountDue, formatEUR } from "@/lib/pro-enums";
 import { getMonthlyRevenue } from "@/lib/factures-stats";
 import Kpis, { type Kpi } from "@/components/pro/Kpis";
 import BarChart from "@/components/pro/BarChart";
@@ -28,7 +28,7 @@ async function getStats() {
     Devis.countDocuments({ status: "envoye" }),
     Devis.countDocuments({ status: "accepte" }),
     Devis.countDocuments({ status: "refuse" }),
-    Facture.find({ status: "emise" }, { totalTTC: 1, dueDate: 1 }).lean(),
+    Facture.find({ status: "emise" }, { totalTTC: 1, depositAmount: 1, dueDate: 1 }).lean(),
     getMonthlyRevenue(),
   ]);
 
@@ -38,7 +38,7 @@ async function getStats() {
     : 0;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const facturesList = facturesEmises as any[];
-  const aEncaisser = facturesList.reduce((s, f) => s + (f.totalTTC || 0), 0);
+  const aEncaisser = facturesList.reduce((s, f) => s + amountDue(f), 0);
   const facturesEnRetard = facturesList.filter(
     (f) => f.dueDate && new Date(f.dueDate) < new Date()
   ).length;

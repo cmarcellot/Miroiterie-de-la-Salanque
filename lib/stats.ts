@@ -1,7 +1,7 @@
 import { connectToDatabase } from "@/lib/mongodb";
 import Client from "@/lib/models/Client";
 import Devis, { DEVIS_STATUSES, DEVIS_STATUS_LABELS, type DevisStatus } from "@/lib/models/Devis";
-import Facture from "@/lib/models/Facture";
+import Facture, { amountDue } from "@/lib/models/Facture";
 import Chantier, {
   CHANTIER_STATUSES,
   CHANTIER_STATUS_LABELS,
@@ -125,7 +125,7 @@ export async function getStatsData(period: StatsPeriod): Promise<StatsData> {
       range.hasComparison
         ? Client.countDocuments({ createdAt: { $gte: range.prevStart!, $lte: range.prevEnd! } })
         : Promise.resolve(0),
-      Facture.find({ status: "emise" }, { totalTTC: 1, dueDate: 1 }).lean(),
+      Facture.find({ status: "emise" }, { totalTTC: 1, depositAmount: 1, dueDate: 1 }).lean(),
     ]);
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -206,9 +206,10 @@ export async function getStatsData(period: StatsPeriod): Promise<StatsData> {
   const topClients = [...clientMap.values()].sort((a, b) => b.total - a.total).slice(0, 5);
 
   // ---- Situation actuelle (impayés) : instantané, indépendant de la période ----
-  const impayeTotal = facturesEnCoursList.reduce((s, f) => s + (f.totalTTC || 0), 0);
+  // Montants restant dus : acompte déjà versé déduit (amountDue).
+  const impayeTotal = facturesEnCoursList.reduce((s, f) => s + amountDue(f), 0);
   const enRetardList = facturesEnCoursList.filter((f) => f.dueDate && new Date(f.dueDate) < new Date());
-  const enRetardMontant = enRetardList.reduce((s, f) => s + (f.totalTTC || 0), 0);
+  const enRetardMontant = enRetardList.reduce((s, f) => s + amountDue(f), 0);
 
   return {
     period,

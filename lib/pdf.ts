@@ -3,7 +3,9 @@ import path from "path";
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 import PDFDocument from "pdfkit";
 import {
+  amountDue,
   bankDetailsText,
+  depositLabel,
   formatEUR,
   DEVIS_STATUS_LABELS,
   FACTURE_STATUS_LABELS,
@@ -62,6 +64,8 @@ type DocData = {
   items: { label: string; qty: number; unitPrice: number; vatRate: number }[];
   totalHT: number;
   vatBreakdown: { rate: number; amount: number }[];
+  /** Lignes affichées entre la TVA et la ligne mise en avant (ex. acompte déduit). */
+  preGrandLines?: { label: string; amount: number; negative?: boolean }[];
   grandLabel: string;
   totalTTC: number;
   extraTotalLine?: { label: string; amount: number };
@@ -223,7 +227,9 @@ function drawDocument(doc: any, data: DocData) {
   const gapBeforeFooter = 10;
   const safetyMargin = 16; // marge de sécurité contre les écarts d'arrondi pdfkit
 
-  const totalsRowsCount = 1 + data.vatBreakdown.length + (data.extraTotalLine ? 1 : 0);
+  const preGrandLines = data.preGrandLines ?? [];
+  const totalsRowsCount =
+    1 + data.vatBreakdown.length + preGrandLines.length + (data.extraTotalLine ? 1 : 0);
   const totalsBlockH = totalsLineH * totalsRowsCount + grandLineH + gapAfterTotals;
 
   doc.font("Helvetica").fontSize(8.5);
@@ -244,9 +250,11 @@ function drawDocument(doc: any, data: DocData) {
   const totalsAmountW = 90;
   const totalsX = MARGIN + CONTENT_W - totalsW;
 
-  function totalRow(label: string, amount: number, rowY: number) {
+  function totalRow(label: string, amount: number, rowY: number, negative = false) {
     doc.text(label, totalsX, rowY, { width: totalsW - totalsAmountW });
-    doc.text(pdfAmount(amount), totalsX + totalsW - totalsAmountW, rowY, {
+    // Tiret ASCII : le signe moins (U+2212) n'existe pas dans les polices PDF de base.
+    const shown = (negative ? "-" : "") + pdfAmount(amount);
+    doc.text(shown, totalsX + totalsW - totalsAmountW, rowY, {
       width: totalsAmountW,
       align: "right",
     });
@@ -258,6 +266,11 @@ function drawDocument(doc: any, data: DocData) {
   for (const { rate, amount } of data.vatBreakdown) {
     doc.font("Helvetica").fontSize(9).fillColor(MUTED);
     totalRow(`TVA ${rate} %`, amount, y);
+    y += totalsLineH;
+  }
+  for (const line of preGrandLines) {
+    doc.font("Helvetica").fontSize(9).fillColor(MUTED);
+    totalRow(line.label, line.amount, y, line.negative);
     y += totalsLineH;
   }
 
@@ -384,6 +397,7 @@ export async function renderFacturePdf(
   }
   const tva = f.totalTVA ?? 0;
   const ttc = f.totalTTC ?? ht + tva;
+  const deposit = Number(f.depositAmount) || 0;
   const late = isFactureLate(f);
   const statusLabel = late
     ? "En retard de paiement"
@@ -414,8 +428,16 @@ export async function renderFacturePdf(
     vatBreakdown: Array.from(vatMap.entries())
       .filter(([rate]) => rate > 0)
       .map(([rate, amount]) => ({ rate, amount })),
-    grandLabel: "Total TTC à payer",
-    totalTTC: ttc,
+    ...(deposit > 0
+      ? {
+          preGrandLines: [
+            { label: "Total TTC", amount: ttc },
+            { label: depositLabel(f.depositPaidAt), amount: deposit, negative: true },
+          ],
+          grandLabel: "Net à payer",
+          totalTTC: amountDue({ totalTTC: ttc, depositAmount: deposit }),
+        }
+      : { grandLabel: "Total TTC à payer", totalTTC: ttc }),
     notesBlocks,
     footerText: [
       legal.forme,

@@ -6,7 +6,7 @@ import Facture, {
   isFactureLate,
   type FactureStatus,
 } from "@/lib/models/Facture";
-import { formatEUR, initialsOf } from "@/lib/pro-enums";
+import { amountDue, formatEUR, initialsOf } from "@/lib/pro-enums";
 import Kpis, { type Kpi } from "@/components/pro/Kpis";
 import FactureRow from "@/components/pro/FactureRow";
 
@@ -37,11 +37,12 @@ export default async function FacturesListPage({
   const enRetard = impayees.filter((f) => isFactureLate(f));
   const enAttente = impayees.filter((f) => !isFactureLate(f));
 
-  const sum = (list: any[]) =>
-    list.reduce((s, f) => s + (f.totalTTC || 0), 0);
-  const montantEncaisse = sum(payees);
-  const montantEnAttente = sum(enAttente);
-  const montantEnRetard = sum(enRetard);
+  // Encaissé : total TTC des factures payées. En attente / en retard :
+  // ce qui reste à encaisser, acompte déjà versé déduit.
+  const montantEncaisse = payees.reduce((s, f) => s + (f.totalTTC || 0), 0);
+  const sumDue = (list: any[]) => list.reduce((s, f) => s + amountDue(f), 0);
+  const montantEnAttente = sumDue(enAttente);
+  const montantEnRetard = sumDue(enRetard);
 
   const tab = TABS.some((t) => t.id === tabParam) ? tabParam : "all";
   const visible =

@@ -46,9 +46,21 @@ function parseItems(raw: unknown): LineItem[] {
 function parseForm(formData: FormData) {
   const items = parseItems(formData.get("items"));
   const totals = computeTotals(items);
+
+  const rawDeposit = String(formData.get("depositAmount") ?? "").trim().replace(",", ".");
+  const depositAmount = rawDeposit ? Math.round(Number(rawDeposit) * 100) / 100 : 0;
+  if (!Number.isFinite(depositAmount) || depositAmount < 0)
+    throw new Error("Montant d'acompte invalide.");
+  if (depositAmount > totals.totalTTC)
+    throw new Error("L'acompte ne peut pas dépasser le total TTC de la facture.");
+  const rawDepositDate = String(formData.get("depositPaidAt") || "");
+
   return {
     items,
     ...totals,
+    depositAmount,
+    depositPaidAt:
+      depositAmount > 0 && rawDepositDate ? new Date(rawDepositDate) : null,
     date: new Date(String(formData.get("date") || "") || Date.now()),
     dueDate: formData.get("dueDate")
       ? new Date(String(formData.get("dueDate")))
@@ -119,6 +131,11 @@ export async function createFactureFromDevis(devisId: string) {
     nextNumber(),
     getSettings(),
   ]);
+  const totalTTC = Number(devis.totalTTC) || 0;
+  const depositAmount = Math.min(
+    totalTTC,
+    Math.round(((Number(devis.depositPct) || 0) / 100) * totalTTC * 100) / 100
+  );
 
   const doc = await Facture.create({
     number,
@@ -136,6 +153,10 @@ export async function createFactureFromDevis(devisId: string) {
     totalHT: devis.totalHT ?? 0,
     totalTVA: devis.totalTVA ?? 0,
     totalTTC: devis.totalTTC ?? 0,
+    // L'acompte est demandé systématiquement et son paiement vaut acceptation
+    // du devis : on le pré-remplit (modifiable ensuite depuis la facture).
+    depositAmount,
+    depositPaidAt: depositAmount > 0 ? new Date() : null,
     notes: settings.factures.notes || devis.notes || "",
   });
 

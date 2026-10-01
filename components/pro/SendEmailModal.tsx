@@ -26,6 +26,7 @@ export default function SendEmailModal({
   companyName,
   companyPhone,
   amountTTC,
+  netToPay,
   dateInfo,
   iconOnly,
   hideTrigger,
@@ -37,6 +38,8 @@ export default function SendEmailModal({
   companyName: string;
   companyPhone: string;
   amountTTC: number;
+  /** Facture avec acompte versé : net restant à payer, annoncé dans le message. */
+  netToPay?: number;
   /** ex. "valable jusqu'au 12/06/2026" ou "à régler avant le 12/06/2026" */
   dateInfo?: string;
   /** Rendu compact (icône seule), pour une action de ligne de tableau. */
@@ -86,14 +89,18 @@ export default function SendEmailModal({
     const attached = kind === "devis" ? "ci-joint votre devis" : "ci-jointe votre facture";
     return `Bonjour,
 
-Veuillez trouver ${attached} ${number} d'un montant de ${formatEUR(amountTTC)} TTC${dateInfo ? `, ${dateInfo}` : ""}.
+Veuillez trouver ${attached} ${number} d'un montant de ${formatEUR(amountTTC)} TTC${
+      netToPay !== undefined
+        ? `, soit un net à payer de ${formatEUR(netToPay)} après déduction de l'acompte versé`
+        : ""
+    }${dateInfo ? `, ${dateInfo}` : ""}.
 
 N'hésitez pas à me contacter pour toute question au sujet de ce ${piece}.
 
 Cordialement,
 ${companyName}
 ${companyPhone}`;
-  }, [kind, number, amountTTC, dateInfo, companyName, companyPhone]);
+  }, [kind, number, amountTTC, netToPay, dateInfo, companyName, companyPhone]);
 
   return (
     <>
