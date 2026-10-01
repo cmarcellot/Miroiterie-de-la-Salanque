@@ -29,27 +29,46 @@ export default async function GoogleReviews() {
       <div className="container-mds">
         <SectionHeading>Avis de nos clients</SectionHeading>
 
-        <div className="mt-8 flex flex-col items-center gap-2 text-center">
-          <div className="flex items-center gap-3">
-            <span className="text-4xl font-bold text-navy">{rating}</span>
-            <Stars value={data.rating} className="h-6 w-6" />
-          </div>
-          <a
-            href={data.reviewsUri}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="text-sm text-slate-600 hover:text-royal hover:underline"
-          >
-            {data.count.toLocaleString("fr-FR")} avis sur Google
-          </a>
-        </div>
-
-        <ul className="mt-10 grid gap-5 md:grid-cols-2 lg:grid-cols-3">
+        {/* Google renvoie 5 avis au plus : la carte de synthèse complète la
+            grille de 3 colonnes (dernière case), et passe en tête sur mobile. */}
+        <ul className="mt-12 grid gap-5 md:grid-cols-2 lg:grid-cols-3">
           {data.reviews.map((r, i) => (
             <li key={i}>
               <ReviewCard review={r} />
             </li>
           ))}
+          <li className="order-first lg:order-last">
+            <div className="flex h-full flex-col items-center justify-center rounded-lg bg-navy p-8 text-center text-white">
+              <p className="text-sm font-semibold uppercase tracking-wide text-white/80">
+                Note Google
+              </p>
+              <p className="mt-2 text-5xl font-bold">{rating}</p>
+              <div className="mt-3">
+                <Stars value={data.rating} className="h-6 w-6" empty="text-white/25" />
+              </div>
+              <p className="mt-2 text-sm text-white/85">
+                sur {data.count.toLocaleString("fr-FR")} avis
+              </p>
+              <a
+                href={data.reviewsUri}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="btn-white mt-6"
+              >
+                Voir tous les avis <ArrowRight className="h-4 w-4" />
+              </a>
+              {data.writeReviewUri && (
+                <a
+                  href={data.writeReviewUri}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="mt-4 text-sm text-white/85 underline-offset-2 hover:text-white hover:underline"
+                >
+                  Laisser un avis
+                </a>
+              )}
+            </div>
+          </li>
         </ul>
 
         <div className="mt-8 flex flex-col items-center gap-2 text-center">
@@ -58,17 +77,6 @@ export default async function GoogleReviews() {
             modification.
           </p>
           <GoogleMapsAttribution />
-        </div>
-
-        <div className="mt-8 flex justify-center">
-          <a
-            href={data.reviewsUri}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="btn-outline"
-          >
-            Voir tous les avis sur Google <ArrowRight className="h-4 w-4" />
-          </a>
         </div>
       </div>
     </section>
@@ -146,7 +154,16 @@ function ReviewCard({ review: r }: { review: GoogleReview }) {
 }
 
 /** Étoiles pleines, avec la dernière remplie partiellement (ex. 4,6). */
-function Stars({ value, className }: { value: number; className: string }) {
+function Stars({
+  value,
+  className,
+  empty = "text-slate-300",
+}: {
+  value: number;
+  className: string;
+  /** Couleur des étoiles vides (à éclaircir sur fond foncé). */
+  empty?: string;
+}) {
   return (
     <span
       className="flex items-center gap-0.5"
@@ -157,7 +174,7 @@ function Stars({ value, className }: { value: number; className: string }) {
         const fill = Math.max(0, Math.min(1, value - i));
         return (
           <span key={i} className={`relative ${className}`}>
-            <Star className={`absolute inset-0 text-slate-300 ${className}`} fill="currentColor" strokeWidth={0} />
+            <Star className={`absolute inset-0 ${empty} ${className}`} fill="currentColor" strokeWidth={0} />
             <span className="absolute inset-0 overflow-hidden" style={{ width: `${fill * 100}%` }}>
               <Star className={`text-amber-400 ${className}`} fill="currentColor" strokeWidth={0} />
             </span>
