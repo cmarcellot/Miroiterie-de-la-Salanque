@@ -1,6 +1,7 @@
 import Image from "next/image";
 import {
   FACTURE_STATUS_LABELS,
+  bankDetailsText,
   formatEUR,
   isFactureLate,
   type FactureStatus,
@@ -155,10 +156,7 @@ export default function FactureDocument({
         {f.notes && <div className="dd-notes">{f.notes}</div>}
 
         {company.iban && (
-          <div className="dd-notes">
-            Coordonnées bancaires : règlement par virement à l&apos;ordre de{" "}
-            {company.name}. IBAN {company.iban}.
-          </div>
+          <div className="dd-notes">{bankDetailsText(company)}</div>
         )}
 
         <footer className="dd-foot">
