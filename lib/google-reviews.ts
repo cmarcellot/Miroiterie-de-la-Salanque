@@ -33,6 +33,8 @@ export type GoogleReviewsData = {
   reviews: GoogleReview[];
   /** Lien vers la liste des avis sur Google Maps. */
   reviewsUri: string;
+  /** Lien pour laisser un avis sur la fiche. */
+  writeReviewUri?: string;
 };
 
 type LocalizedText = { text?: string; languageCode?: string };
@@ -52,7 +54,7 @@ type ApiPlace = {
   userRatingCount?: number;
   reviews?: ApiReview[];
   googleMapsUri?: string;
-  googleMapsLinks?: { reviewsUri?: string; placeUri?: string };
+  googleMapsLinks?: { reviewsUri?: string; placeUri?: string; writeAReviewUri?: string };
 };
 
 export async function getGoogleReviews(): Promise<GoogleReviewsData | null> {
@@ -114,6 +116,7 @@ export async function getGoogleReviews(): Promise<GoogleReviewsData | null> {
       count: place.userRatingCount,
       reviews,
       reviewsUri,
+      writeReviewUri: place.googleMapsLinks?.writeAReviewUri,
     };
   } catch (err) {
     console.error("[google-reviews] Échec de l'appel à Places API :", err);

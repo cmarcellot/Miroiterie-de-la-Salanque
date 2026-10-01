@@ -22,8 +22,8 @@ export default function HomePage() {
       <Solutions />
       <WhyUs />
       <RealisationsPreview />
-      <GoogleReviews />
       <InfoBand />
+      <GoogleReviews />
       <CtaBand />
     </>
   );
