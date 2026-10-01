@@ -4,7 +4,7 @@ import { ArrowRight, PinIcon, WrenchIcon } from "@/components/icons";
 
 export default function InfoBand() {
   return (
-    <section className="bg-slate-50 py-16 sm:py-20">
+    <section className="bg-slate-100 py-16 sm:py-20">
       <div className="container-mds grid gap-6 lg:grid-cols-2">
         {/* Dépannage */}
         <div className="rounded-lg bg-white p-8 shadow-sm">
