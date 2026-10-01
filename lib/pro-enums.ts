@@ -175,3 +175,9 @@ export function formatPhone(raw: string): string {
   }
   return s;
 }
+
+/** Phrase des coordonnées bancaires (devis/factures), ou "" si aucun IBAN renseigné. */
+export function bankDetailsText(company: { name: string; iban?: string }): string {
+  if (!company.iban) return "";
+  return `Coordonnées bancaires : règlement par virement à l'ordre de ${company.name}. IBAN ${company.iban}.`;
+}

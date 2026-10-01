@@ -3,6 +3,7 @@ import path from "path";
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 import PDFDocument from "pdfkit";
 import {
+  bankDetailsText,
   formatEUR,
   DEVIS_STATUS_LABELS,
   FACTURE_STATUS_LABELS,
@@ -351,7 +352,7 @@ export async function renderDevisPdf(
       d.depositPct > 0
         ? { label: `Acompte à la commande (${d.depositPct} %)`, amount: deposit }
         : undefined,
-    notesBlocks: d.notes ? [d.notes] : [],
+    notesBlocks: [d.notes, bankDetailsText(company)].filter(Boolean),
     footerText: [
       legal.forme,
       legal.rcs,
@@ -390,11 +391,7 @@ export async function renderFacturePdf(
 
   const notesBlocks: string[] = [];
   if (f.notes) notesBlocks.push(f.notes);
-  if (company.iban) {
-    notesBlocks.push(
-      `Coordonnées bancaires : règlement par virement à l'ordre de ${company.name}. IBAN ${company.iban}.`
-    );
-  }
+  if (company.iban) notesBlocks.push(bankDetailsText(company));
 
   return renderPdf({
     title: "FACTURE",
