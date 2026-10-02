@@ -2,7 +2,7 @@ import { connectToDatabase } from "@/lib/mongodb";
 import Facture from "@/lib/models/Facture";
 import { getSettings } from "@/lib/settings";
 import { sendMail } from "@/lib/mail";
-import { formatEUR, isFactureLate } from "@/lib/pro-enums";
+import { amountDue, formatEUR, isFactureLate } from "@/lib/pro-enums";
 import { baseUrl, daysFromToday, formatDate, plural } from "@/lib/jobs/_shared";
 
 /**
@@ -24,13 +24,14 @@ export async function checkFacturesEnRetard() {
     const late = factures.filter((f) => isFactureLate(f));
     if (late.length === 0) return;
 
-    const total = late.reduce((s, f) => s + (f.totalTTC || 0), 0);
+    // Montants restant dus : acompte déjà versé déduit.
+    const total = late.reduce((s, f) => s + amountDue(f), 0);
     const lines = late.map((f) => {
       const days = -daysFromToday(f.dueDate);
       const retard = days > 0 ? `${plural(days, "jour")} de retard` : "échue aujourd'hui";
       return [
         `• ${f.number} — ${f.client?.name || "Client"}`,
-        `  ${formatEUR(f.totalTTC || 0)} TTC · échéance le ${formatDate(f.dueDate)} · ${retard}`,
+        `  ${formatEUR(amountDue(f))} TTC · échéance le ${formatDate(f.dueDate)} · ${retard}`,
       ].join("\n");
     });
 

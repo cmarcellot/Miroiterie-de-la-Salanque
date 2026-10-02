@@ -1,5 +1,5 @@
 import Image from "next/image";
-import { DEVIS_STATUS_LABELS, formatEUR, type DevisStatus } from "@/lib/pro-enums";
+import { DEVIS_STATUS_LABELS, bankDetailsText, formatEUR, type DevisStatus } from "@/lib/pro-enums";
 import type { AppSettings } from "@/lib/settings";
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
@@ -153,6 +153,10 @@ export default function DevisDocument({
         </div>
 
         {d.notes && <div className="dd-notes">{d.notes}</div>}
+
+        {company.iban && (
+          <div className="dd-notes">{bankDetailsText(company)}</div>
+        )}
 
         <footer className="dd-foot">
           {legal.forme && <>{legal.forme} — </>}

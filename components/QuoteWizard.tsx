@@ -123,14 +123,14 @@ export default function QuoteWizard() {
           </h1>
           <p className="mb-7 max-w-sm text-white/70">
             Décrivez votre projet en quelques étapes. Nous reprenons contact
-            sous 48h ouvrées pour planifier une visite gratuite et chiffrer
+            rapidement pour planifier une visite gratuite et chiffrer
             précisément.
           </p>
           <ul className="flex flex-col gap-3.5 text-sm text-white/80">
             {[
               "Décrivez votre projet en 4 étapes simples",
-              "Nous vous rappelons sous 48h ouvrées",
-              "Visite gratuite et devis détaillé sous 7 jours",
+              "Nous vous rappelons rapidement",
+              "Visite gratuite et devis détaillé dans les meilleurs délais",
               "Pas d'acompte tant que rien n'est signé",
             ].map((t, i) => (
               <li key={t} className="flex items-start gap-3">
@@ -275,8 +275,8 @@ export default function QuoteWizard() {
               />
               <p className="text-xs leading-relaxed text-slate-400">
                 En envoyant ce formulaire vous acceptez que vos données soient
-                utilisées pour traiter votre demande. Pas de spam — réponse
-                sous 48h ouvrées.
+                utilisées pour traiter votre demande. Pas de spam — nous
+                vous répondons rapidement.
               </p>
               {error && <p className="text-sm text-red-600">{error}</p>}
             </>
@@ -291,7 +291,7 @@ export default function QuoteWizard() {
                 Demande envoyée.
               </h3>
               <p className="text-sm text-slate-500">
-                Nous vous rappelons sous 48h ouvrées.
+                Nous vous rappelons très vite.
                 <br />
                 D&apos;ici là, vous pouvez nous joindre au{" "}
                 <strong className="text-slate-800">{site.phone}</strong>.

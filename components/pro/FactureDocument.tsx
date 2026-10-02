@@ -1,6 +1,9 @@
 import Image from "next/image";
 import {
   FACTURE_STATUS_LABELS,
+  amountDue,
+  bankDetailsText,
+  depositLabel,
   formatEUR,
   isFactureLate,
   type FactureStatus,
@@ -28,6 +31,7 @@ export default function FactureDocument({
   }
   const tva = f.totalTVA ?? 0;
   const ttc = f.totalTTC ?? ht + tva;
+  const deposit = Number(f.depositAmount) || 0;
   const late = isFactureLate(f);
   const statusLabel = late
     ? "En retard de paiement"
@@ -146,19 +150,33 @@ export default function FactureDocument({
                 <span>{formatEUR(amount)}</span>
               </div>
             ))}
-          <div className="dd-grand">
-            <span>Total TTC à payer</span>
-            <span>{formatEUR(ttc)}</span>
-          </div>
+          {deposit > 0 ? (
+            <>
+              <div>
+                <span>Total TTC</span>
+                <span>{formatEUR(ttc)}</span>
+              </div>
+              <div>
+                <span>{depositLabel(f.depositPaidAt)}</span>
+                <span>−{formatEUR(deposit)}</span>
+              </div>
+              <div className="dd-grand">
+                <span>Net à payer</span>
+                <span>{formatEUR(amountDue({ totalTTC: ttc, depositAmount: deposit }))}</span>
+              </div>
+            </>
+          ) : (
+            <div className="dd-grand">
+              <span>Total TTC à payer</span>
+              <span>{formatEUR(ttc)}</span>
+            </div>
+          )}
         </div>
 
         {f.notes && <div className="dd-notes">{f.notes}</div>}
 
         {company.iban && (
-          <div className="dd-notes">
-            Coordonnées bancaires : règlement par virement à l&apos;ordre de{" "}
-            {company.name}. IBAN {company.iban}.
-          </div>
+          <div className="dd-notes">{bankDetailsText(company)}</div>
         )}
 
         <footer className="dd-foot">

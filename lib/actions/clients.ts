@@ -11,6 +11,11 @@ import Message from "@/lib/models/Message";
 import Devis from "@/lib/models/Devis";
 import Facture from "@/lib/models/Facture";
 import Chantier from "@/lib/models/Chantier";
+import {
+  formatFirstName,
+  formatLastName,
+  normalizePhone,
+} from "@/lib/pro-enums";
 
 async function requireSession() {
   const session = await getServerSession(authOptions);
@@ -22,16 +27,18 @@ function parse(formData: FormData) {
   const type: ClientType = CLIENT_TYPES.includes(typeRaw as ClientType)
     ? (typeRaw as ClientType)
     : "particulier";
+  const phone = normalizePhone(String(formData.get("phone") || ""));
+  if (phone === null) throw new Error("Numéro de téléphone invalide.");
   return {
     type,
-    firstName: String(formData.get("firstName") || "").trim(),
-    lastName: String(formData.get("lastName") || "").trim(),
+    firstName: formatFirstName(String(formData.get("firstName") || "")),
+    lastName: formatLastName(String(formData.get("lastName") || "")),
     company:
       type === "professionnel"
         ? String(formData.get("company") || "").trim()
         : "",
     email: String(formData.get("email") || "").trim(),
-    phone: String(formData.get("phone") || "").trim(),
+    phone,
     street: String(formData.get("street") || "").trim(),
     zip: String(formData.get("zip") || "").trim(),
     city: String(formData.get("city") || "").trim(),

@@ -1,9 +1,16 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { Plus } from "lucide-react";
-import { CLIENT_TYPES, CLIENT_TYPE_LABELS } from "@/lib/pro-enums";
+import {
+  CLIENT_TYPES,
+  CLIENT_TYPE_LABELS,
+  formatFirstName,
+  formatLastName,
+  formatPhone,
+  normalizePhone,
+} from "@/lib/pro-enums";
 import CityAutocomplete from "@/components/pro/CityAutocomplete";
 
 export type ClientValues = {
@@ -43,6 +50,18 @@ export default function ClientForm({
   const [pending, setPending] = useState(false);
   const [type, setType] = useState(values.type ?? "particulier");
   const isPro = type === "professionnel";
+  const [phoneError, setPhoneError] = useState(false);
+  const phoneRef = useRef<HTMLInputElement>(null);
+
+  // Numéro pré-rempli (fiche existante, demande du site) non interprétable :
+  // on le signale tout de suite plutôt qu'au moment d'enregistrer.
+  useEffect(() => {
+    const el = phoneRef.current;
+    if (el && normalizePhone(el.value) === null) {
+      el.setCustomValidity("Numéro de téléphone invalide");
+      setPhoneError(true);
+    }
+  }, []);
 
   return (
     <form
@@ -98,7 +117,10 @@ export default function ClientForm({
           <label className="pro-lbl">Prénom</label>
           <input
             name="firstName"
-            defaultValue={values.firstName}
+            defaultValue={formatFirstName(values.firstName ?? "")}
+            onBlur={(e) => {
+              e.currentTarget.value = formatFirstName(e.currentTarget.value);
+            }}
             className="pro-field"
             placeholder="ex. Jean"
           />
@@ -108,7 +130,10 @@ export default function ClientForm({
           <input
             name="lastName"
             required={!isPro}
-            defaultValue={values.lastName}
+            defaultValue={formatLastName(values.lastName ?? "")}
+            onBlur={(e) => {
+              e.currentTarget.value = formatLastName(e.currentTarget.value);
+            }}
             className="pro-field"
             placeholder="ex. Bernard"
           />
@@ -119,11 +144,38 @@ export default function ClientForm({
         <div>
           <label className="pro-lbl">Téléphone</label>
           <input
+            ref={phoneRef}
             name="phone"
-            defaultValue={values.phone}
+            type="tel"
+            defaultValue={values.phone ? formatPhone(values.phone) : ""}
             className="pro-field"
-            placeholder="06 . . . ."
+            placeholder="06 12 34 56 78"
+            onChange={(e) => {
+              // Bloque l'envoi (validation HTML5) tant que le numéro est invalide.
+              e.currentTarget.setCustomValidity(
+                normalizePhone(e.currentTarget.value) === null
+                  ? "Numéro de téléphone invalide"
+                  : ""
+              );
+              setPhoneError(false);
+            }}
+            onBlur={(e) => {
+              const n = normalizePhone(e.currentTarget.value);
+              if (n === null) setPhoneError(true);
+              else e.currentTarget.value = formatPhone(n);
+            }}
           />
+          <div
+            style={{
+              fontSize: 12,
+              marginTop: 4,
+              color: phoneError ? "var(--danger)" : "var(--ink-3)",
+            }}
+          >
+            {phoneError
+              ? "Numéro de téléphone invalide"
+              : "Numéro belge : saisir +32…"}
+          </div>
         </div>
         <div>
           <label className="pro-lbl">Email</label>

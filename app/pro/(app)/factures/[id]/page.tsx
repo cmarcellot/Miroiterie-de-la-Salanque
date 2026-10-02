@@ -3,7 +3,7 @@ import { notFound } from "next/navigation";
 import mongoose from "mongoose";
 import { ArrowLeft, Printer } from "lucide-react";
 import { connectToDatabase } from "@/lib/mongodb";
-import Facture, { isFactureLate } from "@/lib/models/Facture";
+import Facture, { amountDue, isFactureLate } from "@/lib/models/Facture";
 import { getClientOptions } from "@/lib/clients-list";
 import { getCatalogOptions } from "@/lib/prestations-list";
 import { getSettings } from "@/lib/settings";
@@ -98,6 +98,7 @@ export default async function FactureDetailPage({
             companyName={settings.company.name}
             companyPhone={settings.company.phone}
             amountTTC={f.totalTTC || 0}
+            netToPay={f.depositAmount > 0 ? amountDue(f) : undefined}
             dateInfo={
               f.dueDate
                 ? `à régler avant le ${new Date(f.dueDate).toLocaleDateString("fr-FR")}`
@@ -117,6 +118,8 @@ export default async function FactureDetailPage({
           dueDate: toDateInput(f.dueDate),
           notes: f.notes,
           items: f.items,
+          depositAmount: f.depositAmount || 0,
+          depositPaidAt: toDateInput(f.depositPaidAt),
         }}
         lockClient
         cancelHref="/pro/factures"

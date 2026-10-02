@@ -2,7 +2,13 @@
 
 import { useMemo, useState, type CSSProperties } from "react";
 import Link from "next/link";
-import { VAT_RATES, computeTotals, formatEUR, type LineItem } from "@/lib/pro-enums";
+import {
+  VAT_RATES,
+  amountDue,
+  computeTotals,
+  formatEUR,
+  type LineItem,
+} from "@/lib/pro-enums";
 
 type CatalogItem = { id: string; name: string; unitPrice: number; vatRate: number };
 
@@ -12,6 +18,8 @@ type Values = {
   dueDate?: string;
   notes?: string;
   items?: LineItem[];
+  depositAmount?: number;
+  depositPaidAt?: string; // yyyy-mm-dd
 };
 
 const emptyItem = (vatRate = 20): LineItem => ({
@@ -45,7 +53,12 @@ export default function FactureForm({
   );
   const [pending, setPending] = useState(false);
 
+  const [deposit, setDeposit] = useState(
+    values.depositAmount ? String(values.depositAmount) : ""
+  );
+
   const totals = useMemo(() => computeTotals(items), [items]);
+  const depositAmount = Number(deposit.replace(",", ".")) || 0;
 
   function update(i: number, patch: Partial<LineItem>) {
     setItems((prev) =>
@@ -255,23 +268,80 @@ export default function FactureForm({
         style={{
           display: "flex",
           justifyContent: "flex-end",
+          alignItems: "flex-end",
+          flexWrap: "wrap",
           gap: 28,
-          fontFamily: "var(--font-geist-mono)",
-          fontSize: 13,
         }}
       >
-        <div style={{ display: "grid", gap: 4, textAlign: "right" }}>
+        <div style={{ display: "flex", gap: 12 }}>
+          <div>
+            <label className="pro-lab">Acompte versé (TTC)</label>
+            <input
+              type="number"
+              name="depositAmount"
+              step="0.01"
+              min="0"
+              max={totals.totalTTC}
+              value={deposit}
+              onChange={(e) => setDeposit(e.target.value)}
+              placeholder="0,00"
+              className={field}
+              style={{ display: "block", marginTop: 8, width: 150 }}
+            />
+          </div>
+          <div>
+            <label className="pro-lab">Versé le</label>
+            <input
+              type="date"
+              name="depositPaidAt"
+              defaultValue={values.depositPaidAt}
+              className={field}
+              style={{ display: "block", marginTop: 8, width: 160 }}
+            />
+          </div>
+        </div>
+        <div
+          style={{
+            display: "grid",
+            gap: 4,
+            textAlign: "right",
+            fontFamily: "var(--font-geist-mono)",
+            fontSize: 13,
+          }}
+        >
           <div>Total HT&nbsp;&nbsp;{formatEUR(totals.totalHT)}</div>
           <div>TVA&nbsp;&nbsp;{formatEUR(totals.totalTVA)}</div>
           <div
-            style={{
-              fontWeight: 600,
-              fontSize: 15,
-              color: "var(--marine)",
-            }}
+            style={
+              depositAmount > 0
+                ? undefined
+                : { fontWeight: 600, fontSize: 15, color: "var(--marine)" }
+            }
           >
             Total TTC&nbsp;&nbsp;{formatEUR(totals.totalTTC)}
           </div>
+          {depositAmount > 0 && (
+            <>
+              <div>Acompte versé&nbsp;&nbsp;−{formatEUR(depositAmount)}</div>
+              <div
+                style={{
+                  fontWeight: 600,
+                  fontSize: 15,
+                  color: "var(--marine)",
+                }}
+              >
+                Net à payer&nbsp;&nbsp;
+                {formatEUR(
+                  amountDue({ totalTTC: totals.totalTTC, depositAmount })
+                )}
+              </div>
+            </>
+          )}
+          {depositAmount > totals.totalTTC && (
+            <div style={{ color: "var(--danger)", fontSize: 12 }}>
+              L&apos;acompte dépasse le total TTC.
+            </div>
+          )}
         </div>
       </div>
 

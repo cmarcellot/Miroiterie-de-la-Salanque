@@ -23,6 +23,9 @@ import { site } from "@/lib/site";
 import {
   clientDisplayName,
   computeTotals,
+  formatFirstName,
+  formatLastName,
+  normalizePhone,
   type ChantierStatus,
   type ClientType,
   type DevisStatus,
@@ -329,6 +332,8 @@ type ClientSeed = {
   viaSite?: boolean;
   /** Adresses de chantier (syndic, agence...), sinon l'adresse du client. */
   sites?: { street: string; zip: string; city: string }[];
+  /** Téléphone tel que saisi par le prospect (sinon tiré au hasard, en France). */
+  phone?: string;
 };
 
 const CLIENTS: ClientSeed[] = [
@@ -407,6 +412,9 @@ const CLIENTS: ClientSeed[] = [
   { type: "particulier", firstName: "Julie", lastName: "Moreau", street: "6 chemin du Mas Blanc", zip: "66410", city: "Villelongue-de-la-Salanque", projects: ["pergola", "cloture"] },
   { type: "particulier", firstName: "Denis", lastName: "Castell", street: "19 rue des Palmiers", zip: "66140", city: "Canet-en-Roussillon", projects: ["depannage"] },
   { type: "particulier", firstName: "Marion", lastName: "Estève", street: "25 avenue de la Gare", zip: "66380", city: "Pia", projects: ["serrure", "porte"] },
+  // Clients belges (résidences secondaires sur la côte)
+  { type: "particulier", firstName: "Pieter", lastName: "Janssens", street: "10 rue des Mouettes", zip: "66420", city: "Le Barcarès", projects: ["volets", "fenetres"], phone: "+32 470 21 38 54", notes: "Résidence secondaire, habite à Gand (Belgique) le reste de l'année." },
+  { type: "particulier", firstName: "Sophie", lastName: "Dubois", street: "7 allée des Tamaris", zip: "66440", city: "Torreilles", projects: ["pergola"], phone: "0032 2 512 34 67", notes: "Résidence secondaire, joignable à Bruxelles hors saison." },
 ];
 
 const slug = (s: string) =>
@@ -539,9 +547,16 @@ function build() {
       ? `${slug(c.firstName)}.${slug(c.lastName)}@${slug(c.company || "").replace(/\./g, "-")}.example.com`
       : `${slug(c.firstName)}.${slug(c.lastName)}@example.com`
   );
+  // Saisie "brute" (demandes du site) et format des fiches clients (+33…).
   const phones = CLIENTS.map((c) =>
-    c.type === "professionnel" ? phone("04 68") : phone(pick(["06", "07"]))
+    c.phone ?? (c.type === "professionnel" ? phone("04 68") : phone(pick(["06", "07"])))
   );
+  const fichePhones = phones.map((p) => normalizePhone(p) ?? "");
+  const fiches = CLIENTS.map((c) => ({
+    ...c,
+    firstName: formatFirstName(c.firstName),
+    lastName: formatLastName(c.lastName),
+  }));
   // Premier projet de chaque client (le plus ancien) : origine de la demande du site.
   const first = CLIENTS.map(() => ({ ago: -1, status: "brouillon" as DevisStatus, tpl: "fenetres" as TplKey }));
 
@@ -556,12 +571,12 @@ function build() {
     const pro = c.type === "professionnel";
     const email = emails[ci];
     const snap = {
-      name: clientDisplayName(c),
+      name: clientDisplayName(fiches[ci]),
       street: c.street,
       zip: c.zip,
       city: c.city,
       email,
-      phone: phones[ci],
+      phone: fichePhones[ci],
     };
 
     if (plan.devis > first[ci].ago) first[ci] = { ago: plan.devis, status: plan.status, tpl };
@@ -649,6 +664,9 @@ function build() {
       paidAt: plan.paid !== undefined ? at(plan.paid, int(9, 18), int(0, 59)) : null,
       items,
       ...totals,
+      // Acompte de 30 % versé à l'acceptation du devis, déduit du net à payer.
+      depositAmount: Math.round(totals.totalTTC * 0.3 * 100) / 100,
+      depositPaidAt: at(plan.accept, 10),
       notes: "",
       emailSentAt: at(plan.facture, 18),
       emailSentTo: email,
@@ -670,11 +688,11 @@ function build() {
     clients.push({
       _id: clientIds[ci],
       type: c.type,
-      firstName: c.firstName,
-      lastName: c.lastName,
+      firstName: fiches[ci].firstName,
+      lastName: fiches[ci].lastName,
       company: c.company ?? "",
       email,
-      phone: tel,
+      phone: fichePhones[ci],
       street: c.street,
       zip: c.zip,
       city: c.city,
